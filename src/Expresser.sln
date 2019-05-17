@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28621.142
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expresser", "Expresser\Expresser.csproj", "{2BE69DEC-2D3D-4E95-A9BB-2AA6ADC452E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expresser.UnitTests", "Expresser.UnitTests\Expresser.UnitTests.csproj", "{5467AA3C-1DF3-4F29-8271-F0E822803744}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BE69DEC-2D3D-4E95-A9BB-2AA6ADC452E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BE69DEC-2D3D-4E95-A9BB-2AA6ADC452E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BE69DEC-2D3D-4E95-A9BB-2AA6ADC452E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BE69DEC-2D3D-4E95-A9BB-2AA6ADC452E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5467AA3C-1DF3-4F29-8271-F0E822803744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5467AA3C-1DF3-4F29-8271-F0E822803744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5467AA3C-1DF3-4F29-8271-F0E822803744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5467AA3C-1DF3-4F29-8271-F0E822803744}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DE8C5EFC-3412-4C26-BD07-B07B3B816D3A}
+	EndGlobalSection
+EndGlobal

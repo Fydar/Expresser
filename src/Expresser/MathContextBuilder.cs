@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Expresser
 {
@@ -40,8 +41,8 @@ namespace Expresser
 		public IMathContext Build()
 		{
 			return new MathContext(
-				new Dictionary<string, IValueProvider>(Terms),
-				new Dictionary<string, IValueProvider>(Units),
+				Terms.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
+				Units.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
 				ImplicitReference
 			);
 		}

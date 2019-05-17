@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace ExpressionMathmatics
+namespace Expresser
 {
 	[StructLayout(LayoutKind.Explicit)]
 	public struct MathValue

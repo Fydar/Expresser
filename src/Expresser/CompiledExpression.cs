@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace ExpressionMathmatics
+namespace Expresser
 {
 	/// <summary>
 	/// <para>A mathematical expression in a compiled format.</para>
 	/// </summary>
 	public class CompiledExpression
 	{
+		/// <summary>
+		/// <para></para>
+		/// </summary>
 		public enum OperationCode : byte
 		{
 			None,
@@ -137,8 +140,10 @@ namespace ExpressionMathmatics
 			}
 		}
 
-		public struct CalculatedSpan : IEquatable<CalculatedSpan>
+		public struct CalculatedSpan
 		{
+			public static CalculatedSpan None => new CalculatedSpan();
+
 			public int Start;
 			public int Length;
 			public MathValue Value;
@@ -150,15 +155,12 @@ namespace ExpressionMathmatics
 				Value = value;
 			}
 
-			public static CalculatedSpan None => new CalculatedSpan();
-
 			public bool Contains(int index)
 			{
 				return index >= Start && index <= Start + Length - 1;
 			}
 
-			public bool Equals(CalculatedSpan other) => Start == other.Start && Length == other.Length;
-			public override int GetHashCode() => HashCode.Combine(Start, Length);
+			public bool RangeEqual(CalculatedSpan other) => Start == other.Start && Length == other.Length;
 		}
 
 		private static readonly OperationCode[] OrderOfOperations = new[]
@@ -663,9 +665,9 @@ namespace ExpressionMathmatics
 								continue;
 						}
 
-						if (!lastTokenSpan.Equals(CalculatedSpan.None))
+						if (!lastTokenSpan.RangeEqual(CalculatedSpan.None))
 						{
-							if (!nextTokenSpan.Equals(CalculatedSpan.None))
+							if (!nextTokenSpan.RangeEqual(CalculatedSpan.None))
 							{
 								Buffer[lastTokenSpanIndex] = new CalculatedSpan(
 									lastTokenSpan.Start,
@@ -684,7 +686,7 @@ namespace ExpressionMathmatics
 						}
 						else
 						{
-							if (!nextTokenSpan.Equals(CalculatedSpan.None))
+							if (!nextTokenSpan.RangeEqual(CalculatedSpan.None))
 							{
 								Buffer[nextTokenSpanIndex] = new CalculatedSpan(nextTokenSpan.Start - 2, nextTokenSpan.Length + 2, value);
 							}

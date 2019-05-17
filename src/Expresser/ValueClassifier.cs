@@ -1,4 +1,4 @@
-﻿namespace ExpressionMathmatics
+﻿namespace Expresser
 {
 	public enum ValueClassifier : byte
 	{

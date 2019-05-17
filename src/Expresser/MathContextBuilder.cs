@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ExpressionMathmatics
+namespace Expresser
 {
 	public class MathContextBuilder : IMathContextBuilder
 	{

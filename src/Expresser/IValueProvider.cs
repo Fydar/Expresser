@@ -1,5 +1,5 @@
 ﻿
-namespace ExpressionMathmatics
+namespace Expresser
 {
 	/// <summary>
 	/// <para></para>

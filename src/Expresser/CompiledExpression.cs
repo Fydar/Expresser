@@ -421,12 +421,12 @@ namespace Expresser
 								string spanContent = expression.Substring (currentSpanStart + offset, currentSpanLength - offset);
 #endif
 
-								if (spanContent == "true")
+								if (spanContent.Equals("true", StringComparison.OrdinalIgnoreCase))
 								{
 									lastToken = Token.StaticValue (new MathValue (true));
 									foundTokens.Add (lastToken);
 								}
-								else if (spanContent == "false")
+								else if (spanContent.Equals("false", StringComparison.OrdinalIgnoreCase))
 								{
 									lastToken = Token.StaticValue (new MathValue (false));
 									foundTokens.Add (lastToken);

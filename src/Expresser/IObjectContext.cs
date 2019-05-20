@@ -8,6 +8,7 @@
 		/// <summary>
 		/// <para></para>
 		/// </summary>
+		/// <returns></returns>
 		object Target { get; }
 	}
 }

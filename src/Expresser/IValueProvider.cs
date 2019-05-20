@@ -1,5 +1,4 @@
-﻿
-namespace Expresser
+﻿namespace Expresser
 {
 	/// <summary>
 	/// <para></para>

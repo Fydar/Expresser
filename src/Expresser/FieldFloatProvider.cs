@@ -15,7 +15,7 @@ namespace Expresser
 		/// <returns>
 		/// <para></para>
 		/// </returns>
-		public MathValue Value => new MathValue((float)targetField.GetValue(Target), false);
+		public MathValue Value => new MathValue ((float)targetField.GetValue (Target), false);
 
 		/// <summary>
 		/// <para></para>
@@ -48,7 +48,7 @@ namespace Expresser
 		/// <para></para>
 		/// </summary>
 		/// <returns></returns>
-		public override string ToString()
+		public override string ToString ()
 		{
 			return targetField.Name;
 		}

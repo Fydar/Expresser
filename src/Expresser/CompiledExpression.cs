@@ -53,24 +53,24 @@ namespace Expresser
 			Structure
 		}
 
-		[StructLayout(LayoutKind.Explicit)]
+		[StructLayout (LayoutKind.Explicit)]
 		public struct Token
 		{
-			[FieldOffset(0)] public OperationCode Operation;
-			[FieldOffset(1)] public MathValue Value;
-			[FieldOffset(1)] public byte Source;
-			[FieldOffset(2)] public sbyte Multiplier;
+			[FieldOffset (0)] public OperationCode Operation;
+			[FieldOffset (1)] public MathValue Value;
+			[FieldOffset (1)] public byte Source;
+			[FieldOffset (2)] public sbyte Multiplier;
 
-			public static Token None => new Token() { Operation = OperationCode.None };
+			public static Token None => new Token () { Operation = OperationCode.None };
 
-			public MathValue ValueWithSources(IValueProvider[] sources)
+			public MathValue ValueWithSources (IValueProvider[] sources)
 			{
 				if (Operation == OperationCode.Source)
 				{
 					var sourceValue = sources[Source].Value;
 					switch (sourceValue.ValueClass)
 					{
-						case ValueClassifier.Numeric: return new MathValue(sourceValue.FloatValue * Multiplier, false);
+						case ValueClassifier.Numeric: return new MathValue (sourceValue.FloatValue * Multiplier, false);
 						default: return sourceValue;
 					}
 				}
@@ -83,17 +83,17 @@ namespace Expresser
 						Operation == OperationCode.Divide ||
 						Operation == OperationCode.Power;
 
-			public static Token Operator(OperationCode operation)
+			public static Token Operator (OperationCode operation)
 			{
-				return new Token()
+				return new Token ()
 				{
 					Operation = operation
 				};
 			}
 
-			public static Token ReadSource(byte sourceId, bool negative)
+			public static Token ReadSource (byte sourceId, bool negative)
 			{
-				return new Token()
+				return new Token ()
 				{
 					Operation = OperationCode.Source,
 					Source = sourceId,
@@ -101,16 +101,16 @@ namespace Expresser
 				};
 			}
 
-			public static Token StaticValue(MathValue value)
+			public static Token StaticValue (MathValue value)
 			{
-				return new Token()
+				return new Token ()
 				{
 					Operation = OperationCode.Value,
 					Value = value
 				};
 			}
 
-			public override string ToString()
+			public override string ToString ()
 			{
 				switch (Operation)
 				{
@@ -133,34 +133,34 @@ namespace Expresser
 					case OperationCode.LessThan: return "<";
 					case OperationCode.LessThanOrEqual: return "<=";
 
-					case OperationCode.Value: return Value.ToString();
-					case OperationCode.Source: return "source[" + Source.ToString() + "]";
-					default: return Operation.ToString();
+					case OperationCode.Value: return Value.ToString ();
+					case OperationCode.Source: return "source[" + Source.ToString () + "]";
+					default: return Operation.ToString ();
 				}
 			}
 		}
 
-		public struct CalculatedSpan
+		struct CalculatedSpan
 		{
-			public static CalculatedSpan None => new CalculatedSpan();
+			public static CalculatedSpan None => new CalculatedSpan ();
 
 			public int Start;
 			public int Length;
 			public MathValue Value;
 
-			public CalculatedSpan(int start, int length, MathValue value)
+			public CalculatedSpan (int start, int length, MathValue value)
 			{
 				Start = start;
 				Length = length;
 				Value = value;
 			}
 
-			public bool Contains(int index)
+			public bool Contains (int index)
 			{
 				return index >= Start && index <= Start + Length - 1;
 			}
 
-			public bool RangeEqual(CalculatedSpan other) => Start == other.Start && Length == other.Length;
+			public bool RangeEqual (CalculatedSpan other) => Start == other.Start && Length == other.Length;
 		}
 
 		private static readonly OperationCode[] OrderOfOperations = new[]
@@ -204,43 +204,43 @@ namespace Expresser
 		/// </summary>
 		/// <param name="expression"></param>
 		/// <param name="context"></param>
-		public CompiledExpression(string expression, IMathContext context = null)
+		public CompiledExpression (string expression, IMathContext context = null)
 		{
 			Expression = expression;
 			Context = context;
 
-			Buffer = new List<CalculatedSpan>();
+			Buffer = new List<CalculatedSpan> ();
 
-			ParseText(expression, out Tokens, out ImplicitSource, out Sources, context);
+			ParseText (expression, out Tokens, out ImplicitSource, out Sources, context);
 		}
 
 		/// <summary>
 		/// <para></para>
 		/// </summary>
-		public MathValue Evaluate()
+		public MathValue Evaluate ()
 		{
-			return Evaluate(Tokens);
+			return Evaluate (Tokens);
 		}
 
-		public override string ToString()
+		public override string ToString ()
 		{
-			var sb = new StringBuilder();
+			var sb = new StringBuilder ();
 
 			var lastToken = Tokens[0];
 			for (int i = 1; i < Tokens.Length; i++)
 			{
 				var token = Tokens[i];
-				sb.Append(lastToken);
+				sb.Append (lastToken);
 				if (lastToken.Operation != OperationCode.OpenParentheses
 					&& token.Operation != OperationCode.CloseParentheses
 					&& token.Operation != OperationCode.Percentage)
 				{
-					sb.Append(' ');
+					sb.Append (' ');
 				}
 				lastToken = token;
 			}
-			sb.Append(Tokens[Tokens.Length - 1]);
-			return sb.ToString();
+			sb.Append (Tokens[Tokens.Length - 1]);
+			return sb.ToString ();
 		}
 
 		private struct CharacterDescriptor
@@ -253,15 +253,15 @@ namespace Expresser
 			{
 				get
 				{
-					if (Index < 0 || char.IsWhiteSpace(Character))
+					if (Index < 0 || char.IsWhiteSpace (Character))
 					{
 						return SpanClassifier.Space;
 					}
-					else if (char.IsDigit(Character) || Character == '.')
+					else if (char.IsDigit (Character) || Character == '.')
 					{
 						return SpanClassifier.Numeric;
 					}
-					else if (char.IsLetter(Character))
+					else if (char.IsLetter (Character))
 					{
 						return SpanClassifier.String;
 					}
@@ -275,7 +275,7 @@ namespace Expresser
 					}
 					else
 					{
-						throw new InvalidOperationException(string.Format("Character \"{0}\" could not be classified", Character));
+						throw new InvalidOperationException (string.Format ("Character \"{0}\" could not be classified", Character));
 					}
 				}
 			}
@@ -301,17 +301,17 @@ namespace Expresser
 				}
 			}
 
-			public static CharacterDescriptor Start(string sourceString)
+			public static CharacterDescriptor Start (string sourceString)
 			{
-				return new CharacterDescriptor(sourceString, -1);
+				return new CharacterDescriptor (sourceString, -1);
 			}
 
-			public static CharacterDescriptor End(string sourceString)
+			public static CharacterDescriptor End (string sourceString)
 			{
-				return new CharacterDescriptor(sourceString, -2);
+				return new CharacterDescriptor (sourceString, -2);
 			}
 
-			public CharacterDescriptor(string sourceString, short index)
+			public CharacterDescriptor (string sourceString, short index)
 			{
 				SourceString = sourceString;
 				Index = index;
@@ -320,7 +320,7 @@ namespace Expresser
 					if (index >= sourceString.Length)
 					{
 						Index = -2;
-						Character = new char();
+						Character = new char ();
 					}
 					else
 					{
@@ -330,15 +330,15 @@ namespace Expresser
 				else
 				{
 					Index = -1;
-					Character = new char();
+					Character = new char ();
 				}
 			}
 
-			public CharacterDescriptor Next()
+			public CharacterDescriptor Next ()
 			{
 				if (Index == -2)
 					return this;
-				return new CharacterDescriptor(SourceString, (short)(Index + 1));
+				return new CharacterDescriptor (SourceString, (short)(Index + 1));
 			}
 
 			public bool IsOperator => Character == '+' ||
@@ -357,7 +357,7 @@ namespace Expresser
 			public bool IsStructure => Character == '(' ||
 						Character == ')';
 
-			public override string ToString()
+			public override string ToString ()
 			{
 				if (Index == -1)
 					return "Start";
@@ -368,10 +368,10 @@ namespace Expresser
 			}
 		}
 
-		private static void ParseText(string expression, out Token[] tokens, out IValueProvider implicitSource, out IValueProvider[] sources, IMathContext context = null)
+		private static void ParseText (string expression, out Token[] tokens, out IValueProvider implicitSource, out IValueProvider[] sources, IMathContext context = null)
 		{
-			var foundTokens = new List<Token>();
-			var foundSources = new List<IValueProvider>();
+			var foundTokens = new List<Token> ();
+			var foundSources = new List<IValueProvider> ();
 
 			int currentSpanStart = 0;
 			int currentSpanLength = 0;
@@ -380,12 +380,12 @@ namespace Expresser
 
 			var lastToken = Token.None;
 
-			var headCharacter = CharacterDescriptor.Start(expression);
+			var headCharacter = CharacterDescriptor.Start (expression);
 			var lastCharacter = headCharacter;
 
 			while (true)
 			{
-				headCharacter = headCharacter.Next();
+				headCharacter = headCharacter.Next ();
 
 				if (headCharacter.Index == -2 && lastCharacter.Index == -2)
 					break;
@@ -408,7 +408,7 @@ namespace Expresser
 					}
 					else
 					{
-						string debug = expression.Substring(currentSpanStart, currentSpanLength);
+						string debug = expression.Substring (currentSpanStart, currentSpanLength);
 						switch (currentSpanClass)
 						{
 							case SpanClassifier.String:
@@ -418,42 +418,42 @@ namespace Expresser
 #if USE_SPANS
 								var spanContent = expression.AsSpan().Slice(currentSpanStart, currentSpanLength));
 #else
-								string spanContent = expression.Substring(currentSpanStart + offset, currentSpanLength - offset);
+								string spanContent = expression.Substring (currentSpanStart + offset, currentSpanLength - offset);
 #endif
 
 								if (spanContent == "true")
 								{
-									lastToken = Token.StaticValue(new MathValue(true));
-									foundTokens.Add(lastToken);
+									lastToken = Token.StaticValue (new MathValue (true));
+									foundTokens.Add (lastToken);
 								}
 								else if (spanContent == "false")
 								{
-									lastToken = Token.StaticValue(new MathValue(false));
-									foundTokens.Add(lastToken);
+									lastToken = Token.StaticValue (new MathValue (false));
+									foundTokens.Add (lastToken);
 								}
 								else if (context == null)
 								{
-									throw new InvalidOperationException(string.Format("Unrecognised source \"{0}\" at position {1} to {2} (No additional sources specified)",
+									throw new InvalidOperationException (string.Format ("Unrecognised source \"{0}\" at position {1} to {2} (No additional sources specified)",
 										spanContent, currentSpanStart, currentSpanStart + currentSpanLength));
 								}
 								else
 								{
 									IValueProvider provider;
-									if (!context.TryGetTerm(spanContent, out provider))
+									if (!context.TryGetTerm (spanContent, out provider))
 									{
-										throw new InvalidOperationException(string.Format("Unrecognised source \"{0}\" at position {1} to {2}",
+										throw new InvalidOperationException (string.Format ("Unrecognised source \"{0}\" at position {1} to {2}",
 											spanContent, currentSpanStart, currentSpanStart + currentSpanLength));
 									}
 
-									int sourceIndex = foundSources.IndexOf(provider);
+									int sourceIndex = foundSources.IndexOf (provider);
 									if (sourceIndex == -1)
 									{
 										sourceIndex = foundSources.Count;
-										foundSources.Add(provider);
+										foundSources.Add (provider);
 									}
 
-									lastToken = Token.ReadSource((byte)sourceIndex, isNegative);
-									foundTokens.Add(lastToken);
+									lastToken = Token.ReadSource ((byte)sourceIndex, isNegative);
+									foundTokens.Add (lastToken);
 								}
 								break;
 
@@ -461,13 +461,13 @@ namespace Expresser
 #if USE_SPANS
 								spanContent = expression.AsSpan().Slice(currentSpanStart, currentSpanLength));
 #else
-								spanContent = expression.Substring(currentSpanStart, currentSpanLength);
+								spanContent = expression.Substring (currentSpanStart, currentSpanLength);
 #endif
 
-								float numericFloat = float.Parse(spanContent);
+								float numericFloat = float.Parse (spanContent);
 
-								lastToken = Token.StaticValue(new MathValue(numericFloat, false));
-								foundTokens.Add(lastToken);
+								lastToken = Token.StaticValue (new MathValue (numericFloat, false));
+								foundTokens.Add (lastToken);
 
 								break;
 
@@ -475,11 +475,11 @@ namespace Expresser
 							case SpanClassifier.Structure:
 								if (currentSpanLength == 1)
 								{
-									lastToken = Token.Operator(lastCharacter.OperationCode);
+									lastToken = Token.Operator (lastCharacter.OperationCode);
 								}
 								else
 								{
-									spanContent = expression.Substring(currentSpanStart, currentSpanLength);
+									spanContent = expression.Substring (currentSpanStart, currentSpanLength);
 
 									OperationCode operation;
 									switch (spanContent)
@@ -492,13 +492,13 @@ namespace Expresser
 										case "||": operation = OperationCode.Or; break;
 										default: operation = OperationCode.None; break;
 									}
-									lastToken = Token.Operator(operation);
+									lastToken = Token.Operator (operation);
 								}
 								if (lastToken.Operation == OperationCode.None)
 								{
-									throw new InvalidOperationException(string.Format("Unrecognised Operator Sequence \"{0}\"", expression.Substring(currentSpanStart, currentSpanLength)));
+									throw new InvalidOperationException (string.Format ("Unrecognised Operator Sequence \"{0}\"", expression.Substring (currentSpanStart, currentSpanLength)));
 								}
-								foundTokens.Add(lastToken);
+								foundTokens.Add (lastToken);
 								break;
 						}
 
@@ -513,15 +513,15 @@ namespace Expresser
 				lastCharacter = headCharacter;
 			}
 
-			tokens = foundTokens.ToArray();
-			sources = foundSources.ToArray();
+			tokens = foundTokens.ToArray ();
+			sources = foundSources.ToArray ();
 			implicitSource = null;
 		}
 
-		MathValue Evaluate(Token[] tokens)
+		MathValue Evaluate (Token[] tokens)
 		{
-			Buffer.Clear();
-			return Evaluate(tokens, 0, tokens.Length);
+			Buffer.Clear ();
+			return Evaluate (tokens, 0, tokens.Length);
 		}
 
 		struct IndexDescriptor
@@ -529,32 +529,32 @@ namespace Expresser
 			public MathValue Value;
 			public Token Token;
 
-			public IndexDescriptor(MathValue value, Token token)
+			public IndexDescriptor (MathValue value, Token token)
 			{
 				Value = value;
 				Token = token;
 			}
 		}
 
-		MathValue Evaluate(Token[] tokens, int spanStart, int spanLength)
+		MathValue Evaluate (Token[] tokens, int spanStart, int spanLength)
 		{
 			if (spanLength == 0)
 			{
-				throw new InvalidOperationException("Trying to calculate with 0 length span");
+				throw new InvalidOperationException ("Trying to calculate with 0 length span");
 			}
 			if (spanLength == 1)
 			{
-				var onlyIndex = DescribeIndex(tokens, spanStart);
+				var onlyIndex = DescribeIndex (tokens, spanStart);
 
 				switch (onlyIndex.Token.Operation)
 				{
 					case OperationCode.Source:
 					case OperationCode.Value:
-						Buffer.Add(new CalculatedSpan(spanStart, 1, onlyIndex.Value));
+						Buffer.Add (new CalculatedSpan (spanStart, 1, onlyIndex.Value));
 						break;
 
 					default:
-						throw new InvalidOperationException("Operator found with no values.");
+						throw new InvalidOperationException ("Operator found with no values.");
 				}
 			}
 			else
@@ -576,7 +576,7 @@ namespace Expresser
 						case OperationCode.CloseParentheses:
 							if (--depth == 0)
 							{
-								Evaluate(tokens, parenthesesStart, i - parenthesesStart);
+								Evaluate (tokens, parenthesesStart, i - parenthesesStart);
 							}
 							break;
 					}
@@ -590,7 +590,7 @@ namespace Expresser
 						int thisTokenSpanIndex;
 						CalculatedSpan thisTokenSpan;
 
-						var thisIndex = DescribeIndex(tokens, i, out thisTokenSpan, out thisTokenSpanIndex);
+						var thisIndex = DescribeIndex (tokens, i, out thisTokenSpan, out thisTokenSpanIndex);
 
 						if (operation != thisIndex.Token.Operation)
 							continue;
@@ -601,84 +601,84 @@ namespace Expresser
 						int nextTokenSpanIndex;
 						CalculatedSpan nextTokenSpan;
 
-						var lastIndex = DescribeIndex(tokens, i - 1, out lastTokenSpan, out lastTokenSpanIndex);
-						var nextIndex = DescribeIndex(tokens, i + 1, out nextTokenSpan, out nextTokenSpanIndex);
+						var lastIndex = DescribeIndex (tokens, i - 1, out lastTokenSpan, out lastTokenSpanIndex);
+						var nextIndex = DescribeIndex (tokens, i + 1, out nextTokenSpan, out nextTokenSpanIndex);
 
 						MathValue value;
 
 						switch (operation)
 						{
 							case OperationCode.Plus:
-								value = MathValue.Add(lastIndex.Value, nextIndex.Value);
+								value = MathValue.Add (lastIndex.Value, nextIndex.Value);
 								break;
 
 							case OperationCode.Multiply:
-								value = MathValue.Multiply(lastIndex.Value, nextIndex.Value);
+								value = MathValue.Multiply (lastIndex.Value, nextIndex.Value);
 								break;
 
 							case OperationCode.Minus:
-								value = MathValue.Subtract(lastIndex.Value, nextIndex.Value);
+								value = MathValue.Subtract (lastIndex.Value, nextIndex.Value);
 								break;
 
 							case OperationCode.Divide:
-								value = MathValue.Divide(lastIndex.Value, nextIndex.Value);
+								value = MathValue.Divide (lastIndex.Value, nextIndex.Value);
 								break;
 
 							case OperationCode.Power:
-								value = MathValue.Power(lastIndex.Value, nextIndex.Value);
+								value = MathValue.Power (lastIndex.Value, nextIndex.Value);
 								break;
 
 
 							case OperationCode.GreaterThan:
-								value = MathValue.GreaterThan(lastIndex.Value, nextIndex.Value);
+								value = MathValue.GreaterThan (lastIndex.Value, nextIndex.Value);
 								break;
 
 							case OperationCode.GreaterThanOrEqual:
-								value = MathValue.GreaterThanOrEqual(lastIndex.Value, nextIndex.Value);
+								value = MathValue.GreaterThanOrEqual (lastIndex.Value, nextIndex.Value);
 								break;
 
 							case OperationCode.LessThan:
-								value = MathValue.LessThan(lastIndex.Value, nextIndex.Value);
+								value = MathValue.LessThan (lastIndex.Value, nextIndex.Value);
 								break;
 
 							case OperationCode.LessThanOrEqual:
-								value = MathValue.LessThanOrEqual(lastIndex.Value, nextIndex.Value);
+								value = MathValue.LessThanOrEqual (lastIndex.Value, nextIndex.Value);
 								break;
 
 							case OperationCode.Equal:
-								value = MathValue.Equal(lastIndex.Value, nextIndex.Value);
+								value = MathValue.Equal (lastIndex.Value, nextIndex.Value);
 								break;
 
 							case OperationCode.NotEqual:
-								value = MathValue.NotEqual(lastIndex.Value, nextIndex.Value);
+								value = MathValue.NotEqual (lastIndex.Value, nextIndex.Value);
 								break;
 
 							case OperationCode.And:
-								value = MathValue.And(lastIndex.Value, nextIndex.Value);
+								value = MathValue.And (lastIndex.Value, nextIndex.Value);
 								break;
 
 							case OperationCode.Or:
-								value = MathValue.Or(lastIndex.Value, nextIndex.Value);
+								value = MathValue.Or (lastIndex.Value, nextIndex.Value);
 								break;
 
 							default:
 								continue;
 						}
 
-						if (!lastTokenSpan.RangeEqual(CalculatedSpan.None))
+						if (!lastTokenSpan.RangeEqual (CalculatedSpan.None))
 						{
-							if (!nextTokenSpan.RangeEqual(CalculatedSpan.None))
+							if (!nextTokenSpan.RangeEqual (CalculatedSpan.None))
 							{
-								Buffer[lastTokenSpanIndex] = new CalculatedSpan(
+								Buffer[lastTokenSpanIndex] = new CalculatedSpan (
 									lastTokenSpan.Start,
 									lastTokenSpan.Length + nextTokenSpan.Length + 1,
 									value);
 
-								Buffer.RemoveAt(nextTokenSpanIndex);
+								Buffer.RemoveAt (nextTokenSpanIndex);
 							}
 							else
 							{
-								Buffer[lastTokenSpanIndex] = new CalculatedSpan(
+								Buffer[lastTokenSpanIndex] = new CalculatedSpan (
 									lastTokenSpan.Start,
 									lastTokenSpan.Length + 2,
 									value);
@@ -686,13 +686,13 @@ namespace Expresser
 						}
 						else
 						{
-							if (!nextTokenSpan.RangeEqual(CalculatedSpan.None))
+							if (!nextTokenSpan.RangeEqual (CalculatedSpan.None))
 							{
-								Buffer[nextTokenSpanIndex] = new CalculatedSpan(nextTokenSpan.Start - 2, nextTokenSpan.Length + 2, value);
+								Buffer[nextTokenSpanIndex] = new CalculatedSpan (nextTokenSpan.Start - 2, nextTokenSpan.Length + 2, value);
 							}
 							else
 							{
-								Buffer.Add(new CalculatedSpan(i - 1, 3, value));
+								Buffer.Add (new CalculatedSpan (i - 1, 3, value));
 							}
 						}
 					}
@@ -701,21 +701,21 @@ namespace Expresser
 
 			if (Buffer.Count == 0)
 			{
-				throw new InvalidOperationException("No operators found");
+				throw new InvalidOperationException ("No operators found");
 			}
 			else if (Buffer.Count != 1)
 			{
-				throw new InvalidOperationException("Missing operators resulting in dangling expression");
+				throw new InvalidOperationException ("Missing operators resulting in dangling expression");
 			}
 
 			CalculatedSpan finalSpan;
 			int finalSpanIndex;
-			DescribeIndex(tokens, spanStart, out finalSpan, out finalSpanIndex);
+			DescribeIndex (tokens, spanStart, out finalSpan, out finalSpanIndex);
 
 			// Have we covered the area we have been told to calculate?
 			if (finalSpan.Start != spanStart && finalSpan.Length != spanLength)
 			{
-				throw new InvalidOperationException("Dangling tokens uncaught by operators");
+				throw new InvalidOperationException ("Dangling tokens uncaught by operators");
 			}
 
 			// Expand span if it encompasses parenthasis.
@@ -726,7 +726,7 @@ namespace Expresser
 				var beforeSpan = tokens[finalSpan.Start - 1].Operation;
 				if (beforeSpan == OperationCode.OpenParentheses)
 				{
-					finalSpan = new CalculatedSpan(
+					finalSpan = new CalculatedSpan (
 						finalSpan.Start - 1,
 						finalSpan.Length + 2,
 						finalSpan.Value);
@@ -737,37 +737,37 @@ namespace Expresser
 			return finalSpan.Value;
 		}
 
-		IndexDescriptor DescribeIndex(Token[] tokens, int index)
+		IndexDescriptor DescribeIndex (Token[] tokens, int index)
 		{
 			for (int j = 0; j < Buffer.Count; j++)
 			{
 				var span = Buffer[j];
-				if (span.Contains(index))
+				if (span.Contains (index))
 				{
-					return new IndexDescriptor(span.Value, Token.None);
+					return new IndexDescriptor (span.Value, Token.None);
 				}
 			}
 
 			var token = tokens[index];
-			return new IndexDescriptor(token.ValueWithSources(Sources), token);
+			return new IndexDescriptor (token.ValueWithSources (Sources), token);
 		}
 
-		IndexDescriptor DescribeIndex(Token[] tokens, int index, out CalculatedSpan span, out int spanIndex)
+		IndexDescriptor DescribeIndex (Token[] tokens, int index, out CalculatedSpan span, out int spanIndex)
 		{
 			for (int j = 0; j < Buffer.Count; j++)
 			{
 				span = Buffer[j];
-				if (span.Contains(index))
+				if (span.Contains (index))
 				{
 					spanIndex = j;
-					return new IndexDescriptor(span.Value, Token.None);
+					return new IndexDescriptor (span.Value, Token.None);
 				}
 			}
 			spanIndex = -1;
 			span = CalculatedSpan.None;
 
 			var token = tokens[index];
-			return new IndexDescriptor(token.ValueWithSources(Sources), token);
+			return new IndexDescriptor (token.ValueWithSources (Sources), token);
 		}
 	}
 }

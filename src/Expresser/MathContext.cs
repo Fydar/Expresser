@@ -12,7 +12,7 @@ namespace Expresser
 
 		public IValueProvider ImplicitReference { get; }
 
-		public MathContext(IReadOnlyDictionary<string, IValueProvider> terms, IReadOnlyDictionary<string, IValueProvider> units, IValueProvider implicitReference)
+		public MathContext (IReadOnlyDictionary<string, IValueProvider> terms, IReadOnlyDictionary<string, IValueProvider> units, IValueProvider implicitReference)
 		{
 			Terms = terms;
 			Units = units;
@@ -25,9 +25,9 @@ namespace Expresser
 		/// <param name="key"></param>
 		/// <param name="provider"></param>
 		/// <returns></returns>
-		public bool TryGetTerm(string key, out IValueProvider provider)
+		public bool TryGetTerm (string key, out IValueProvider provider)
 		{
-			return Terms.TryGetValue(key.ToLower(), out provider);
+			return Terms.TryGetValue (key.ToLower (), out provider);
 		}
 
 		/// <summary>
@@ -36,9 +36,9 @@ namespace Expresser
 		/// <param name="key"></param>
 		/// <param name="provider"></param>
 		/// <returns></returns>
-		public bool TryGetUnit(string key, out IValueProvider provider)
+		public bool TryGetUnit (string key, out IValueProvider provider)
 		{
-			return Units.TryGetValue(key.ToLower(), out provider);
+			return Units.TryGetValue (key.ToLower (), out provider);
 		}
 	}
 }

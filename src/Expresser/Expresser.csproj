@@ -4,16 +4,20 @@
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>6.0</LangVersion>
+    <Version>1.0.0.1</Version>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Company>Anthony Marmont</Company>
     <Authors>Anthony Marmont</Authors>
-    <PackageProjectUrl>https://github.com/Fydar/Expresser</PackageProjectUrl>
-    <PackageLicenseExpression>Apache License 2.0</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/Fydar/Expresser</RepositoryUrl>
-    <AssemblyVersion>0.01.0.0</AssemblyVersion>
-    <FileVersion>0.1.0.0</FileVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Anthony Marmont</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageReleaseNotes>First NuGet release</PackageReleaseNotes>
+    <Description>Simple mathematics library for C#, optimized for performance in data-driven games.</Description>
+    <PackageProjectUrl>https://github.com/Fydar/Expresser</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Fydar/Expresser</RepositoryUrl>
+    <PackageIconUrl>https://github.com/Fydar/Expresser/raw/master/project-icon.png</PackageIconUrl>
   </PropertyGroup>
 
 </Project>

@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.28621.142
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expresser", "Expresser\Expresser.csproj", "{2BE69DEC-2D3D-4E95-A9BB-2AA6ADC452E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expresser.UnitTests", "Expresser.UnitTests\Expresser.UnitTests.csproj", "{5467AA3C-1DF3-4F29-8271-F0E822803744}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expresser.UnitTests", "Expresser.UnitTests\Expresser.UnitTests.csproj", "{5467AA3C-1DF3-4F29-8271-F0E822803744}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8718C43A-8B92-444D-B832-008D38AB2472}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

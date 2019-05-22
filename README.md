@@ -4,6 +4,8 @@
 
 Simple mathematics library for C#, optimized for performance in data-driven games.
 
+[![Documentation](https://img.shields.io/badge/-Documentation-278bce.svg)](https://github.com/Fydar/Expresser/wiki/Expresser)
+
 ## Usage
 
 ```csharp
@@ -31,41 +33,36 @@ public class Program
 
 ## Todo
 
-![Project Backlog](https://img.shields.io/github/issues/Fydar/Expresser/Project_Backlog.svg?color=%2384c649&label=Project%20Backlog)
+[![Project Backlog](https://img.shields.io/github/issues/Fydar/Expresser/todo.svg?color=%2384c649&label=Todo%20List)](https://github.com/Fydar/Expresser/issues?q=is%3Aissue+is%3Aopen+label%3Atodo)
+[![Bugs](https://img.shields.io/github/issues/Fydar/Expresser/bug.svg?color=%23c66649&label=Bugs)](https://github.com/Fydar/Expresser/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
 
 Issues marked with Todo are issues that have been identified as potential enhancements for Expresser, and are apart of the project backlog.
 
 Below is a collection of enhancements that are currently being considered for the project backlog.
 
+- Introduce "Functions" (`max(5, 10)`, `mod(11.5)`) [#1](https://github.com/Fydar/Expresser/issues/1)
 - Introduce another intermediary form of an expression to increase evaluation performance.
 - Support for `%` operator in use in defining percentages
 - Support for `!` as a NOT operator
 - Support for bitwise operators
-- Introduce "Functions" (`max(5, 10)`, `mod(11.5)`)
 - More Data-Types (currently only support Bool and Float)
-
-## Known Issues
-
-![Bugs](https://img.shields.io/github/issues/Fydar/Expresser/bug.svg?color=%23c66649&label=Bugs)
-
-Expresser is still in the early stages of development with occasional breaking changes.
 
 ## Contributing
 
+[![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg)](https://gitmoji.carloscuesta.me)
+
+This project follows commit guidelines specified by [Gitmoji](https://gitmoji.carloscuesta.me), with the exception of using the raw unicode character (✨) rather than a string (`:sparkles:`). This is to increase compatibility with Git clients.
+
+Commit messages should target around a 50 character long headline, with any addition information following two line breaks. [Fork](https://git-fork.com/) uses this format when you are writing your commit messages.
+
 Feel free to submit pull requests, referencing any relevant issues and listing a brief overview of the changes in the pull request.
-
-### Commit Messages
-
-[![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://gitmoji.carloscuesta.me)
-
-This project follows commit guidelines specified by [Gitmoji](https://gitmoji.carloscuesta.me).
-
-Commit messages should have around a 50 character long headline, with any addition information following two line breaks. [Fork](https://git-fork.com/) uses this format when you are writing your commit messages.
 
 ### Code Style
 
 An `.editorconfig` is included in the project that will ensure that your IDE follows the projects code style. I recommend you use an IDE that supports `.editorconfig` files such as [Visual Studio](https://visualstudio.microsoft.com/).
 
 ## License
+
+[![License](https://img.shields.io/github/license/Fydar/Expresser.svg)](https://github.com/Fydar/Expresser/blob/master/LICENSE)
 
 This work is licensed under the **Apache License, Version 2.0**, meaning you are free to use this work commercially under the conditions the `LICENSE` and `NOTICE` files are included within the source.

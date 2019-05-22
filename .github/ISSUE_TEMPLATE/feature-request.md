@@ -1,18 +1,16 @@
 ---
 name: Feature Request
-about: Suggest an idea for this project
+about: Suggest a feature for this project
 labels: enhancement
 ---
 
-# User Story
+# Brief
 
-Describe the end user-facing experience of this feature. If it's purely a tool, this section can describe the user of the tools experience.
+A breif description of the feature in question.
 
-<!--
-# Tools and Design
+## Examples
 
-Describe how this feature may be setup inside a Unity project and what sort of tools may be required to leverage the feature.
--->
+A practical example of the feature in use.
 
 <!--
 # Implementation
@@ -23,5 +21,5 @@ If you have a suggested way of implementing this feature, add it here.
 <!--
 # Additional context
 
-Add any other context or screenshots about the feature request here. E.g. Screenshots, mockups, diagrams.
+Add any other context or screenshots about the feature request here. E.g. screenshots, mockups, diagrams.
 -->

@@ -1,18 +1,10 @@
 ﻿namespace Expresser
 {
-	public enum OperationCode : byte
+	public enum SyntaxTokenKind : byte
 	{
 		None,
 
-		Value,
-		Source,
-
-		// Structure
-		OpenParentheses,
-		CloseParentheses,
-
 		// Maths
-		Percentage,
 		Plus,
 		Minus,
 		Multiply,
@@ -28,5 +20,15 @@
 		GreaterThanOrEqual,
 		LessThan,
 		LessThanOrEqual,
+
+		Value,
+		Source,
+
+		// Structure
+		OpenParentheses,
+		CloseParentheses,
+
+		// Suffix
+		Percentage,
 	}
 }

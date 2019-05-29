@@ -41,23 +41,23 @@ namespace Expresser
 			public bool IsStructure => Character == '(' ||
 						Character == ')';
 
-			public OperationCode OperationCode
+			public SyntaxTokenKind OperationCode
 			{
 				get
 				{
 					switch (Character)
 					{
-						case '+': return OperationCode.Plus;
-						case '-': return OperationCode.Minus;
-						case '*': return OperationCode.Multiply;
-						case '/': return OperationCode.Divide;
-						case '^': return OperationCode.Power;
-						case '%': return OperationCode.Percentage;
-						case '(': return OperationCode.OpenParentheses;
-						case ')': return OperationCode.CloseParentheses;
-						case '>': return OperationCode.GreaterThan;
-						case '<': return OperationCode.LessThan;
-						default: return OperationCode.None;
+						case '+': return SyntaxTokenKind.Plus;
+						case '-': return SyntaxTokenKind.Minus;
+						case '*': return SyntaxTokenKind.Multiply;
+						case '/': return SyntaxTokenKind.Divide;
+						case '^': return SyntaxTokenKind.Power;
+						case '%': return SyntaxTokenKind.Percentage;
+						case '(': return SyntaxTokenKind.OpenParentheses;
+						case ')': return SyntaxTokenKind.CloseParentheses;
+						case '>': return SyntaxTokenKind.GreaterThan;
+						case '<': return SyntaxTokenKind.LessThan;
+						default: return SyntaxTokenKind.None;
 					}
 				}
 			}
@@ -177,9 +177,9 @@ namespace Expresser
 			{
 				var token = Tokens[i];
 				sb.Append (lastToken);
-				if (lastToken.Operation != OperationCode.OpenParentheses
-					&& token.Operation != OperationCode.CloseParentheses
-					&& token.Operation != OperationCode.Percentage)
+				if (lastToken.Operation != SyntaxTokenKind.OpenParentheses
+					&& token.Operation != SyntaxTokenKind.CloseParentheses
+					&& token.Operation != SyntaxTokenKind.Percentage)
 				{
 					sb.Append (' ');
 				}
@@ -213,7 +213,7 @@ namespace Expresser
 
 				characterClass = headCharacter.Type;
 
-				if (headCharacter.Character == '-' && (lastToken.IsOperator || lastToken.Operation == OperationCode.None))
+				if (headCharacter.Character == '-' && (lastToken.IsOperator || lastToken.Operation == SyntaxTokenKind.None))
 				{
 					characterClass = SpanClassifier.Numeric;
 				}
@@ -289,20 +289,20 @@ namespace Expresser
 								{
 									spanContent = expression.Substring (currentSpanStart, currentSpanLength);
 
-									OperationCode operation;
+									SyntaxTokenKind operation;
 									switch (spanContent)
 									{
-										case "==": operation = OperationCode.Equal; break;
-										case "!=": operation = OperationCode.NotEqual; break;
-										case ">=": operation = OperationCode.GreaterThanOrEqual; break;
-										case "<=": operation = OperationCode.LessThanOrEqual; break;
-										case "&&": operation = OperationCode.And; break;
-										case "||": operation = OperationCode.Or; break;
-										default: operation = OperationCode.None; break;
+										case "==": operation = SyntaxTokenKind.Equal; break;
+										case "!=": operation = SyntaxTokenKind.NotEqual; break;
+										case ">=": operation = SyntaxTokenKind.GreaterThanOrEqual; break;
+										case "<=": operation = SyntaxTokenKind.LessThanOrEqual; break;
+										case "&&": operation = SyntaxTokenKind.And; break;
+										case "||": operation = SyntaxTokenKind.Or; break;
+										default: operation = SyntaxTokenKind.None; break;
 									}
 									lastToken = ExpressionToken.Operator (operation);
 								}
-								if (lastToken.Operation == OperationCode.None)
+								if (lastToken.Operation == SyntaxTokenKind.None)
 								{
 									throw new InvalidOperationException (string.Format ("Unrecognised Operator Sequence \"{0}\"", expression.Substring (currentSpanStart, currentSpanLength)));
 								}

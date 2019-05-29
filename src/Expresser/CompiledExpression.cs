@@ -9,16 +9,6 @@ namespace Expresser
 	/// </summary>
 	public class CompiledExpression
 	{
-		enum SpanClassifier : byte
-		{
-			None,
-			Numeric,
-			Operator,
-			String,
-			Space,
-			Structure
-		}
-
 		struct CalculatedSpan
 		{
 			public int Length;
@@ -41,130 +31,6 @@ namespace Expresser
 			public bool RangeEqual (CalculatedSpan other) => Start == other.Start && Length == other.Length;
 		}
 
-		private struct CharacterDescriptor
-		{
-			public char Character;
-			public short Index;
-			private readonly string SourceString;
-
-			public bool IsOperator => Character == '+' ||
-						Character == '-' ||
-						Character == '*' ||
-						Character == '/' ||
-						Character == '^' ||
-						Character == '&' ||
-						Character == '%' ||
-						Character == '|' ||
-						Character == '=' ||
-						Character == '!' ||
-						Character == '>' ||
-						Character == '<';
-
-			public bool IsStructure => Character == '(' ||
-						Character == ')';
-
-			public OperationCode OperationCode
-			{
-				get
-				{
-					switch (Character)
-					{
-						case '+': return OperationCode.Plus;
-						case '-': return OperationCode.Minus;
-						case '*': return OperationCode.Multiply;
-						case '/': return OperationCode.Divide;
-						case '^': return OperationCode.Power;
-						case '%': return OperationCode.Percentage;
-						case '(': return OperationCode.OpenParentheses;
-						case ')': return OperationCode.CloseParentheses;
-						case '>': return OperationCode.GreaterThan;
-						case '<': return OperationCode.LessThan;
-						default: return OperationCode.None;
-					}
-				}
-			}
-
-			public SpanClassifier Type
-			{
-				get
-				{
-					if (Index < 0 || char.IsWhiteSpace (Character))
-					{
-						return SpanClassifier.Space;
-					}
-					else if (char.IsDigit (Character) || Character == '.')
-					{
-						return SpanClassifier.Numeric;
-					}
-					else if (char.IsLetter (Character))
-					{
-						return SpanClassifier.String;
-					}
-					else if (IsStructure)
-					{
-						return SpanClassifier.Structure;
-					}
-					else if (IsOperator)
-					{
-						return SpanClassifier.Operator;
-					}
-					else
-					{
-						throw new InvalidOperationException (string.Format ("Character \"{0}\" could not be classified", Character));
-					}
-				}
-			}
-
-			public CharacterDescriptor (string sourceString, short index)
-			{
-				SourceString = sourceString;
-				Index = index;
-				if (Index >= 0)
-				{
-					if (index >= sourceString.Length)
-					{
-						Index = -2;
-						Character = new char ();
-					}
-					else
-					{
-						Character = sourceString[index];
-					}
-				}
-				else
-				{
-					Index = -1;
-					Character = new char ();
-				}
-			}
-
-			public static CharacterDescriptor End (string sourceString)
-			{
-				return new CharacterDescriptor (sourceString, -2);
-			}
-
-			public static CharacterDescriptor Start (string sourceString)
-			{
-				return new CharacterDescriptor (sourceString, -1);
-			}
-
-			public CharacterDescriptor Next ()
-			{
-				if (Index == -2)
-					return this;
-				return new CharacterDescriptor (SourceString, (short)(Index + 1));
-			}
-
-			public override string ToString ()
-			{
-				if (Index == -1)
-					return "Start";
-				if (Index == -2)
-					return "End";
-
-				return $"\"{Character}\" at {Index}";
-			}
-		}
 		struct IndexDescriptor
 		{
 			public ExpressionToken Token;
@@ -176,25 +42,26 @@ namespace Expresser
 				Token = token;
 			}
 		}
-		private static readonly OperationCode[] OrderOfOperations = new[]
-						{
-			OperationCode.Percentage,
 
-			OperationCode.Power,
-			OperationCode.Divide,
-			OperationCode.Multiply,
-			OperationCode.Plus,
-			OperationCode.Minus,
+		private static readonly SyntaxTokenKind[] OrderOfOperations = new[]
+		{
+			SyntaxTokenKind.Percentage,
 
-			OperationCode.GreaterThan,
-			OperationCode.GreaterThanOrEqual,
-			OperationCode.LessThan,
-			OperationCode.LessThanOrEqual,
-			OperationCode.Equal,
-			OperationCode.NotEqual,
+			SyntaxTokenKind.Power,
+			SyntaxTokenKind.Divide,
+			SyntaxTokenKind.Multiply,
+			SyntaxTokenKind.Plus,
+			SyntaxTokenKind.Minus,
 
-			OperationCode.And,
-			OperationCode.Or,
+			SyntaxTokenKind.GreaterThan,
+			SyntaxTokenKind.GreaterThanOrEqual,
+			SyntaxTokenKind.LessThan,
+			SyntaxTokenKind.LessThanOrEqual,
+			SyntaxTokenKind.Equal,
+			SyntaxTokenKind.NotEqual,
+
+			SyntaxTokenKind.And,
+			SyntaxTokenKind.Or,
 		};
 
 		private readonly List<CalculatedSpan> Buffer;
@@ -259,9 +126,9 @@ namespace Expresser
 			{
 				var token = Syntax.Tokens[i];
 				sb.Append (lastToken);
-				if (lastToken.Operation != OperationCode.OpenParentheses
-					&& token.Operation != OperationCode.CloseParentheses
-					&& token.Operation != OperationCode.Percentage)
+				if (lastToken.Operation != SyntaxTokenKind.OpenParentheses
+					&& token.Operation != SyntaxTokenKind.CloseParentheses
+					&& token.Operation != SyntaxTokenKind.Percentage)
 				{
 					sb.Append (' ');
 				}
@@ -322,8 +189,8 @@ namespace Expresser
 
 				switch (onlyIndex.Token.Operation)
 				{
-					case OperationCode.Source:
-					case OperationCode.Value:
+					case SyntaxTokenKind.Source:
+					case SyntaxTokenKind.Value:
 						Buffer.Add (new CalculatedSpan (spanStart, 1, onlyIndex.Value));
 						break;
 
@@ -340,14 +207,14 @@ namespace Expresser
 				{
 					switch (tokens[i].Operation)
 					{
-						case OperationCode.OpenParentheses:
+						case SyntaxTokenKind.OpenParentheses:
 							if (++depth == 1)
 							{
 								parenthesesStart = i + 1;
 							}
 							break;
 
-						case OperationCode.CloseParentheses:
+						case SyntaxTokenKind.CloseParentheses:
 							if (--depth == 0)
 							{
 								Evaluate (tokens, parenthesesStart, i - parenthesesStart);
@@ -382,56 +249,56 @@ namespace Expresser
 
 						switch (operation)
 						{
-							case OperationCode.Plus:
+							case SyntaxTokenKind.Plus:
 								value = MathValue.Add (lastIndex.Value, nextIndex.Value);
 								break;
 
-							case OperationCode.Multiply:
+							case SyntaxTokenKind.Multiply:
 								value = MathValue.Multiply (lastIndex.Value, nextIndex.Value);
 								break;
 
-							case OperationCode.Minus:
+							case SyntaxTokenKind.Minus:
 								value = MathValue.Subtract (lastIndex.Value, nextIndex.Value);
 								break;
 
-							case OperationCode.Divide:
+							case SyntaxTokenKind.Divide:
 								value = MathValue.Divide (lastIndex.Value, nextIndex.Value);
 								break;
 
-							case OperationCode.Power:
+							case SyntaxTokenKind.Power:
 								value = MathValue.Power (lastIndex.Value, nextIndex.Value);
 								break;
 
 
-							case OperationCode.GreaterThan:
+							case SyntaxTokenKind.GreaterThan:
 								value = MathValue.GreaterThan (lastIndex.Value, nextIndex.Value);
 								break;
 
-							case OperationCode.GreaterThanOrEqual:
+							case SyntaxTokenKind.GreaterThanOrEqual:
 								value = MathValue.GreaterThanOrEqual (lastIndex.Value, nextIndex.Value);
 								break;
 
-							case OperationCode.LessThan:
+							case SyntaxTokenKind.LessThan:
 								value = MathValue.LessThan (lastIndex.Value, nextIndex.Value);
 								break;
 
-							case OperationCode.LessThanOrEqual:
+							case SyntaxTokenKind.LessThanOrEqual:
 								value = MathValue.LessThanOrEqual (lastIndex.Value, nextIndex.Value);
 								break;
 
-							case OperationCode.Equal:
+							case SyntaxTokenKind.Equal:
 								value = MathValue.Equal (lastIndex.Value, nextIndex.Value);
 								break;
 
-							case OperationCode.NotEqual:
+							case SyntaxTokenKind.NotEqual:
 								value = MathValue.NotEqual (lastIndex.Value, nextIndex.Value);
 								break;
 
-							case OperationCode.And:
+							case SyntaxTokenKind.And:
 								value = MathValue.And (lastIndex.Value, nextIndex.Value);
 								break;
 
-							case OperationCode.Or:
+							case SyntaxTokenKind.Or:
 								value = MathValue.Or (lastIndex.Value, nextIndex.Value);
 								break;
 
@@ -498,7 +365,7 @@ namespace Expresser
 				&& finalSpan.Start + finalSpan.Length < tokens.Count)
 			{
 				var beforeSpan = tokens[finalSpan.Start - 1].Operation;
-				if (beforeSpan == OperationCode.OpenParentheses)
+				if (beforeSpan == SyntaxTokenKind.OpenParentheses)
 				{
 					finalSpan = new CalculatedSpan (
 						finalSpan.Start - 1,

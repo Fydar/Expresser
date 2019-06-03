@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Processing
 {
-	enum IntermediateOperationCode
+	public enum IntermediateOperationCode
 	{
 		None,
 

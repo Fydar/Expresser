@@ -34,6 +34,7 @@ namespace Expresser
 
 				case ValueClassifier.Boolean:
 					return BoolValue.ToString ();
+
 				default:
 					return "null";
 			}

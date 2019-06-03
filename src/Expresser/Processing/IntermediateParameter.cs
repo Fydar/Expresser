@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Processing
 {
-	struct IntermediateParameter
+	public struct IntermediateParameter
 	{
 		public IntermediateSource Source;
 		public byte Index;
@@ -9,6 +9,11 @@
 		{
 			Source = source;
 			Index = index;
+		}
+
+		public override string ToString ()
+		{
+			return $"{Source}[{Index}]";
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Processing
 {
-	enum IntermediateSource
+	public enum IntermediateSource
 	{
 		Static,
 		Identifier,

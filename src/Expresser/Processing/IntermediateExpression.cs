@@ -2,11 +2,11 @@
 
 namespace Expresser.Processing
 {
-	struct IntermediateExpression
+	public struct IntermediateExpression
 	{
 		public IntermediateOperation[] Operations;
 
-		public IntermediateExpression(IntermediateOperation[] operations)
+		public IntermediateExpression (IntermediateOperation[] operations)
 		{
 			Operations = operations;
 		}
@@ -14,6 +14,8 @@ namespace Expresser.Processing
 		public static IntermediateExpression Compile (ExpressionSyntax syntax)
 		{
 			var distBuffer = new List<DistSpan> ();
+			var srcBuffer = new List<MathValue> ();
+
 			var opBuffer = new List<IntermediateOperation> ();
 			var paramBuffer = new List<IntermediateParameter> ();
 
@@ -29,12 +31,17 @@ namespace Expresser.Processing
 					if (IsIndexCalculated (distBuffer, i))
 						continue;
 
-					var lastIndex = DescribeIndex (syntax, distBuffer, i - 1);
-					var nextIndex = DescribeIndex (syntax, distBuffer, i + 1);
+					var lastIndex = DescribeIndex (syntax, distBuffer, srcBuffer, i - 1);
+					var nextIndex = DescribeIndex (syntax, distBuffer, srcBuffer, i + 1);
+
+					paramBuffer.Add (lastIndex);
+					paramBuffer.Add (nextIndex);
+
+					distBuffer.Add (new DistSpan ((byte)(i - 1), 3, 0));
 
 					var intermediateOperationCode = (IntermediateOperationCode)token.Operation;
 
-					var intermediateOperation = new IntermediateOperation (intermediateOperationCode, paramBuffer.ToArray());
+					var intermediateOperation = new IntermediateOperation (0, intermediateOperationCode, paramBuffer.ToArray ());
 
 					paramBuffer.Clear ();
 
@@ -67,7 +74,7 @@ namespace Expresser.Processing
 			SyntaxTokenKind.Or,
 		};
 
-		static IntermediateParameter DescribeIndex (ExpressionSyntax syntax, IReadOnlyList<DistSpan> distBuffer, int index)
+		static IntermediateParameter DescribeIndex (ExpressionSyntax syntax, IReadOnlyList<DistSpan> distBuffer, List<MathValue> srcBuffer, int index)
 		{
 			for (byte i = 0; i < distBuffer.Count; i++)
 			{
@@ -79,7 +86,14 @@ namespace Expresser.Processing
 			}
 
 			var token = syntax.Tokens[index];
-			return new IntermediateParameter (IntermediateSource.Static, (byte)index);
+
+			int valueIndex = srcBuffer.LastIndexOf (token.Value);
+			if (valueIndex == -1)
+			{
+				valueIndex = srcBuffer.Count;
+				srcBuffer.Add (token.Value);
+			}
+			return new IntermediateParameter (IntermediateSource.Static, (byte)valueIndex);
 		}
 
 		static bool IsIndexCalculated (IReadOnlyList<DistSpan> distBuffer, int index)

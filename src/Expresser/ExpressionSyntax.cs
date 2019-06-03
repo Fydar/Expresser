@@ -148,6 +148,7 @@ namespace Expresser
 		/// <para></para>
 		/// </summary>
 		public string Expression { get; }
+
 		public IReadOnlyList<string> Terms { get; }
 		public IReadOnlyList<ExpressionToken> Tokens { get; }
 

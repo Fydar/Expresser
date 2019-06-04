@@ -20,5 +20,14 @@ namespace Tests
 
 
 		}
+
+		[Test]
+		public void CompileBranchingExpression ()
+		{
+			var syntax = new ExpressionSyntax ("10 * 10 + 2 * 2");
+			var intermediateExpression = IntermediateExpression.Compile (syntax);
+
+
+		}
 	}
 }

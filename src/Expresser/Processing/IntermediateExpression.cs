@@ -5,11 +5,8 @@ namespace Expresser.Processing
 	public struct IntermediateExpression
 	{
 		public IntermediateOperation[] Operations;
-
-		public IntermediateExpression (IntermediateOperation[] operations)
-		{
-			Operations = operations;
-		}
+		public MathValue[] Static;
+		public int DistSize;
 
 		public static IntermediateExpression Compile (ExpressionSyntax syntax)
 		{
@@ -37,11 +34,11 @@ namespace Expresser.Processing
 					paramBuffer.Add (lastIndex);
 					paramBuffer.Add (nextIndex);
 
-					distBuffer.Add (new DistSpan ((byte)(i - 1), 3, 0));
+					var currentSpan = Spread (distBuffer, (byte)(i - 1), 3);
 
 					var intermediateOperationCode = (IntermediateOperationCode)token.Operation;
 
-					var intermediateOperation = new IntermediateOperation (0, intermediateOperationCode, paramBuffer.ToArray ());
+					var intermediateOperation = new IntermediateOperation (currentSpan.Index, intermediateOperationCode, paramBuffer.ToArray ());
 
 					paramBuffer.Clear ();
 
@@ -49,7 +46,12 @@ namespace Expresser.Processing
 				}
 			}
 
-			return new IntermediateExpression (opBuffer.ToArray ());
+			return new IntermediateExpression ()
+			{
+				Operations = opBuffer.ToArray (),
+				Static = srcBuffer.ToArray(),
+				DistSize = distBuffer.Count,
+			};
 		}
 
 
@@ -106,11 +108,48 @@ namespace Expresser.Processing
 			return false;
 		}
 
+		static DistSpan Spread(IList<DistSpan> distBuffer, byte start, byte length)
+		{
+			byte end = (byte)(start + length);
+			for (int i = 0; i < distBuffer.Count; i++)
+			{
+				var dist = distBuffer[i];
+				if (dist.Start == end)
+				{
+					dist.Start -= length;
+					dist.Length += length;
+
+					distBuffer[i] = dist;
+					return dist;
+				}
+
+				if (dist.End == start)
+				{
+					dist.Length += length;
+
+					distBuffer[i] = dist;
+					return dist;
+				}
+			}
+
+			var newDist = new DistSpan (start, length, (byte)distBuffer.Count);
+			distBuffer.Add (newDist);
+			return newDist;
+		}
+
 		struct DistSpan
 		{
 			public byte Length;
 			public byte Start;
 			public byte Index;
+
+			public byte End
+			{
+				get
+				{
+					return (byte)(Start + Length);
+				}
+			}
 
 			public static DistSpan None => new DistSpan ();
 

@@ -122,10 +122,25 @@ namespace Expresser.Processing
 					distBuffer[i] = dist;
 					return dist;
 				}
+				if (dist.Start == end - 1)
+				{
+					dist.Start -= (byte)(length - 1);
+					dist.Length += (byte)(length - 1);
+
+					distBuffer[i] = dist;
+					return dist;
+				}
 
 				if (dist.End == start)
 				{
 					dist.Length += length;
+
+					distBuffer[i] = dist;
+					return dist;
+				}
+				if (dist.End == start + 1)
+				{
+					dist.Length += (byte)(length - 1);
 
 					distBuffer[i] = dist;
 					return dist;

@@ -29,5 +29,14 @@ namespace Tests
 
 
 		}
+
+		[Test]
+		public void OrderFromParanthesis ()
+		{
+			var syntax = new ExpressionSyntax ("(10 + 10) ^ 2");
+			var intermediateExpression = IntermediateExpression.Compile (syntax);
+
+
+		}
 	}
 }

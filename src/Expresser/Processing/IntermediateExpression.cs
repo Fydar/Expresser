@@ -2,58 +2,109 @@
 
 namespace Expresser.Processing
 {
+
 	public struct IntermediateExpression
 	{
 		public IntermediateOperation[] Operations;
 		public MathValue[] Static;
 		public int DistSize;
 
+
+		struct CompilerBuffers
+		{
+			public readonly List<DistSpan> Dist;
+			public readonly List<MathValue> Src;
+			public readonly List<IntermediateOperation> Operations;
+			public readonly List<IntermediateParameter> Parameters;
+
+			public static CompilerBuffers New ()
+			{
+				return new CompilerBuffers (
+					new List<DistSpan> (),
+					new List<MathValue> (),
+					new List<IntermediateOperation> (),
+					new List<IntermediateParameter> ());
+			}
+
+			CompilerBuffers (List<DistSpan> dist, List<MathValue> src, List<IntermediateOperation> operations, List<IntermediateParameter> parameters)
+			{
+				Dist = dist;
+				Src = src;
+				Operations = operations;
+				Parameters = parameters;
+			}
+		}
+
 		public static IntermediateExpression Compile (ExpressionSyntax syntax)
 		{
-			var distBuffer = new List<DistSpan> ();
-			var srcBuffer = new List<MathValue> ();
+			var buffer = CompilerBuffers.New ();
 
-			var opBuffer = new List<IntermediateOperation> ();
-			var paramBuffer = new List<IntermediateParameter> ();
+			CompileSpan (buffer, syntax, 0, syntax.Tokens.Count);
+
+			return new IntermediateExpression ()
+			{
+				Operations = buffer.Operations.ToArray (),
+				Static = buffer.Src.ToArray(),
+				DistSize = buffer.Dist.Count,
+			};
+		}
+
+		static void CompileSpan(CompilerBuffers buffer, ExpressionSyntax syntax, int start, int length)
+		{
+			int spanEnd = start + length;
+			int depth = 0;
+			int parenthesesStart = -1;
+			for (int i = start; i < spanEnd; i++)
+			{
+				switch (syntax.Tokens[i].Operation)
+				{
+					case SyntaxTokenKind.OpenParentheses:
+						if (++depth == 1)
+						{
+							parenthesesStart = i + 1;
+						}
+						break;
+
+					case SyntaxTokenKind.CloseParentheses:
+						if (--depth == 0)
+						{
+							CompileSpan (buffer, syntax, parenthesesStart, i - parenthesesStart);
+						}
+						break;
+				}
+			}
 
 			foreach (var operation in OrderOfOperations)
 			{
-				for (int i = 0 + 1; i < syntax.Tokens.Count; i++)
+				int interations = start + length - 1;
+				for (int i = start + 1; i < interations; i++)
 				{
 					var token = syntax.Tokens[i];
 
 					if (token.Operation != operation)
 						continue;
 
-					if (IsIndexCalculated (distBuffer, i))
+					if (IsIndexCalculated (buffer.Dist, i))
 						continue;
 
-					var lastIndex = DescribeIndex (syntax, distBuffer, srcBuffer, i - 1);
-					var nextIndex = DescribeIndex (syntax, distBuffer, srcBuffer, i + 1);
+					var lastIndex = DescribeIndex (syntax, buffer.Dist, buffer.Src, i - 1);
+					var nextIndex = DescribeIndex (syntax, buffer.Dist, buffer.Src, i + 1);
 
-					paramBuffer.Add (lastIndex);
-					paramBuffer.Add (nextIndex);
+					buffer.Parameters.Add (lastIndex);
+					buffer.Parameters.Add (nextIndex);
 
-					var currentSpan = Spread (distBuffer, (byte)(i - 1), 3);
+					var currentSpan = Spread (buffer.Dist, (byte)(i - 1), 3);
 
 					var intermediateOperationCode = (IntermediateOperationCode)token.Operation;
 
-					var intermediateOperation = new IntermediateOperation (currentSpan.Index, intermediateOperationCode, paramBuffer.ToArray ());
+					var intermediateOperation = new IntermediateOperation (currentSpan.Index, intermediateOperationCode, buffer.Parameters.ToArray ());
 
-					paramBuffer.Clear ();
+					buffer.Parameters.Clear ();
 
-					opBuffer.Add (intermediateOperation);
+					buffer.Operations.Add (intermediateOperation);
 				}
 			}
-
-			return new IntermediateExpression ()
-			{
-				Operations = opBuffer.ToArray (),
-				Static = srcBuffer.ToArray(),
-				DistSize = distBuffer.Count,
-			};
 		}
-
 
 		private static readonly SyntaxTokenKind[] OrderOfOperations = new[]
 		{

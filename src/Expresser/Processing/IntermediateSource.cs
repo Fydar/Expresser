@@ -3,7 +3,7 @@
 	public enum IntermediateSource
 	{
 		Static,
-		Identifier,
-		Output
+		Import,
+		Output,
 	}
 }

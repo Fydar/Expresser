@@ -7,6 +7,16 @@ namespace Expresser
 	{
 		public static IValueProvider[] ResolveTerms (this IMathContext context, IReadOnlyList<string> terms)
 		{
+			if (context == null)
+			{
+				if (terms != null && terms.Count != 0)
+				{
+					throw new InvalidOperationException ("Could not resolve terms with no math context provided");
+				}
+
+				return null;
+			}
+
 			int termsCount = terms.Count;
 			var providers = new IValueProvider[termsCount];
 

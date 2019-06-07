@@ -1,21 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Expresser.Processing
 {
 
 	public struct IntermediateExpression
 	{
-		public IntermediateOperation[] Operations;
-		public MathValue[] Static;
-		public int DistSize;
-
-
 		struct CompilerBuffers
 		{
 			public readonly List<DistSpan> Dist;
-			public readonly List<MathValue> Src;
 			public readonly List<IntermediateOperation> Operations;
 			public readonly List<IntermediateParameter> Parameters;
+			public readonly List<MathValue> Src;
+
+			public CompilerBuffers (
+				List<DistSpan> dist,
+				List<MathValue> src,
+				List<IntermediateOperation> operations,
+				List<IntermediateParameter> parameters)
+			{
+				Dist = dist;
+				Src = src;
+				Operations = operations;
+				Parameters = parameters;
+			}
 
 			public static CompilerBuffers New ()
 			{
@@ -25,17 +33,65 @@ namespace Expresser.Processing
 					new List<IntermediateOperation> (),
 					new List<IntermediateParameter> ());
 			}
-
-			CompilerBuffers (List<DistSpan> dist, List<MathValue> src, List<IntermediateOperation> operations, List<IntermediateParameter> parameters)
-			{
-				Dist = dist;
-				Src = src;
-				Operations = operations;
-				Parameters = parameters;
-			}
 		}
 
-		public static IntermediateExpression Compile (ExpressionSyntax syntax)
+		struct DistSpan
+		{
+			public byte Index;
+			public byte Length;
+			public byte Start;
+			public static DistSpan None => new DistSpan ();
+
+			public byte End
+			{
+				get
+				{
+					return (byte)(Start + Length);
+				}
+			}
+
+			public DistSpan (byte start, byte length, byte index)
+			{
+				Start = start;
+				Length = length;
+				Index = index;
+			}
+
+			public bool Contains (int index)
+			{
+				return index >= Start && index <= Start + Length - 1;
+			}
+
+			public bool RangeEqual (DistSpan other) => Start == other.Start && Length == other.Length;
+		}
+
+		private static readonly SyntaxTokenKind[] OrderOfOperations = new[]
+		{
+			SyntaxTokenKind.Percentage,
+
+			SyntaxTokenKind.Power,
+			SyntaxTokenKind.Divide,
+			SyntaxTokenKind.Multiply,
+			SyntaxTokenKind.Plus,
+			SyntaxTokenKind.Minus,
+
+			SyntaxTokenKind.GreaterThan,
+			SyntaxTokenKind.GreaterThanOrEqual,
+			SyntaxTokenKind.LessThan,
+			SyntaxTokenKind.LessThanOrEqual,
+			SyntaxTokenKind.Equal,
+			SyntaxTokenKind.NotEqual,
+
+			SyntaxTokenKind.And,
+			SyntaxTokenKind.Or,
+		};
+
+		public int DistSize;
+		public IValueProvider[] Import;
+		public IntermediateOperation[] Operations;
+		public MathValue[] Static;
+
+		public static IntermediateExpression Compile (ExpressionSyntax syntax, IMathContext context = null)
 		{
 			var buffer = CompilerBuffers.New ();
 
@@ -44,12 +100,13 @@ namespace Expresser.Processing
 			return new IntermediateExpression ()
 			{
 				Operations = buffer.Operations.ToArray (),
-				Static = buffer.Src.ToArray(),
+				Static = buffer.Src.ToArray (),
 				DistSize = buffer.Dist.Count,
+				Import = context.ResolveTerms (syntax.Terms)
 			};
 		}
 
-		static void CompileSpan(CompilerBuffers buffer, ExpressionSyntax syntax, int start, int length)
+		static void CompileSpan (CompilerBuffers buffer, ExpressionSyntax syntax, int start, int length)
 		{
 			int spanEnd = start + length;
 			int depth = 0;
@@ -87,8 +144,8 @@ namespace Expresser.Processing
 					if (IsIndexCalculated (buffer.Dist, i))
 						continue;
 
-					var lastIndex = DescribeIndex (syntax, buffer.Dist, buffer.Src, i - 1);
-					var nextIndex = DescribeIndex (syntax, buffer.Dist, buffer.Src, i + 1);
+					var lastIndex = DescribeIndex (syntax, buffer, i - 1);
+					var nextIndex = DescribeIndex (syntax, buffer, i + 1);
 
 					buffer.Parameters.Add (lastIndex);
 					buffer.Parameters.Add (nextIndex);
@@ -106,32 +163,11 @@ namespace Expresser.Processing
 			}
 		}
 
-		private static readonly SyntaxTokenKind[] OrderOfOperations = new[]
+		static IntermediateParameter DescribeIndex (ExpressionSyntax syntax, CompilerBuffers buffers, int index)
 		{
-			SyntaxTokenKind.Percentage,
-
-			SyntaxTokenKind.Power,
-			SyntaxTokenKind.Divide,
-			SyntaxTokenKind.Multiply,
-			SyntaxTokenKind.Plus,
-			SyntaxTokenKind.Minus,
-
-			SyntaxTokenKind.GreaterThan,
-			SyntaxTokenKind.GreaterThanOrEqual,
-			SyntaxTokenKind.LessThan,
-			SyntaxTokenKind.LessThanOrEqual,
-			SyntaxTokenKind.Equal,
-			SyntaxTokenKind.NotEqual,
-
-			SyntaxTokenKind.And,
-			SyntaxTokenKind.Or,
-		};
-
-		static IntermediateParameter DescribeIndex (ExpressionSyntax syntax, IReadOnlyList<DistSpan> distBuffer, List<MathValue> srcBuffer, int index)
-		{
-			for (byte i = 0; i < distBuffer.Count; i++)
+			for (byte i = 0; i < buffers.Dist.Count; i++)
 			{
-				var span = distBuffer[i];
+				var span = buffers.Dist[i];
 				if (span.Contains (index))
 				{
 					return new IntermediateParameter (IntermediateSource.Output, i);
@@ -140,13 +176,23 @@ namespace Expresser.Processing
 
 			var token = syntax.Tokens[index];
 
-			int valueIndex = srcBuffer.LastIndexOf (token.Value);
-			if (valueIndex == -1)
+			if (token.Operation == SyntaxTokenKind.Value)
 			{
-				valueIndex = srcBuffer.Count;
-				srcBuffer.Add (token.Value);
+				int valueIndex = buffers.Src.LastIndexOf (token.Value);
+				if (valueIndex == -1)
+				{
+					valueIndex = buffers.Src.Count;
+					buffers.Src.Add (token.Value);
+				}
+				return new IntermediateParameter (IntermediateSource.Static, (byte)valueIndex);
 			}
-			return new IntermediateParameter (IntermediateSource.Static, (byte)valueIndex);
+
+			if (token.Operation == SyntaxTokenKind.Source)
+			{
+				return new IntermediateParameter (IntermediateSource.Import, token.Source);
+			}
+
+			throw new InvalidOperationException (string.Format ("Unrecognised token {0}", token));
 		}
 
 		static bool IsIndexCalculated (IReadOnlyList<DistSpan> distBuffer, int index)
@@ -159,7 +205,7 @@ namespace Expresser.Processing
 			return false;
 		}
 
-		static DistSpan Spread(IList<DistSpan> distBuffer, byte start, byte length)
+		static DistSpan Spread (IList<DistSpan> distBuffer, byte start, byte length)
 		{
 			byte end = (byte)(start + length);
 			for (int i = 0; i < distBuffer.Count; i++)
@@ -201,37 +247,6 @@ namespace Expresser.Processing
 			var newDist = new DistSpan (start, length, (byte)distBuffer.Count);
 			distBuffer.Add (newDist);
 			return newDist;
-		}
-
-		struct DistSpan
-		{
-			public byte Length;
-			public byte Start;
-			public byte Index;
-
-			public byte End
-			{
-				get
-				{
-					return (byte)(Start + Length);
-				}
-			}
-
-			public static DistSpan None => new DistSpan ();
-
-			public DistSpan (byte start, byte length, byte index)
-			{
-				Start = start;
-				Length = length;
-				Index = index;
-			}
-
-			public bool Contains (int index)
-			{
-				return index >= Start && index <= Start + Length - 1;
-			}
-
-			public bool RangeEqual (DistSpan other) => Start == other.Start && Length == other.Length;
 		}
 	}
 }

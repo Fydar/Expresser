@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Expresser.Processing
 {
-
 	public struct IntermediateExpression
 	{
 		struct CompilerBuffers

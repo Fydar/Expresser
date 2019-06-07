@@ -15,7 +15,7 @@
 
 		public override string ToString ()
 		{
-			return $"dist[{DistIndex}] = {OperationCode}: {string.Join (", ", Parameters)}";
+			return $"Output[{DistIndex}] = {OperationCode}: {string.Join (", ", Parameters)}";
 		}
 	}
 }

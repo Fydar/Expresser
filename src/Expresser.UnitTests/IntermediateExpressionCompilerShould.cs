@@ -14,6 +14,15 @@ namespace Tests
 
 
 		}
+
+		[Test]
+		public void CompileComplexLogicMaths ()
+		{
+			var syntax = new ExpressionSyntax ("1 + (10 / 40) > 1 == true");
+			var intermediateExpression = IntermediateExpression.Compile (syntax);
+
+		}
+
 		[Test]
 		public void CompileBasicLogic ()
 		{

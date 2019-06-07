@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using Expresser.Processing;
 using System;
 
 namespace Expresser.Benchmarks
@@ -25,7 +26,7 @@ namespace Expresser.Benchmarks
 		public void ParseSyntax () => new ExpressionSyntax (Expression);
 
 		[Benchmark]
-		public void Compile () => new CompiledExpression (CompileSyntax);
+		public void Compile () => IntermediateExpression.Compile (CompileSyntax);
 
 		[Benchmark]
 		public void Evaluate () => EvaluateTarget.Evaluate ();

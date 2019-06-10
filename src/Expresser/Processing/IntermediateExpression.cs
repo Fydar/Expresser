@@ -90,6 +90,131 @@ namespace Expresser.Processing
 		public IntermediateOperation[] Operations;
 		public MathValue[] Static;
 
+		public MathValue GetParameter (IntermediateParameter parameter, MathValue[] dist)
+		{
+			switch (parameter.Source)
+			{
+				case IntermediateSource.Static:
+					return Static[parameter.Index];
+
+				case IntermediateSource.Import:
+					return Import[parameter.Index].Value;
+
+				case IntermediateSource.Output:
+					return dist[parameter.Index];
+			}
+			return new MathValue ();
+		}
+
+		public MathValue Evaluate ()
+		{
+			var dist = new MathValue[DistSize];
+
+			for (int i = 0; i < Operations.Length; i++)
+			{
+				var operation = Operations[i];
+
+				switch (operation.OperationCode)
+				{
+					case IntermediateOperationCode.Add:
+						dist[operation.DistIndex] = MathValue.Add(
+							GetParameter(operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.Subtract:
+						dist[operation.DistIndex] = MathValue.Subtract (
+							GetParameter (operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.Multiply:
+						dist[operation.DistIndex] = MathValue.Multiply (
+							GetParameter (operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.Divide:
+						dist[operation.DistIndex] = MathValue.Divide (
+							GetParameter (operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.Power:
+						dist[operation.DistIndex] = MathValue.Power (
+							GetParameter (operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.And:
+						dist[operation.DistIndex] = MathValue.And (
+							GetParameter (operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.Or:
+						dist[operation.DistIndex] = MathValue.Or (
+							GetParameter (operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.Equal:
+						dist[operation.DistIndex] = MathValue.Equal (
+							GetParameter (operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.NotEqual:
+						dist[operation.DistIndex] = MathValue.NotEqual (
+							GetParameter (operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.GreaterThan:
+						dist[operation.DistIndex] = MathValue.GreaterThan (
+							GetParameter (operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.GreaterThanOrEqual:
+						dist[operation.DistIndex] = MathValue.GreaterThanOrEqual (
+							GetParameter (operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.LessThan:
+						dist[operation.DistIndex] = MathValue.LessThan (
+							GetParameter (operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.LessThanOrEqual:
+						dist[operation.DistIndex] = MathValue.LessThanOrEqual (
+							GetParameter (operation.Parameters[0], dist),
+							GetParameter (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.Invoke:
+						break;
+				}
+			}
+
+			return dist[0];
+		}
+
 		public static IntermediateExpression Compile (ExpressionSyntax syntax, IMathContext context = null)
 		{
 			var buffer = CompilerBuffers.New ();

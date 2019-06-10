@@ -1,4 +1,5 @@
 using Expresser;
+using Expresser.Processing;
 using NUnit.Framework;
 
 namespace Tests
@@ -19,14 +20,14 @@ namespace Tests
 				.WithTerm ("Height", new StaticValueProvider (10))
 				.Build ();
 
-			TestExpression (-100, new CompiledExpression ("10 * -Height", contextA));
-			TestExpression (25, new CompiledExpression ("width + Height", contextA));
-			TestExpression (25, new CompiledExpression ("wiDth + heiGHt", contextA));
+			TestExpression (-100, IntermediateExpression.Compile (new ExpressionSyntax ("10 * -Height"), contextA));
+			TestExpression (25, IntermediateExpression.Compile (new ExpressionSyntax ("width + Height"), contextA));
+			TestExpression (25, IntermediateExpression.Compile (new ExpressionSyntax ("wiDth + heiGHt"), contextA));
 
-			TestExpression (20, new CompiledExpression ("Height * 2", contextA));
-			TestExpression (23, new CompiledExpression ("3 + Height * 2", contextA));
+			TestExpression (20, IntermediateExpression.Compile (new ExpressionSyntax ("Height * 2"), contextA));
+			TestExpression (23, IntermediateExpression.Compile (new ExpressionSyntax ("3 + Height * 2"), contextA));
 
-			TestExpression (5, new CompiledExpression ("Width + -Height", contextA));
+			TestExpression (5, IntermediateExpression.Compile (new ExpressionSyntax ("Width + -Height"), contextA));
 		}
 
 		[Test]
@@ -36,94 +37,94 @@ namespace Tests
 				.WithTerm ("Level", new StaticValueProvider (15))
 				.Build ();
 
-			TestExpression (true, new CompiledExpression ("2 < Level", contextA));
-			TestExpression (true, new CompiledExpression ("15 == Level", contextA));
-			TestExpression (true, new CompiledExpression ("16 > Level", contextA));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("2 < Level"), contextA));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("15 == Level"), contextA));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("16 > Level"), contextA));
 		}
 
 		[Test]
 		public void OperateComparisons ()
 		{
-			TestExpression (true, new CompiledExpression ("2 > 1"));
-			TestExpression (false, new CompiledExpression ("1 > 1"));
-			TestExpression (false, new CompiledExpression ("0 > 1"));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("2 > 1")));
+			TestExpression (false, IntermediateExpression.Compile (new ExpressionSyntax ("1 > 1")));
+			TestExpression (false, IntermediateExpression.Compile (new ExpressionSyntax ("0 > 1")));
 
-			TestExpression (true, new CompiledExpression ("1 >= 1"));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("1 >= 1")));
 
-			TestExpression (false, new CompiledExpression ("2 <= 1"));
+			TestExpression (false, IntermediateExpression.Compile (new ExpressionSyntax ("2 <= 1")));
 
-			TestExpression (true, new CompiledExpression ("true || 2 < 1"));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("true || 2 < 1")));
 		}
 
 		[Test]
 		public void OperateEquality ()
 		{
 			// Equality Operators
-			TestExpression (true, new CompiledExpression ("1 == 1"));
-			TestExpression (false, new CompiledExpression ("1 != 1"));
-			TestExpression (false, new CompiledExpression ("1 == 10"));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("1 == 1")));
+			TestExpression (false, IntermediateExpression.Compile (new ExpressionSyntax ("1 != 1")));
+			TestExpression (false, IntermediateExpression.Compile (new ExpressionSyntax ("1 == 10")));
 
-			TestExpression (true, new CompiledExpression ("true == true"));
-			TestExpression (false, new CompiledExpression ("true != true"));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("true == true")));
+			TestExpression (false, IntermediateExpression.Compile (new ExpressionSyntax ("true != true")));
 
-			TestExpression (true, new CompiledExpression ("false == false"));
-			TestExpression (false, new CompiledExpression ("false != false"));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("false == false")));
+			TestExpression (false, IntermediateExpression.Compile (new ExpressionSyntax ("false != false")));
 		}
 
 		[Test]
 		public void OperateLogic ()
 		{
 			// Logic Operators
-			TestExpression (true, new CompiledExpression ("true && true"));
-			TestExpression (false, new CompiledExpression ("true && false"));
-			TestExpression (false, new CompiledExpression ("false && true"));
-			TestExpression (false, new CompiledExpression ("false && false"));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("true && true")));
+			TestExpression (false, IntermediateExpression.Compile (new ExpressionSyntax ("true && false")));
+			TestExpression (false, IntermediateExpression.Compile (new ExpressionSyntax ("false && true")));
+			TestExpression (false, IntermediateExpression.Compile (new ExpressionSyntax ("false && false")));
 
-			TestExpression (true, new CompiledExpression ("true || true"));
-			TestExpression (true, new CompiledExpression ("false || true"));
-			TestExpression (true, new CompiledExpression ("true || false"));
-			TestExpression (false, new CompiledExpression ("false || false"));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("true || true")));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("false || true")));
+			TestExpression (true, IntermediateExpression.Compile (new ExpressionSyntax ("true || false")));
+			TestExpression (false, IntermediateExpression.Compile (new ExpressionSyntax ("false || false")));
 		}
 
 		[Test]
 		public void OperateMaths ()
 		{
-			TestExpression (2, new CompiledExpression ("3 + -1"));
-			TestExpression (2, new CompiledExpression ("1     + (1)"));
+			TestExpression (2, IntermediateExpression.Compile (new ExpressionSyntax ("3 + -1")));
+			TestExpression (2, IntermediateExpression.Compile (new ExpressionSyntax ("1     + (1)")));
 
 			// Add Operator
-			TestExpression (2, new CompiledExpression ("1 + 1"));
-			TestExpression (2, new CompiledExpression ("1     + 1"));
-			TestExpression (5, new CompiledExpression ("((1 + 3) + 1)"));
+			TestExpression (2, IntermediateExpression.Compile (new ExpressionSyntax ("1 + 1")));
+			TestExpression (2, IntermediateExpression.Compile (new ExpressionSyntax ("1     + 1")));
+			TestExpression (5, IntermediateExpression.Compile (new ExpressionSyntax ("((1 + 3) + 1)")));
 
-			TestExpression (25, new CompiledExpression ("10+15"));
-			TestExpression (20, new CompiledExpression ("10 + 10"));
-			TestExpression (25, new CompiledExpression ("10 + 10 + 5"));
+			TestExpression (25, IntermediateExpression.Compile (new ExpressionSyntax ("10+15")));
+			TestExpression (20, IntermediateExpression.Compile (new ExpressionSyntax ("10 + 10")));
+			TestExpression (25, IntermediateExpression.Compile (new ExpressionSyntax ("10 + 10 + 5")));
 
 			// Negative Numbers
-			TestExpression (2, new CompiledExpression ("3 + -1"));
-			TestExpression (3, new CompiledExpression ("-1 + 4"));
+			TestExpression (2, IntermediateExpression.Compile (new ExpressionSyntax ("3 + -1")));
+			TestExpression (3, IntermediateExpression.Compile (new ExpressionSyntax ("-1 + 4")));
 
 			// Subtract Operator
-			TestExpression (2, new CompiledExpression ("3 - 1"));
+			TestExpression (2, IntermediateExpression.Compile (new ExpressionSyntax ("3 - 1")));
 
 			// Multiply Operator
-			TestExpression (5, new CompiledExpression ("1 * 5"));
-			TestExpression (20, new CompiledExpression ("200 * 0.1"));
+			TestExpression (5, IntermediateExpression.Compile (new ExpressionSyntax ("1 * 5")));
+			TestExpression (20, IntermediateExpression.Compile (new ExpressionSyntax ("200 * 0.1")));
 
 			// Divide Operator
-			TestExpression (5, new CompiledExpression ("10 / 2"));
+			TestExpression (5, IntermediateExpression.Compile (new ExpressionSyntax ("10 / 2")));
 
 			// Power Operator
-			TestExpression (27, new CompiledExpression ("3 ^ 3"));
-			TestExpression (27, new CompiledExpression ("3 ^ (1 + 2)"));
+			TestExpression (27, IntermediateExpression.Compile (new ExpressionSyntax ("3 ^ 3")));
+			TestExpression (27, IntermediateExpression.Compile (new ExpressionSyntax ("3 ^ (1 + 2)")));
 
 			// Order of Operations Tests
-			TestExpression (-5, new CompiledExpression ("10 - 10 + 5"));
-			TestExpression (-5, new CompiledExpression ("10 -(10+   5)"));
-			TestExpression (5, new CompiledExpression ("(10 - 10) + 5"));
+			TestExpression (-5, IntermediateExpression.Compile (new ExpressionSyntax ("10 - 10 + 5")));
+			TestExpression (-5, IntermediateExpression.Compile (new ExpressionSyntax ("10 -(10+   5)")));
+			TestExpression (5, IntermediateExpression.Compile (new ExpressionSyntax ("(10 - 10) + 5")));
 
-			TestExpression (12.564f, new CompiledExpression ("3.141 * 2^2"));
+			TestExpression (12.564f, IntermediateExpression.Compile (new ExpressionSyntax ("3.141 * 2^2")));
 		}
 
 		[Test]
@@ -134,8 +135,8 @@ namespace Tests
 				.WithTerm ("Height", new StaticValueProvider (10))
 				.Build ();
 
-			TestExpression (5, new CompiledExpression ("50% * Height", contextA));
-			// TestExpression(5, new CompiledExpression("50% Height", contextA));
+			TestExpression (5, IntermediateExpression.Compile (new ExpressionSyntax ("50% * Height"), contextA));
+			// TestExpression(5, new CompiledExpression("50% Height"), contextA));
 		}
 
 		public void TestExpression (float expected, CompiledExpression expression)
@@ -150,12 +151,24 @@ namespace Tests
 			Assert.AreEqual (expected, expression.Evaluate ().BoolValue);
 		}
 
+		public void TestExpression (float expected, IntermediateExpression expression)
+		{
+			TestContext.Error.WriteLine (expression.ToString () + " = " + expected);
+			Assert.AreEqual (expected, expression.Evaluate ().FloatValue);
+		}
+
+		public void TestExpression (bool expected, IntermediateExpression expression)
+		{
+			TestContext.Error.WriteLine (expression.ToString () + " = " + expected);
+			Assert.AreEqual (expected, expression.Evaluate ().BoolValue);
+		}
+
 		[Test]
 		public void TokeniseString ()
 		{
-			TestContext.Error.WriteLine (new CompiledExpression ("1 + 1"));
-			TestContext.Error.WriteLine (new CompiledExpression ("2 > 1"));
-			TestContext.Error.WriteLine (new CompiledExpression ("2 > 1 && 4 > 1"));
+			TestContext.Error.WriteLine (IntermediateExpression.Compile (new ExpressionSyntax ("1 + 1")));
+			TestContext.Error.WriteLine (IntermediateExpression.Compile (new ExpressionSyntax ("2 > 1")));
+			TestContext.Error.WriteLine (IntermediateExpression.Compile (new ExpressionSyntax ("2 > 1 && 4 > 1")));
 		}
 	}
 }

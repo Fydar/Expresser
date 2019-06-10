@@ -105,7 +105,7 @@ namespace Expresser.Processing
 			};
 		}
 
-		static void CompileSpan (CompilerBuffers buffer, ExpressionSyntax syntax, int start, int length)
+		static int CompileSpan (CompilerBuffers buffer, ExpressionSyntax syntax, int start, int length)
 		{
 			int spanEnd = start + length;
 			int depth = 0;
@@ -124,12 +124,15 @@ namespace Expresser.Processing
 					case SyntaxTokenKind.CloseParentheses:
 						if (--depth == 0)
 						{
-							CompileSpan (buffer, syntax, parenthesesStart, i - parenthesesStart);
+							int growIndex = CompileSpan (buffer, syntax, parenthesesStart, i - parenthesesStart);
+
+							Grow (buffer.Dist, growIndex);
 						}
 						break;
 				}
 			}
 
+			int distIndex = -1;
 			foreach (var operation in OrderOfOperations)
 			{
 				int interations = start + length - 1;
@@ -151,6 +154,8 @@ namespace Expresser.Processing
 
 					var currentSpan = Spread (buffer.Dist, (byte)(i - 1), 3);
 
+					distIndex = currentSpan.Index;
+
 					var intermediateOperationCode = (IntermediateOperationCode)token.Operation;
 
 					var intermediateOperation = new IntermediateOperation (currentSpan.Index, intermediateOperationCode, buffer.Parameters.ToArray ());
@@ -160,6 +165,7 @@ namespace Expresser.Processing
 					buffer.Operations.Add (intermediateOperation);
 				}
 			}
+			return distIndex;
 		}
 
 		static IntermediateParameter DescribeIndex (ExpressionSyntax syntax, CompilerBuffers buffers, int index)
@@ -246,6 +252,17 @@ namespace Expresser.Processing
 			var newDist = new DistSpan (start, length, (byte)distBuffer.Count);
 			distBuffer.Add (newDist);
 			return newDist;
+		}
+
+		static DistSpan Grow (IList<DistSpan> distBuffer, int distIndex)
+		{
+			var dist = distBuffer[distIndex];
+
+			dist.Start -= 1;
+			dist.Length += 2;
+
+			distBuffer[distIndex] = dist;
+			return dist;
 		}
 	}
 }

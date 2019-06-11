@@ -22,5 +22,6 @@
 		LessThanOrEqual,
 
 		Invoke,
+		Copy
 	}
 }

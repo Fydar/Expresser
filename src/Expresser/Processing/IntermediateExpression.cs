@@ -209,6 +209,10 @@ namespace Expresser.Processing
 
 					case IntermediateOperationCode.Invoke:
 						break;
+
+					case IntermediateOperationCode.Copy:
+						dist[operation.DistIndex] = GetParameter (operation.Parameters[0], dist);
+						break;
 				}
 			}
 
@@ -232,6 +236,25 @@ namespace Expresser.Processing
 
 		static int CompileSpan (CompilerBuffers buffer, ExpressionSyntax syntax, int start, int length)
 		{
+			if (length == 0)
+			{
+				throw new InvalidOperationException ("Trying to calculate with 0 length span");
+			}
+			if (length == 1)
+			{
+				var singleParameter = DescribeIndex (syntax, buffer, start);
+				var singleSpan = Spread (buffer.Dist, (byte)start, 1);
+
+				buffer.Parameters.Add (singleParameter);
+
+				var intermediateOperationCode = IntermediateOperationCode.Copy;
+				var intermediateOperation = new IntermediateOperation (singleSpan.Index, intermediateOperationCode, buffer.Parameters.ToArray ());
+
+				buffer.Parameters.Clear ();
+				buffer.Operations.Add (intermediateOperation);
+				return singleSpan.Index;
+			}
+
 			int spanEnd = start + length;
 			int depth = 0;
 			int parenthesesStart = -1;

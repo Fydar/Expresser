@@ -179,5 +179,15 @@ namespace Expresser
 
 			throw new InvalidOperationException (string.Format ("Cannot equality a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
 		}
+
+		public static MathValue Negate (MathValue value)
+		{
+			if (value.ValueClass == ValueClassifier.Numeric
+				|| value.ValueClass == ValueClassifier.Fractional)
+			{
+				return new MathValue (value.FloatValue, value.ValueClass == ValueClassifier.Fractional);
+			}
+			throw new InvalidOperationException (string.Format ("Cannot negative type {0}", value.ValueClass));
+		}
 	}
 }

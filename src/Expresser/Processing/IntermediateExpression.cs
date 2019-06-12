@@ -105,9 +105,8 @@ namespace Expresser.Processing
 			};
 		}
 
-		public MathValue Evaluate ()
+		public MathValue Evaluate (MathValue[] dist)
 		{
-			var dist = new MathValue[DistSize];
 
 			for (int i = 0; i < Operations.Length; i++)
 			{

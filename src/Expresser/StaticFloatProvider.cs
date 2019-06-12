@@ -15,6 +15,15 @@
 		/// <para></para>
 		/// </summary>
 		/// <param name="value"></param>
+		public StaticValueProvider (MathValue value)
+		{
+			Value = value;
+		}
+
+		/// <summary>
+		/// <para></para>
+		/// </summary>
+		/// <param name="value"></param>
 		public StaticValueProvider (float value)
 		{
 			Value = new MathValue (value, false);

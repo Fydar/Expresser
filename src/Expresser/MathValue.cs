@@ -189,5 +189,20 @@ namespace Expresser
 			}
 			throw new InvalidOperationException (string.Format ("Cannot negative type {0}", value.ValueClass));
 		}
+
+		public static implicit operator MathValue (int value)
+		{
+			return new MathValue (value, false);
+		}
+
+		public static implicit operator MathValue (float value)
+		{
+			return new MathValue (value, false);
+		}
+
+		public static implicit operator MathValue (bool value)
+		{
+			return new MathValue (value);
+		}
 	}
 }

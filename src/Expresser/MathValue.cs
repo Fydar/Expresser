@@ -185,7 +185,7 @@ namespace Expresser
 			if (value.ValueClass == ValueClassifier.Numeric
 				|| value.ValueClass == ValueClassifier.Fractional)
 			{
-				return new MathValue (value.FloatValue, value.ValueClass == ValueClassifier.Fractional);
+				return new MathValue (-value.FloatValue, value.ValueClass == ValueClassifier.Fractional);
 			}
 			throw new InvalidOperationException (string.Format ("Cannot negative type {0}", value.ValueClass));
 		}

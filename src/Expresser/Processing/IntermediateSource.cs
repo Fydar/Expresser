@@ -4,6 +4,7 @@
 	{
 		Static,
 		Import,
+		ImportNegated,
 		Output,
 	}
 }

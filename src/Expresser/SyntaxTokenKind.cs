@@ -27,6 +27,7 @@
 		// Structure
 		OpenParentheses,
 		CloseParentheses,
+		Comma,
 
 		// Suffix
 		Percentage,

@@ -39,9 +39,10 @@ namespace Expresser
 						Character == '<';
 
 			public bool IsStructure => Character == '(' ||
-						Character == ')';
+						Character == ')' ||
+						Character == ',';
 
-			public SyntaxTokenKind OperationCode
+			public SyntaxTokenKind SelfTokenKind
 			{
 				get
 				{
@@ -55,6 +56,7 @@ namespace Expresser
 						case '%': return SyntaxTokenKind.Percentage;
 						case '(': return SyntaxTokenKind.OpenParentheses;
 						case ')': return SyntaxTokenKind.CloseParentheses;
+						case ',': return SyntaxTokenKind.Comma;
 						case '>': return SyntaxTokenKind.GreaterThan;
 						case '<': return SyntaxTokenKind.LessThan;
 						default: return SyntaxTokenKind.None;
@@ -284,7 +286,7 @@ namespace Expresser
 							case SpanClassifier.Structure:
 								if (currentSpanLength == 1)
 								{
-									lastToken = ExpressionToken.Operator (lastCharacter.OperationCode);
+									lastToken = ExpressionToken.Operator (lastCharacter.SelfTokenKind);
 								}
 								else
 								{

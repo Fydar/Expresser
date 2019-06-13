@@ -3,8 +3,10 @@
 	public enum ValueClassifier : byte
 	{
 		None,
-		Numeric,
 		Boolean,
-		Fractional
+		Float,
+		FloatFractional,
+		Int,
+		IntFractional
 	}
 }

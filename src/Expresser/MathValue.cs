@@ -19,17 +19,17 @@ namespace Expresser
 		public MathValue (float floatValue, bool isFractional) : this ()
 		{
 			FloatValue = floatValue;
-			ValueClass = isFractional ? ValueClassifier.Fractional : ValueClassifier.Numeric;
+			ValueClass = isFractional ? ValueClassifier.FloatFractional : ValueClassifier.Float;
 		}
 
 		public override string ToString ()
 		{
 			switch (ValueClass)
 			{
-				case ValueClassifier.Fractional:
+				case ValueClassifier.FloatFractional:
 					return (FloatValue / 100).ToString () + "%";
 
-				case ValueClassifier.Numeric:
+				case ValueClassifier.Float:
 					return FloatValue.ToString ();
 
 				case ValueClassifier.Boolean:
@@ -42,7 +42,7 @@ namespace Expresser
 
 		public static MathValue Power (MathValue x, MathValue y)
 		{
-			if (x.ValueClass != y.ValueClass || x.ValueClass != ValueClassifier.Numeric)
+			if (x.ValueClass != y.ValueClass || x.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot Power a \"{0}\" and a \"{1}\" together", x.ValueClass, y.ValueClass));
 			}
@@ -52,7 +52,7 @@ namespace Expresser
 
 		public static MathValue Add (MathValue left, MathValue right)
 		{
-			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Numeric)
+			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot add a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
 			}
@@ -62,7 +62,7 @@ namespace Expresser
 
 		public static MathValue Subtract (MathValue left, MathValue right)
 		{
-			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Numeric)
+			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot subtract a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
 			}
@@ -72,7 +72,7 @@ namespace Expresser
 
 		public static MathValue Multiply (MathValue left, MathValue right)
 		{
-			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Numeric)
+			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot multiply a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
 			}
@@ -82,7 +82,7 @@ namespace Expresser
 
 		public static MathValue Divide (MathValue left, MathValue right)
 		{
-			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Numeric)
+			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot divide a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
 			}
@@ -92,7 +92,7 @@ namespace Expresser
 
 		public static MathValue GreaterThan (MathValue left, MathValue right)
 		{
-			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Numeric)
+			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot divide a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
 			}
@@ -102,7 +102,7 @@ namespace Expresser
 
 		public static MathValue LessThan (MathValue left, MathValue right)
 		{
-			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Numeric)
+			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot divide a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
 			}
@@ -112,7 +112,7 @@ namespace Expresser
 
 		public static MathValue GreaterThanOrEqual (MathValue left, MathValue right)
 		{
-			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Numeric)
+			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot divide a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
 			}
@@ -122,7 +122,7 @@ namespace Expresser
 
 		public static MathValue LessThanOrEqual (MathValue left, MathValue right)
 		{
-			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Numeric)
+			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot divide a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
 			}
@@ -154,8 +154,8 @@ namespace Expresser
 		{
 			switch (left.ValueClass)
 			{
-				case ValueClassifier.Fractional:
-				case ValueClassifier.Numeric:
+				case ValueClassifier.FloatFractional:
+				case ValueClassifier.Float:
 					return new MathValue (left.FloatValue == right.FloatValue);
 
 				case ValueClassifier.Boolean:
@@ -169,8 +169,8 @@ namespace Expresser
 		{
 			switch (left.ValueClass)
 			{
-				case ValueClassifier.Fractional:
-				case ValueClassifier.Numeric:
+				case ValueClassifier.FloatFractional:
+				case ValueClassifier.Float:
 					return new MathValue (left.FloatValue != right.FloatValue);
 
 				case ValueClassifier.Boolean:
@@ -182,10 +182,10 @@ namespace Expresser
 
 		public static MathValue Negate (MathValue value)
 		{
-			if (value.ValueClass == ValueClassifier.Numeric
-				|| value.ValueClass == ValueClassifier.Fractional)
+			if (value.ValueClass == ValueClassifier.Float
+				|| value.ValueClass == ValueClassifier.FloatFractional)
 			{
-				return new MathValue (-value.FloatValue, value.ValueClass == ValueClassifier.Fractional);
+				return new MathValue (-value.FloatValue, value.ValueClass == ValueClassifier.FloatFractional);
 			}
 			throw new InvalidOperationException (string.Format ("Cannot negative type {0}", value.ValueClass));
 		}

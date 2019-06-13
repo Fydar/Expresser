@@ -19,7 +19,7 @@ namespace Expresser
 				var sourceValue = sources[Source].Value;
 				switch (sourceValue.ValueClass)
 				{
-					case ValueClassifier.Numeric: return new MathValue (sourceValue.FloatValue * Multiplier, false);
+					case ValueClassifier.Float: return new MathValue (sourceValue.FloatValue * Multiplier, false);
 					default: return sourceValue;
 				}
 			}

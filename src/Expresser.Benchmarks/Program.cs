@@ -18,15 +18,15 @@ namespace Expresser.Benchmarks
 		[GlobalSetup]
 		public void Setup ()
 		{
-			EvaluateTarget = new CompiledExpression (Expression);
+			EvaluateTarget = CompiledExpression.Compile (Expression);
 			CompileSyntax = new ExpressionSyntax (Expression);
 		}
 
 		[Benchmark]
-		public void ParseSyntax () => new ExpressionSyntax (Expression);
+		public void Parse () => new ExpressionSyntax (Expression);
 
 		[Benchmark]
-		public void Compile () => IntermediateExpression.Compile (CompileSyntax);
+		public void Compile () => CompiledExpression.Compile (CompileSyntax);
 
 		[Benchmark]
 		public void Evaluate () => EvaluateTarget.Evaluate ();

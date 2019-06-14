@@ -10,6 +10,8 @@ namespace Tests
 		{
 			var syntax = new ExpressionSyntax ("1, 4");
 
+			TestContext.Error.WriteLine (syntax);
+
 			Assert.AreEqual (syntax.Tokens, new ExpressionToken[] {
 				ExpressionToken.StaticValue(1),
 				ExpressionToken.Operator(SyntaxTokenKind.Comma),

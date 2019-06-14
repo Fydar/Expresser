@@ -65,6 +65,7 @@ namespace Expresser
 			{
 				case SyntaxTokenKind.OpenParentheses: return "(";
 				case SyntaxTokenKind.CloseParentheses: return ")";
+				case SyntaxTokenKind.Comma: return ",";
 
 				case SyntaxTokenKind.Plus: return "+";
 				case SyntaxTokenKind.Minus: return "-";

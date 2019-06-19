@@ -1,8 +1,6 @@
-using Expresser;
-using Expresser.Processing;
 using NUnit.Framework;
 
-namespace Tests
+namespace Expresser.UnitTests
 {
 	public class CompiledExpressionShould
 	{

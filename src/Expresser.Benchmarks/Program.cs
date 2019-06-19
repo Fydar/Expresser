@@ -1,12 +1,11 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using Expresser.Processing;
 using System;
 
 namespace Expresser.Benchmarks
 {
 	[CoreJob]
-	[RPlotExporter, RankColumn]
+	[RPlotExporter]
 	public class BasicBenchmarks
 	{
 		[Params ("1 + (10 / 40) > 1 == true", "1+1", "true == false")]

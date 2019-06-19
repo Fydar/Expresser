@@ -1,7 +1,6 @@
-using Expresser;
 using NUnit.Framework;
 
-namespace Tests
+namespace Expresser.UnitTests
 {
 	public class ExpressionSyntaxShould
 	{

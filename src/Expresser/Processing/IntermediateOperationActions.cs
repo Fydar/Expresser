@@ -8,10 +8,27 @@ namespace Expresser.Processing
 
 		public IntermediateOperationActions (IMathContext context)
 		{
-			if (context == null)
-				throw new ArgumentNullException (nameof (context));
-
 			Context = context;
+		}
+
+		private MathValue ResolveNumericType (MathValue source)
+		{
+			if (source.ValueClass == ValueClassifier.FloatFractional)
+			{
+				if (Context.ImplicitReference != null)
+				{
+					return new MathValue (Context.ImplicitReference.Value.FloatValue * source.FloatValue, false);
+				}
+				else
+				{
+					throw new InvalidOperationException ("Could not resolve \"" + source + "\" to a numeric type");
+				}
+			}
+			if (source.ValueClass == ValueClassifier.Float)
+			{
+				return source;
+			}
+			throw new InvalidOperationException ("Could not resolve \"" + source + "\" to a numeric type");
 		}
 
 		public MathValue Power (MathValue x, MathValue y)
@@ -26,6 +43,8 @@ namespace Expresser.Processing
 
 		public MathValue Add (MathValue left, MathValue right)
 		{
+			left = ResolveNumericType (left);
+			right = ResolveNumericType (right);
 			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot add a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
@@ -36,6 +55,8 @@ namespace Expresser.Processing
 
 		public MathValue Subtract (MathValue left, MathValue right)
 		{
+			left = ResolveNumericType (left);
+			right = ResolveNumericType (right);
 			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot subtract a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
@@ -46,6 +67,8 @@ namespace Expresser.Processing
 
 		public MathValue Multiply (MathValue left, MathValue right)
 		{
+			left = ResolveNumericType (left);
+			right = ResolveNumericType (right);
 			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot multiply a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
@@ -56,6 +79,8 @@ namespace Expresser.Processing
 
 		public MathValue Divide (MathValue left, MathValue right)
 		{
+			left = ResolveNumericType (left);
+			right = ResolveNumericType (right);
 			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot divide a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
@@ -66,6 +91,8 @@ namespace Expresser.Processing
 
 		public MathValue GreaterThan (MathValue left, MathValue right)
 		{
+			left = ResolveNumericType (left);
+			right = ResolveNumericType (right);
 			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot divide a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
@@ -76,6 +103,8 @@ namespace Expresser.Processing
 
 		public MathValue LessThan (MathValue left, MathValue right)
 		{
+			left = ResolveNumericType (left);
+			right = ResolveNumericType (right);
 			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot divide a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
@@ -86,6 +115,8 @@ namespace Expresser.Processing
 
 		public MathValue GreaterThanOrEqual (MathValue left, MathValue right)
 		{
+			left = ResolveNumericType (left);
+			right = ResolveNumericType (right);
 			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot divide a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
@@ -96,6 +127,8 @@ namespace Expresser.Processing
 
 		public MathValue LessThanOrEqual (MathValue left, MathValue right)
 		{
+			left = ResolveNumericType (left);
+			right = ResolveNumericType (right);
 			if (left.ValueClass != right.ValueClass || left.ValueClass != ValueClassifier.Float)
 			{
 				throw new InvalidOperationException (string.Format ("Cannot divide a \"{0}\" and a \"{1}\" together", left.ValueClass, right.ValueClass));
@@ -130,6 +163,8 @@ namespace Expresser.Processing
 			{
 				case ValueClassifier.FloatFractional:
 				case ValueClassifier.Float:
+					left = ResolveNumericType (left);
+					right = ResolveNumericType (right);
 					return new MathValue (left.FloatValue == right.FloatValue);
 
 				case ValueClassifier.Boolean:
@@ -145,6 +180,8 @@ namespace Expresser.Processing
 			{
 				case ValueClassifier.FloatFractional:
 				case ValueClassifier.Float:
+					left = ResolveNumericType (left);
+					right = ResolveNumericType (right);
 					return new MathValue (left.FloatValue != right.FloatValue);
 
 				case ValueClassifier.Boolean:

@@ -27,7 +27,7 @@ namespace Expresser
 			switch (ValueClass)
 			{
 				case ValueClassifier.FloatFractional:
-					return (FloatValue / 100).ToString () + "%";
+					return (FloatValue * 100).ToString () + "%";
 
 				case ValueClassifier.Float:
 					return FloatValue.ToString ();

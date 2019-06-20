@@ -299,8 +299,8 @@ namespace Expresser.Processing
 			int distIndex = -1;
 			foreach (var operation in OrderOfOperations)
 			{
-				int interations = start + length - 1;
-				for (int i = start + 1; i < interations; i++)
+				int interations = start + length;
+				for (int i = start; i < interations; i++)
 				{
 					var token = syntax.Tokens[i];
 

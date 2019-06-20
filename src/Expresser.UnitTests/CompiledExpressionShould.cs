@@ -72,6 +72,9 @@ namespace Expresser.UnitTests
 		[Test]
 		public void OperateLogic ()
 		{
+			TestExpression (true, CompiledExpression.Compile ("true"));
+			TestExpression (false, CompiledExpression.Compile ("false"));
+
 			// Logic Operators
 			TestExpression (true, CompiledExpression.Compile ("true && true"));
 			TestExpression (false, CompiledExpression.Compile ("true && false"));
@@ -131,11 +134,12 @@ namespace Expresser.UnitTests
 			var contextA = new MathContextBuilder ()
 				.WithTerm ("Width", new StaticValueProvider (15))
 				.WithTerm ("Height", new StaticValueProvider (10))
+				.ImplicitlyReferences (new StaticValueProvider (10))
 				.Build ();
 
+			TestExpression (50, CompiledExpression.Compile ("50% * Height", contextA));
 			TestExpression (new MathValue(0.5f, true), CompiledExpression.Compile ("50%"));
 
-			TestExpression (5, CompiledExpression.Compile ("50% * Height", contextA));
 			// TestExpression(5, new CompiledExpression("50% Height", contextA)));
 		}
 

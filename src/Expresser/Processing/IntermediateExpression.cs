@@ -68,6 +68,7 @@ namespace Expresser.Processing
 		public IValueProvider[] Import;
 		public IntermediateOperation[] Operations;
 		public MathValue[] Static;
+		public IntermediateOperationActions Actions;
 
 		private enum OperatorPattern
 		{
@@ -120,13 +121,13 @@ namespace Expresser.Processing
 				Operations = buffer.Operations.ToArray (),
 				Static = buffer.Src.ToArray (),
 				DistSize = buffer.Dist.Count,
-				Import = context.ResolveTerms (syntax.Terms)
+				Import = context.ResolveTerms (syntax.Terms),
+				Actions = new IntermediateOperationActions(context)
 			};
 		}
 
 		public MathValue Evaluate (MathValue[] dist)
 		{
-
 			for (int i = 0; i < Operations.Length; i++)
 			{
 				var operation = Operations[i];
@@ -134,91 +135,91 @@ namespace Expresser.Processing
 				switch (operation.OperationCode)
 				{
 					case IntermediateOperationCode.Add:
-						dist[operation.DistIndex] = MathValue.Add (
+						dist[operation.DistIndex] = Actions.Add (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
 						break;
 
 					case IntermediateOperationCode.Subtract:
-						dist[operation.DistIndex] = MathValue.Subtract (
+						dist[operation.DistIndex] = Actions.Subtract (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
 						break;
 
 					case IntermediateOperationCode.Multiply:
-						dist[operation.DistIndex] = MathValue.Multiply (
+						dist[operation.DistIndex] = Actions.Multiply (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
 						break;
 
 					case IntermediateOperationCode.Divide:
-						dist[operation.DistIndex] = MathValue.Divide (
+						dist[operation.DistIndex] = Actions.Divide (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
 						break;
 
 					case IntermediateOperationCode.Power:
-						dist[operation.DistIndex] = MathValue.Power (
+						dist[operation.DistIndex] = Actions.Power (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
 						break;
 
 					case IntermediateOperationCode.And:
-						dist[operation.DistIndex] = MathValue.And (
+						dist[operation.DistIndex] = Actions.And (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
 						break;
 
 					case IntermediateOperationCode.Or:
-						dist[operation.DistIndex] = MathValue.Or (
+						dist[operation.DistIndex] = Actions.Or (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
 						break;
 
 					case IntermediateOperationCode.Equal:
-						dist[operation.DistIndex] = MathValue.Equal (
+						dist[operation.DistIndex] = Actions.Equal (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
 						break;
 
 					case IntermediateOperationCode.NotEqual:
-						dist[operation.DistIndex] = MathValue.NotEqual (
+						dist[operation.DistIndex] = Actions.NotEqual (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
 						break;
 
 					case IntermediateOperationCode.GreaterThan:
-						dist[operation.DistIndex] = MathValue.GreaterThan (
+						dist[operation.DistIndex] = Actions.GreaterThan (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
 						break;
 
 					case IntermediateOperationCode.GreaterThanOrEqual:
-						dist[operation.DistIndex] = MathValue.GreaterThanOrEqual (
+						dist[operation.DistIndex] = Actions.GreaterThanOrEqual (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
 						break;
 
 					case IntermediateOperationCode.LessThan:
-						dist[operation.DistIndex] = MathValue.LessThan (
+						dist[operation.DistIndex] = Actions.LessThan (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
 						break;
 
 					case IntermediateOperationCode.LessThanOrEqual:
-						dist[operation.DistIndex] = MathValue.LessThanOrEqual (
+						dist[operation.DistIndex] = Actions.LessThanOrEqual (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
 						);
@@ -477,7 +478,7 @@ namespace Expresser.Processing
 					return Import[parameter.Index].Value;
 
 				case IntermediateSource.ImportNegated:
-					return MathValue.Negate (Import[parameter.Index].Value);
+					return Actions.Negate (Import[parameter.Index].Value);
 
 				case IntermediateSource.Output:
 					return dist[parameter.Index];

@@ -21,6 +21,8 @@
 		LessThan,
 		LessThanOrEqual,
 
+		Percentage,
+
 		Invoke,
 		Copy
 	}

@@ -69,25 +69,44 @@ namespace Expresser.Processing
 		public IntermediateOperation[] Operations;
 		public MathValue[] Static;
 
-		private static readonly SyntaxTokenKind[] OrderOfOperations = new[]
+		private enum OperatorPattern
 		{
-			SyntaxTokenKind.Percentage,
+			Prefix,
+			Conjective,
+			Suffix,
+		}
 
-			SyntaxTokenKind.Power,
-			SyntaxTokenKind.Divide,
-			SyntaxTokenKind.Multiply,
-			SyntaxTokenKind.Plus,
-			SyntaxTokenKind.Minus,
+		private struct TokenOperationCompiler
+		{
+			public SyntaxTokenKind TokenKind;
+			public OperatorPattern Pattern;
 
-			SyntaxTokenKind.GreaterThan,
-			SyntaxTokenKind.GreaterThanOrEqual,
-			SyntaxTokenKind.LessThan,
-			SyntaxTokenKind.LessThanOrEqual,
-			SyntaxTokenKind.Equal,
-			SyntaxTokenKind.NotEqual,
+			public TokenOperationCompiler (SyntaxTokenKind tokenKind, OperatorPattern pattern)
+			{
+				TokenKind = tokenKind;
+				Pattern = pattern;
+			}
+		}
 
-			SyntaxTokenKind.And,
-			SyntaxTokenKind.Or,
+		private static readonly TokenOperationCompiler[] OrderOfOperations = new[]
+		{
+			new TokenOperationCompiler(SyntaxTokenKind.Percentage, OperatorPattern.Suffix),
+
+			new TokenOperationCompiler(SyntaxTokenKind.Power, OperatorPattern.Conjective),
+			new TokenOperationCompiler(SyntaxTokenKind.Divide, OperatorPattern.Conjective),
+			new TokenOperationCompiler(SyntaxTokenKind.Multiply, OperatorPattern.Conjective),
+			new TokenOperationCompiler(SyntaxTokenKind.Plus, OperatorPattern.Conjective),
+			new TokenOperationCompiler(SyntaxTokenKind.Minus, OperatorPattern.Conjective),
+
+			new TokenOperationCompiler(SyntaxTokenKind.GreaterThan, OperatorPattern.Conjective),
+			new TokenOperationCompiler(SyntaxTokenKind.GreaterThanOrEqual, OperatorPattern.Conjective),
+			new TokenOperationCompiler(SyntaxTokenKind.LessThan, OperatorPattern.Conjective),
+			new TokenOperationCompiler(SyntaxTokenKind.LessThanOrEqual, OperatorPattern.Conjective),
+			new TokenOperationCompiler(SyntaxTokenKind.Equal, OperatorPattern.Conjective),
+			new TokenOperationCompiler(SyntaxTokenKind.NotEqual, OperatorPattern.Conjective),
+
+			new TokenOperationCompiler(SyntaxTokenKind.And, OperatorPattern.Conjective),
+			new TokenOperationCompiler(SyntaxTokenKind.Or, OperatorPattern.Conjective),
 		};
 
 		public static IntermediateExpression Compile (ExpressionSyntax syntax, IMathContext context = null)
@@ -205,6 +224,19 @@ namespace Expresser.Processing
 						);
 						break;
 
+					case IntermediateOperationCode.Percentage:
+						var suffixed = ParameterValue (operation.Parameters[0], dist);
+
+						if (suffixed.ValueClass == ValueClassifier.Float)
+						{
+							dist[operation.DistIndex] = new MathValue (suffixed.FloatValue * 0.01f, true);
+						}
+						else
+						{
+							throw new InvalidOperationException ("Can't perform Percentage on target");
+						}
+						break;
+
 					case IntermediateOperationCode.Invoke:
 						break;
 
@@ -271,19 +303,50 @@ namespace Expresser.Processing
 				{
 					var token = syntax.Tokens[i];
 
-					if (token.Operation != operation)
+					if (token.Operation != operation.TokenKind)
 						continue;
 
 					if (IsIndexCalculated (buffer.Dist, i))
 						continue;
 
-					var lastIndex = DescribeIndex (syntax, buffer, i - 1);
-					var nextIndex = DescribeIndex (syntax, buffer, i + 1);
+					DistSpan currentSpan;
 
-					buffer.Parameters.Add (lastIndex);
-					buffer.Parameters.Add (nextIndex);
+					switch (operation.Pattern)
+					{
+						case OperatorPattern.Prefix:
+						{
+							var nextIndex = DescribeIndex (syntax, buffer, i + 1);
 
-					var currentSpan = Spread (buffer.Dist, (byte)(i - 1), 3);
+							buffer.Parameters.Add (nextIndex);
+
+							currentSpan = Spread (buffer.Dist, (byte)i, 2);
+							break;
+						}
+						case OperatorPattern.Conjective:
+						{
+							var lastIndex = DescribeIndex (syntax, buffer, i - 1);
+							var nextIndex = DescribeIndex (syntax, buffer, i + 1);
+
+							buffer.Parameters.Add (lastIndex);
+							buffer.Parameters.Add (nextIndex);
+
+							currentSpan = Spread (buffer.Dist, (byte)(i - 1), 3);
+
+							break;
+						}
+						default:
+						case OperatorPattern.Suffix:
+						{
+							var lastIndex = DescribeIndex (syntax, buffer, i - 1);
+
+							buffer.Parameters.Add (lastIndex);
+
+							currentSpan = Spread (buffer.Dist, (byte)(i - 1), 2);
+
+							break;
+						}
+					}
+
 
 					distIndex = currentSpan.Index;
 
@@ -414,7 +477,7 @@ namespace Expresser.Processing
 					return Import[parameter.Index].Value;
 
 				case IntermediateSource.ImportNegated:
-					return MathValue.Negate(Import[parameter.Index].Value);
+					return MathValue.Negate (Import[parameter.Index].Value);
 
 				case IntermediateSource.Output:
 					return dist[parameter.Index];

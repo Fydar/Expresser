@@ -133,20 +133,16 @@ namespace Expresser.UnitTests
 				.WithTerm ("Height", new StaticValueProvider (10))
 				.Build ();
 
+			TestExpression (new MathValue(0.5f, true), CompiledExpression.Compile ("50%"));
+
 			TestExpression (5, CompiledExpression.Compile ("50% * Height", contextA));
 			// TestExpression(5, new CompiledExpression("50% Height", contextA)));
 		}
 
-		public void TestExpression (float expected, CompiledExpression expression)
+		public void TestExpression (MathValue expected, CompiledExpression expression)
 		{
 			TestContext.Error.WriteLine (expression.ToString () + " = " + expected);
-			Assert.AreEqual (expected, expression.Evaluate ().FloatValue);
-		}
-
-		public void TestExpression (bool expected, CompiledExpression expression)
-		{
-			TestContext.Error.WriteLine (expression.ToString () + " = " + expected);
-			Assert.AreEqual (expected, expression.Evaluate ().BoolValue);
+			Assert.AreEqual (expected, expression.Evaluate ());
 		}
 
 		[Test]

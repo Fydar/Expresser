@@ -21,6 +21,10 @@
 		LessThan,
 		LessThanOrEqual,
 
+		// Suffix
+		Percentage,
+
+		// Data
 		Value,
 		Source,
 
@@ -28,8 +32,5 @@
 		OpenParentheses,
 		CloseParentheses,
 		Comma,
-
-		// Suffix
-		Percentage,
 	}
 }

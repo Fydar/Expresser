@@ -1,9 +1,10 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Expresser
 {
 	[StructLayout (LayoutKind.Explicit)]
-	public struct ExpressionToken
+	public struct ExpressionToken : IComparable<ExpressionToken>
 	{
 		[FieldOffset (0)] public SyntaxTokenKind Operation;
 		[FieldOffset (1)] public MathValue Value;
@@ -87,6 +88,11 @@ namespace Expresser
 				case SyntaxTokenKind.Source: return "source[" + Source.ToString () + "]";
 				default: return Operation.ToString ();
 			}
+		}
+
+		public int CompareTo (ExpressionToken other)
+		{
+			return Operation.CompareTo (other.Operation);
 		}
 	}
 }

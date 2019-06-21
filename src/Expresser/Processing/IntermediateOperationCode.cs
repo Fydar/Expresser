@@ -14,6 +14,7 @@
 		// Logic
 		And,
 		Or,
+		Not,
 		Equal,
 		NotEqual,
 		GreaterThan,

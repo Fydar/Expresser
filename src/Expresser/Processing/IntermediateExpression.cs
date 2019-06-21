@@ -123,6 +123,7 @@ namespace Expresser.Processing
 			// Logic
 			new TokenOperationCompiler(20, OperatorPattern.Conjective),
 			new TokenOperationCompiler(20, OperatorPattern.Conjective),
+			new TokenOperationCompiler(0, OperatorPattern.Prefix),
 			new TokenOperationCompiler(16, OperatorPattern.Conjective),
 			new TokenOperationCompiler(16, OperatorPattern.Conjective),
 			new TokenOperationCompiler(15, OperatorPattern.Conjective),
@@ -213,6 +214,12 @@ namespace Expresser.Processing
 						dist[operation.DistIndex] = Actions.Or (
 							ParameterValue (operation.Parameters[0], dist),
 							ParameterValue (operation.Parameters[1], dist)
+						);
+						break;
+
+					case IntermediateOperationCode.Not:
+						dist[operation.DistIndex] = Actions.Not (
+							ParameterValue (operation.Parameters[0], dist)
 						);
 						break;
 

@@ -157,6 +157,16 @@ namespace Expresser.Processing
 			return new MathValue (left.BoolValue || right.BoolValue);
 		}
 
+		public MathValue Not (MathValue right)
+		{
+			if (right.ValueClass != ValueClassifier.Boolean)
+			{
+				throw new InvalidOperationException (string.Format ("Cannot perform NOT operator on \"{0}\"",  right.ValueClass));
+			}
+
+			return new MathValue (!right.BoolValue);
+		}
+
 		public MathValue Equal (MathValue left, MathValue right)
 		{
 			switch (left.ValueClass)

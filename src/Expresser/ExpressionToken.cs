@@ -77,6 +77,7 @@ namespace Expresser
 
 				case SyntaxTokenKind.And: return "&&";
 				case SyntaxTokenKind.Or: return "||";
+				case SyntaxTokenKind.Not: return "!";
 				case SyntaxTokenKind.Equal: return "==";
 				case SyntaxTokenKind.NotEqual: return "!=";
 				case SyntaxTokenKind.GreaterThan: return ">";

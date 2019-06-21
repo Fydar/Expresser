@@ -61,7 +61,8 @@ namespace Expresser
 				if (lastToken.Operation != SyntaxTokenKind.OpenParentheses
 					&& token.Operation != SyntaxTokenKind.CloseParentheses
 					&& token.Operation != SyntaxTokenKind.Percentage
-					&& token.Operation != SyntaxTokenKind.Comma)
+					&& token.Operation != SyntaxTokenKind.Comma
+					&& token.Operation != SyntaxTokenKind.Not)
 				{
 					sb.Append (' ');
 				}

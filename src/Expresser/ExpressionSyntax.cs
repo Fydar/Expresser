@@ -59,6 +59,7 @@ namespace Expresser
 						case ',': return SyntaxTokenKind.Comma;
 						case '>': return SyntaxTokenKind.GreaterThan;
 						case '<': return SyntaxTokenKind.LessThan;
+						case '!': return SyntaxTokenKind.Not;
 						default: return SyntaxTokenKind.None;
 					}
 				}

@@ -75,16 +75,24 @@ namespace Expresser.UnitTests
 			TestExpression (true, CompiledExpression.Compile ("true"));
 			TestExpression (false, CompiledExpression.Compile ("false"));
 
-			// Logic Operators
+			// AND Operator
 			TestExpression (true, CompiledExpression.Compile ("true && true"));
 			TestExpression (false, CompiledExpression.Compile ("true && false"));
 			TestExpression (false, CompiledExpression.Compile ("false && true"));
 			TestExpression (false, CompiledExpression.Compile ("false && false"));
 
+			// OR Operator
 			TestExpression (true, CompiledExpression.Compile ("true || true"));
 			TestExpression (true, CompiledExpression.Compile ("false || true"));
 			TestExpression (true, CompiledExpression.Compile ("true || false"));
 			TestExpression (false, CompiledExpression.Compile ("false || false"));
+
+			// NOT Operator
+			TestExpression (false, CompiledExpression.Compile ("!true"));
+			TestExpression (true, CompiledExpression.Compile ("!false"));
+			TestExpression (true, CompiledExpression.Compile ("!(false)"));
+
+			TestExpression (false, CompiledExpression.Compile ("!(30 > 10)"));
 		}
 
 		[Test]

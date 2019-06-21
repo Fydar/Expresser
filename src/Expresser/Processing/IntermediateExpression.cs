@@ -352,6 +352,9 @@ namespace Expresser.Processing
 				int i = tokenReference.Index;
 				var token = tokenReference.Token;
 
+				if (IsIndexCalculated (buffer.Dist, i))
+					continue;
+
 				DistSpan currentSpan;
 
 				switch (tokenReference.Compiler.Pattern)
@@ -452,6 +455,16 @@ namespace Expresser.Processing
 
 			distBuffer[distIndex] = dist;
 			return dist;
+		}
+
+		static bool IsIndexCalculated (IReadOnlyList<DistSpan> distBuffer, int index)
+		{
+			foreach (var span in distBuffer)
+			{
+				if (span.Contains (index))
+					return true;
+			}
+			return false;
 		}
 
 		static DistSpan Spread (IList<DistSpan> distBuffer, byte start, byte length)

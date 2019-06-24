@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace Expresser
 {
@@ -40,7 +39,7 @@ namespace Expresser
 			}
 		}
 
-		
+
 
 		public static implicit operator MathValue (int value)
 		{

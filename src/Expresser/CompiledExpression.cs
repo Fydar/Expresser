@@ -6,6 +6,31 @@ namespace Expresser
 	/// <summary>
 	/// <para>A mathematical expression in a compiled format.</para>
 	/// </summary>
+	/// <example>
+	/// <para>Below is an example of constructing a CompiledExpression with a string and evaluating it.</para>
+	/// <code>
+	/// using System;
+	/// using Expresser;
+	/// 
+	/// public class Program
+	/// {
+	/// 	public static void Main (string[] args)
+	/// 	{
+	/// 		var context = new MathContextBuilder ()
+	/// 			.WithTerm ("Width", new StaticValueProvider (10))
+	/// 			.Build ();
+	/// 
+	/// 		var expression = new CompiledExpression ("0.1*Width", context);
+	/// 
+	/// 		var result = expression.Evaluate ();
+	/// 
+	/// 		Console.WriteLine (expression);        // 0.1 * Width
+	/// 		Console.WriteLine (result.ValueClass); // ValueClassifier.Float
+	/// 		Console.WriteLine (result.FloatValue); // 1
+	/// 	}
+	/// }
+	/// </code>
+	/// </example>
 	public class CompiledExpression
 	{
 		private readonly MathValue[] CalculationBuffer;
@@ -41,7 +66,7 @@ namespace Expresser
 
 		public static CompiledExpression Compile (string expression, IMathContext context = null)
 		{
-			return new CompiledExpression (new ExpressionSyntax(expression), context);
+			return new CompiledExpression (new ExpressionSyntax (expression), context);
 		}
 
 		public MathValue Evaluate ()

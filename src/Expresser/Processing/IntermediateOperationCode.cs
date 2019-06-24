@@ -1,5 +1,8 @@
 ﻿namespace Expresser.Processing
 {
+	/// <summary>
+	/// <para>A code representing the type of operation that an <see cref="IntermediateOperation"/> represents.</para>
+	/// </summary>
 	public enum IntermediateOperationCode
 	{
 		None,

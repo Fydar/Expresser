@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Expresser.Processing
 {
+	/// <summary>
+	/// <para>A compiled form of a mathmatical expression.</para>
+	/// </summary>
 	public struct IntermediateExpression
 	{
 		class CompilerBuffers
@@ -64,11 +67,27 @@ namespace Expresser.Processing
 			public bool RangeEqual (DistSpan other) => Start == other.Start && Length == other.Length;
 		}
 
+		/// <summary>
+		/// <para>The size the buffer required to invoke <c>Evaluate</c>.</para>
+		/// </summary>
 		public int DistSize;
+
+		/// <summary>
+		/// <para>An array of imported values for this expression.</para>
+		/// </summary>
 		public IValueProvider[] Import;
+
+		/// <summary>
+		/// <para>The body of this expression described by an array of operations.</para>
+		/// </summary>
 		public IntermediateOperation[] Operations;
+
+		/// <summary>
+		/// <para>A collection of static values used by the operations in this expression.</para>
+		/// </summary>
 		public MathValue[] Static;
-		public IntermediateOperationActions Actions;
+
+		private IntermediateOperationActions Actions;
 
 		private enum OperatorPattern
 		{
@@ -144,6 +163,12 @@ namespace Expresser.Processing
 			new TokenOperationCompiler()
 		};
 
+		/// <summary>
+		/// <para>Compiles a new <see cref="IntermediateExpression"/> from a source <see cref="ExpressionSyntax"/>.</para>
+		/// </summary>
+		/// <param name="syntax">The parsed string that describes an expression to compile.</param>
+		/// <param name="context">The compilation context.</param>
+		/// <returns></returns>
 		public static IntermediateExpression Compile (ExpressionSyntax syntax, IMathContext context = null)
 		{
 			var buffer = CompilerBuffers.New ();
@@ -160,6 +185,13 @@ namespace Expresser.Processing
 			};
 		}
 
+		/// <summary>
+		/// <para>Evaluates this <see cref="IntermediateExpression"/> and return a singlular outputted value.</para>
+		/// </summary>
+		/// <param name="dist">A buffer used for calculations. Must be as large as this expressions <c>DistSize</c>.</param>
+		/// <returns>
+		/// <para>The output of the evaluation.</para>
+		/// </returns>
 		public MathValue Evaluate (MathValue[] dist)
 		{
 			for (int i = 0; i < Operations.Length; i++)

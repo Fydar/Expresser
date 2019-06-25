@@ -1,4 +1,4 @@
-﻿namespace Expresser
+namespace Expresser.Input
 {
 	public interface IMathContext
 	{

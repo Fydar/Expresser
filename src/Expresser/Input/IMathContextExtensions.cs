@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace Expresser
+namespace Expresser.Input
 {
 	public static class IMathContextExtensions
 	{

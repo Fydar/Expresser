@@ -1,9 +1,9 @@
-﻿namespace Expresser
+namespace Expresser.Input
 {
 	/// <summary>
 	/// <para></para>
 	/// </summary>
-	public struct StaticValueProvider : IValueProvider
+	public class StaticValueProvider : IValueProvider
 	{
 		/// <summary>
 		/// <para></para>

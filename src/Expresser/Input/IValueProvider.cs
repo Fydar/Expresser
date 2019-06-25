@@ -1,14 +1,14 @@
-﻿namespace Expresser
+namespace Expresser.Input
 {
 	/// <summary>
 	/// <para></para>
 	/// </summary>
-	public interface IObjectContext
+	public interface IValueProvider
 	{
 		/// <summary>
 		/// <para></para>
 		/// </summary>
 		/// <returns></returns>
-		object Target { get; }
+		MathValue Value { get; }
 	}
 }

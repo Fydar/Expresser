@@ -1,11 +1,11 @@
-﻿using System.Reflection;
+using System.Reflection;
 
-namespace Expresser
+namespace Expresser.Input
 {
 	/// <summary>
 	/// <para></para>
 	/// </summary>
-	public struct FieldFloatProvider : IValueProvider, IObjectContext
+	public class FieldValueProvider : IValueProvider, IObjectContext
 	{
 		private readonly FieldInfo targetField;
 
@@ -27,7 +27,7 @@ namespace Expresser
 		/// <para></para>
 		/// </summary>
 		/// <param name="targetField"></param>
-		public FieldFloatProvider (FieldInfo targetField)
+		public FieldValueProvider (FieldInfo targetField)
 		{
 			this.targetField = targetField;
 			Target = null;
@@ -38,7 +38,7 @@ namespace Expresser
 		/// </summary>
 		/// <param name="targetField"></param>
 		/// <param name="targetObject"></param>
-		public FieldFloatProvider (FieldInfo targetField, object targetObject)
+		public FieldValueProvider (FieldInfo targetField, object targetObject)
 		{
 			this.targetField = targetField;
 			Target = targetObject;

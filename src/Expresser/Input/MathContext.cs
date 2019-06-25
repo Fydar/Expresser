@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace Expresser
+namespace Expresser.Input
 {
 	/// <summary>
 	/// <para></para>

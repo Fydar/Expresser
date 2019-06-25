@@ -1,3 +1,4 @@
+using Expresser.Input;
 using NUnit.Framework;
 
 namespace Expresser.UnitTests

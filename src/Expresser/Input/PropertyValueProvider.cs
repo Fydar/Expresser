@@ -1,11 +1,11 @@
-﻿using System.Reflection;
+using System.Reflection;
 
-namespace Expresser
+namespace Expresser.Input
 {
 	/// <summary>
 	/// <para></para>
 	/// </summary>
-	public struct PropertyFloatProvider : IValueProvider, IObjectContext
+	public class PropertyValueProvider : IValueProvider, IObjectContext
 	{
 		private readonly PropertyInfo targetProperty;
 
@@ -24,7 +24,7 @@ namespace Expresser
 		/// <para></para>
 		/// </summary>
 		/// <param name="targetProperty"></param>
-		public PropertyFloatProvider (PropertyInfo targetProperty)
+		public PropertyValueProvider (PropertyInfo targetProperty)
 		{
 			this.targetProperty = targetProperty;
 			Target = null;
@@ -35,7 +35,7 @@ namespace Expresser
 		/// </summary>
 		/// <param name="targetProperty"></param>
 		/// <param name="targetObject"></param>
-		public PropertyFloatProvider (PropertyInfo targetProperty, object targetObject)
+		public PropertyValueProvider (PropertyInfo targetProperty, object targetObject)
 		{
 			this.targetProperty = targetProperty;
 			Target = targetObject;

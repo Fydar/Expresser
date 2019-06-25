@@ -13,7 +13,7 @@ namespace Expresser.Input
 		/// <para></para>
 		/// </summary>
 		/// <returns></returns>
-		public MathValue Value => new MathValue ((float)targetProperty.GetValue (Target), false);
+		public MathValue Value => new MathValue (targetProperty.GetValue (Target));
 
 		/// <summary>
 		/// <para></para>

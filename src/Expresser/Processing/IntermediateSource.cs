@@ -1,4 +1,6 @@
-﻿namespace Expresser.Processing
+﻿using Expresser.Input;
+
+namespace Expresser.Processing
 {
 	/// <summary>
 	/// <para>A source for values within an <see cref="IntermediateExpression"/>.</para>

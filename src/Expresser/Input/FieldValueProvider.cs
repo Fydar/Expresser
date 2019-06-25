@@ -15,7 +15,7 @@ namespace Expresser.Input
 		/// <returns>
 		/// <para></para>
 		/// </returns>
-		public MathValue Value => new MathValue ((float)targetField.GetValue (Target), false);
+		public MathValue Value => new MathValue (targetField.GetValue (Target));
 
 		/// <summary>
 		/// <para></para>

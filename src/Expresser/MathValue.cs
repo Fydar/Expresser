@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Expresser
 {
@@ -7,6 +8,7 @@ namespace Expresser
 	{
 		[FieldOffset (0)] public ValueClassifier ValueClass;
 		[FieldOffset (1)] public float FloatValue;
+		[FieldOffset (1)] public float IntValue;
 		[FieldOffset (1)] public bool BoolValue;
 
 		public MathValue (bool boolValue) : this ()
@@ -15,10 +17,44 @@ namespace Expresser
 			ValueClass = ValueClassifier.Boolean;
 		}
 
+		public MathValue (int intValue) : this ()
+		{
+			IntValue = intValue;
+			ValueClass = ValueClassifier.Int;
+		}
+
 		public MathValue (float floatValue, bool isFractional) : this ()
 		{
 			FloatValue = floatValue;
 			ValueClass = isFractional ? ValueClassifier.FloatFractional : ValueClassifier.Float;
+		}
+
+		public MathValue (object objectValue) : this ()
+		{
+			if (objectValue == null)
+			{
+				ValueClass = ValueClassifier.None;
+			}
+			else
+			{
+				var objectType = objectValue.GetType ();
+
+				if (objectType == typeof (int))
+				{
+					ValueClass = ValueClassifier.Int;
+					IntValue = (int)objectValue;
+				}
+				else if (objectType == typeof (float))
+				{
+					ValueClass = ValueClassifier.Float;
+					FloatValue = (float)objectValue;
+				}
+				else if (objectType == typeof (bool))
+				{
+					ValueClass = ValueClassifier.Boolean;
+					BoolValue = (bool)objectValue;
+				}
+			}
 		}
 
 		public override string ToString ()
@@ -38,8 +74,6 @@ namespace Expresser
 					return "null";
 			}
 		}
-
-
 
 		public static implicit operator MathValue (int value)
 		{

@@ -4,24 +4,24 @@ using System.Runtime.InteropServices;
 
 namespace Expresser
 {
-	[StructLayout (LayoutKind.Explicit)]
+	[StructLayout(LayoutKind.Explicit)]
 	public struct ExpressionToken : IComparable<ExpressionToken>
 	{
-		[FieldOffset (0)] public SyntaxTokenKind Operation;
-		[FieldOffset (1)] public MathValue Value;
-		[FieldOffset (1)] public byte Source;
-		[FieldOffset (2)] public sbyte Multiplier;
+		[FieldOffset(0)] public SyntaxTokenKind Operation;
+		[FieldOffset(1)] public MathValue Value;
+		[FieldOffset(1)] public byte Source;
+		[FieldOffset(2)] public sbyte Multiplier;
 
-		public static ExpressionToken None => new ExpressionToken () { Operation = SyntaxTokenKind.None };
+		public static ExpressionToken None => new ExpressionToken() { Operation = SyntaxTokenKind.None };
 
-		public MathValue ValueWithSources (IValueProvider[] sources)
+		public MathValue ValueWithSources(IValueProvider[] sources)
 		{
 			if (Operation == SyntaxTokenKind.Source)
 			{
 				var sourceValue = sources[Source].Value;
 				switch (sourceValue.ValueClass)
 				{
-					case ValueClassifier.Float: return new MathValue (sourceValue.FloatValue * Multiplier, false);
+					case ValueClassifier.Float: return new MathValue(sourceValue.FloatValue * Multiplier, false);
 					default: return sourceValue;
 				}
 			}
@@ -34,17 +34,17 @@ namespace Expresser
 					Operation == SyntaxTokenKind.Divide ||
 					Operation == SyntaxTokenKind.Power;
 
-		public static ExpressionToken Operator (SyntaxTokenKind operation)
+		public static ExpressionToken Operator(SyntaxTokenKind operation)
 		{
-			return new ExpressionToken ()
+			return new ExpressionToken()
 			{
 				Operation = operation
 			};
 		}
 
-		public static ExpressionToken ReadSource (byte sourceId, bool negative)
+		public static ExpressionToken ReadSource(byte sourceId, bool negative)
 		{
-			return new ExpressionToken ()
+			return new ExpressionToken()
 			{
 				Operation = SyntaxTokenKind.Source,
 				Source = sourceId,
@@ -52,16 +52,16 @@ namespace Expresser
 			};
 		}
 
-		public static ExpressionToken StaticValue (MathValue value)
+		public static ExpressionToken StaticValue(MathValue value)
 		{
-			return new ExpressionToken ()
+			return new ExpressionToken()
 			{
 				Operation = SyntaxTokenKind.Value,
 				Value = value
 			};
 		}
 
-		public override string ToString ()
+		public override string ToString()
 		{
 			switch (Operation)
 			{
@@ -86,15 +86,15 @@ namespace Expresser
 				case SyntaxTokenKind.LessThan: return "<";
 				case SyntaxTokenKind.LessThanOrEqual: return "<=";
 
-				case SyntaxTokenKind.Value: return Value.ToString ();
-				case SyntaxTokenKind.Source: return "source[" + Source.ToString () + "]";
-				default: return Operation.ToString ();
+				case SyntaxTokenKind.Value: return Value.ToString();
+				case SyntaxTokenKind.Source: return "source[" + Source.ToString() + "]";
+				default: return Operation.ToString();
 			}
 		}
 
-		public int CompareTo (ExpressionToken other)
+		public int CompareTo(ExpressionToken other)
 		{
-			return Operation.CompareTo (other.Operation);
+			return Operation.CompareTo(other.Operation);
 		}
 	}
 }

@@ -20,7 +20,7 @@
 		/// </summary>
 		/// <param name="source">The soure from where this parameters value is sourced from.</param>
 		/// <param name="index">The index within the source to source a value from.</param>
-		public IntermediateParameter (IntermediateSource source, byte index)
+		public IntermediateParameter(IntermediateSource source, byte index)
 		{
 			Source = source;
 			Index = index;
@@ -32,7 +32,7 @@
 		/// <returns>
 		/// <para>A string representation of this <see cref="IntermediateParameter"/>.</para>
 		/// </returns>
-		public override string ToString ()
+		public override string ToString()
 		{
 			return $"{Source}[{Index}]";
 		}

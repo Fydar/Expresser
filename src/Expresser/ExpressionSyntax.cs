@@ -9,7 +9,7 @@ namespace Expresser
 	/// </summary>
 	public class ExpressionSyntax
 	{
-		enum SpanClassifier : byte
+		private enum SpanClassifier : byte
 		{
 			None,
 			Numeric,
@@ -69,15 +69,15 @@ namespace Expresser
 			{
 				get
 				{
-					if (Index < 0 || char.IsWhiteSpace (Character))
+					if (Index < 0 || char.IsWhiteSpace(Character))
 					{
 						return SpanClassifier.Space;
 					}
-					else if (char.IsDigit (Character) || Character == '.')
+					else if (char.IsDigit(Character) || Character == '.')
 					{
 						return SpanClassifier.Numeric;
 					}
-					else if (char.IsLetter (Character))
+					else if (char.IsLetter(Character))
 					{
 						return SpanClassifier.String;
 					}
@@ -91,12 +91,12 @@ namespace Expresser
 					}
 					else
 					{
-						throw new InvalidOperationException (string.Format ("Character \"{0}\" could not be classified", Character));
+						throw new InvalidOperationException(string.Format("Character \"{0}\" could not be classified", Character));
 					}
 				}
 			}
 
-			public CharacterDescriptor (string sourceString, short index)
+			public CharacterDescriptor(string sourceString, short index)
 			{
 				SourceString = sourceString;
 				Index = index;
@@ -105,7 +105,7 @@ namespace Expresser
 					if (index >= sourceString.Length)
 					{
 						Index = -2;
-						Character = new char ();
+						Character = new char();
 					}
 					else
 					{
@@ -115,33 +115,41 @@ namespace Expresser
 				else
 				{
 					Index = -1;
-					Character = new char ();
+					Character = new char();
 				}
 			}
 
-			public static CharacterDescriptor End (string sourceString)
+			public static CharacterDescriptor End(string sourceString)
 			{
-				return new CharacterDescriptor (sourceString, -2);
+				return new CharacterDescriptor(sourceString, -2);
 			}
 
-			public static CharacterDescriptor Start (string sourceString)
+			public static CharacterDescriptor Start(string sourceString)
 			{
-				return new CharacterDescriptor (sourceString, -1);
+				return new CharacterDescriptor(sourceString, -1);
 			}
 
-			public CharacterDescriptor Next ()
+			public CharacterDescriptor Next()
 			{
 				if (Index == -2)
+				{
 					return this;
-				return new CharacterDescriptor (SourceString, (short)(Index + 1));
+				}
+
+				return new CharacterDescriptor(SourceString, (short)(Index + 1));
 			}
 
-			public override string ToString ()
+			public override string ToString()
 			{
 				if (Index == -1)
+				{
 					return "Start";
+				}
+
 				if (Index == -2)
+				{
 					return "End";
+				}
 
 				return $"\"{Character}\" at {Index}";
 			}
@@ -159,46 +167,46 @@ namespace Expresser
 		/// <para></para>
 		/// </summary>
 		/// <param name="expression"></param>
-		public ExpressionSyntax (string expression)
+		public ExpressionSyntax(string expression)
 		{
 			Expression = expression;
 
 			ExpressionToken[] tokens;
 			string[] terms;
 
-			ParseText (expression, out tokens, out terms);
+			ParseText(expression, out tokens, out terms);
 
 			Tokens = tokens;
 			Terms = terms;
 		}
 
-		public override string ToString ()
+		public override string ToString()
 		{
-			var sb = new StringBuilder ();
+			var sb = new StringBuilder();
 
 			var lastToken = Tokens[0];
 			for (int i = 1; i < Tokens.Count; i++)
 			{
 				var token = Tokens[i];
-				sb.Append (lastToken);
+				sb.Append(lastToken);
 				if (lastToken.Operation != SyntaxTokenKind.OpenParentheses
 					&& token.Operation != SyntaxTokenKind.CloseParentheses
 					&& token.Operation != SyntaxTokenKind.Percentage
 					&& token.Operation != SyntaxTokenKind.Comma
 					&& lastToken.Operation != SyntaxTokenKind.Not)
 				{
-					sb.Append (' ');
+					sb.Append(' ');
 				}
 				lastToken = token;
 			}
-			sb.Append (Tokens[Tokens.Count - 1]);
-			return sb.ToString ();
+			sb.Append(Tokens[Tokens.Count - 1]);
+			return sb.ToString();
 		}
 
-		private static void ParseText (string expression, out ExpressionToken[] tokens, out string[] sources)
+		private static void ParseText(string expression, out ExpressionToken[] tokens, out string[] sources)
 		{
-			var foundTokens = new List<ExpressionToken> ();
-			var foundSources = new List<string> ();
+			var foundTokens = new List<ExpressionToken>();
+			var foundSources = new List<string>();
 
 			int currentSpanStart = 0;
 			int currentSpanLength = 0;
@@ -207,15 +215,17 @@ namespace Expresser
 
 			var lastToken = ExpressionToken.None;
 
-			var headCharacter = CharacterDescriptor.Start (expression);
+			var headCharacter = CharacterDescriptor.Start(expression);
 			var lastCharacter = headCharacter;
 
 			while (true)
 			{
-				headCharacter = headCharacter.Next ();
+				headCharacter = headCharacter.Next();
 
 				if (headCharacter.Index == -2 && lastCharacter.Index == -2)
+				{
 					break;
+				}
 
 				characterClass = headCharacter.Type;
 
@@ -244,30 +254,30 @@ namespace Expresser
 #if USE_SPANS
 								var spanContent = expression.AsSpan().Slice(currentSpanStart, currentSpanLength));
 #else
-								string spanContent = expression.Substring (currentSpanStart + offset, currentSpanLength - offset);
+								string spanContent = expression.Substring(currentSpanStart + offset, currentSpanLength - offset);
 #endif
 
-								if (spanContent.Equals ("true", StringComparison.OrdinalIgnoreCase))
+								if (spanContent.Equals("true", StringComparison.OrdinalIgnoreCase))
 								{
-									lastToken = ExpressionToken.StaticValue (new MathValue (true));
-									foundTokens.Add (lastToken);
+									lastToken = ExpressionToken.StaticValue(new MathValue(true));
+									foundTokens.Add(lastToken);
 								}
-								else if (spanContent.Equals ("false", StringComparison.OrdinalIgnoreCase))
+								else if (spanContent.Equals("false", StringComparison.OrdinalIgnoreCase))
 								{
-									lastToken = ExpressionToken.StaticValue (new MathValue (false));
-									foundTokens.Add (lastToken);
+									lastToken = ExpressionToken.StaticValue(new MathValue(false));
+									foundTokens.Add(lastToken);
 								}
 								else
 								{
-									int sourceIndex = foundSources.IndexOf (spanContent);
+									int sourceIndex = foundSources.IndexOf(spanContent);
 									if (sourceIndex == -1)
 									{
 										sourceIndex = foundSources.Count;
-										foundSources.Add (spanContent);
+										foundSources.Add(spanContent);
 									}
 
-									lastToken = ExpressionToken.ReadSource ((byte)sourceIndex, isNegative);
-									foundTokens.Add (lastToken);
+									lastToken = ExpressionToken.ReadSource((byte)sourceIndex, isNegative);
+									foundTokens.Add(lastToken);
 								}
 								break;
 
@@ -275,13 +285,13 @@ namespace Expresser
 #if USE_SPANS
 								spanContent = expression.AsSpan().Slice(currentSpanStart, currentSpanLength));
 #else
-								spanContent = expression.Substring (currentSpanStart, currentSpanLength);
+								spanContent = expression.Substring(currentSpanStart, currentSpanLength);
 #endif
 
-								float numericFloat = float.Parse (spanContent);
+								float numericFloat = float.Parse(spanContent);
 
-								lastToken = ExpressionToken.StaticValue (new MathValue (numericFloat, false));
-								foundTokens.Add (lastToken);
+								lastToken = ExpressionToken.StaticValue(new MathValue(numericFloat, false));
+								foundTokens.Add(lastToken);
 
 								break;
 
@@ -289,11 +299,11 @@ namespace Expresser
 							case SpanClassifier.Structure:
 								if (currentSpanLength == 1)
 								{
-									lastToken = ExpressionToken.Operator (lastCharacter.SelfTokenKind);
+									lastToken = ExpressionToken.Operator(lastCharacter.SelfTokenKind);
 								}
 								else
 								{
-									spanContent = expression.Substring (currentSpanStart, currentSpanLength);
+									spanContent = expression.Substring(currentSpanStart, currentSpanLength);
 
 									SyntaxTokenKind operation;
 									switch (spanContent)
@@ -306,13 +316,13 @@ namespace Expresser
 										case "||": operation = SyntaxTokenKind.Or; break;
 										default: operation = SyntaxTokenKind.None; break;
 									}
-									lastToken = ExpressionToken.Operator (operation);
+									lastToken = ExpressionToken.Operator(operation);
 								}
 								if (lastToken.Operation == SyntaxTokenKind.None)
 								{
-									throw new InvalidOperationException (string.Format ("Unrecognised Operator Sequence \"{0}\"", expression.Substring (currentSpanStart, currentSpanLength)));
+									throw new InvalidOperationException(string.Format("Unrecognised Operator Sequence \"{0}\"", expression.Substring(currentSpanStart, currentSpanLength)));
 								}
-								foundTokens.Add (lastToken);
+								foundTokens.Add(lastToken);
 								break;
 						}
 
@@ -327,8 +337,8 @@ namespace Expresser
 				lastCharacter = headCharacter;
 			}
 
-			tokens = foundTokens.ToArray ();
-			sources = foundSources.ToArray ();
+			tokens = foundTokens.ToArray();
+			sources = foundSources.ToArray();
 		}
 	}
 }

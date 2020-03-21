@@ -5,13 +5,13 @@ namespace Expresser.UnitTests
 	public class ExpressionSyntaxShould
 	{
 		[Test]
-		public void HandleCommaDelitedParameters ()
+		public void HandleCommaDelitedParameters()
 		{
-			var syntax = new ExpressionSyntax ("1, 4");
+			var syntax = new ExpressionSyntax("1, 4");
 
-			TestContext.Error.WriteLine (syntax);
+			TestContext.Error.WriteLine(syntax);
 
-			Assert.AreEqual (syntax.Tokens, new ExpressionToken[] {
+			Assert.AreEqual(syntax.Tokens, new ExpressionToken[] {
 				ExpressionToken.StaticValue(1),
 				ExpressionToken.Operator(SyntaxTokenKind.Comma),
 				ExpressionToken.StaticValue(4)
@@ -19,11 +19,11 @@ namespace Expresser.UnitTests
 		}
 
 		[Test]
-		public void HandleDoubleParenthasis ()
+		public void HandleDoubleParenthasis()
 		{
-			var syntax = new ExpressionSyntax ("((1 + 1) + 1)");
+			var syntax = new ExpressionSyntax("((1 + 1) + 1)");
 
-			Assert.AreEqual (syntax.Tokens, new ExpressionToken[] {
+			Assert.AreEqual(syntax.Tokens, new ExpressionToken[] {
 				ExpressionToken.Operator(SyntaxTokenKind.OpenParentheses),
 				ExpressionToken.Operator(SyntaxTokenKind.OpenParentheses),
 				ExpressionToken.StaticValue(1),

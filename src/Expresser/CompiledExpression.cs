@@ -34,7 +34,7 @@ namespace Expresser
 	/// </example>
 	public class CompiledExpression
 	{
-		private readonly MathValue[] CalculationBuffer;
+		private readonly MathValue[] calculationBuffer;
 
 		/// <summary>
 		/// <para></para>
@@ -51,51 +51,51 @@ namespace Expresser
 		/// </summary>
 		public ExpressionSyntax Syntax { get; private set; }
 
-		CompiledExpression (ExpressionSyntax syntax, IMathContext context = null)
+		private CompiledExpression(ExpressionSyntax syntax, IMathContext context = null)
 		{
 			Syntax = syntax;
 			Context = context;
 
-			Intermediate = IntermediateExpression.Compile (syntax, context);
-			CalculationBuffer = new MathValue[Intermediate.DistSize];
+			Intermediate = IntermediateExpression.Compile(syntax, context);
+			calculationBuffer = new MathValue[Intermediate.DistSize];
 		}
 
-		public static CompiledExpression Compile (ExpressionSyntax syntax, IMathContext context = null)
+		public static CompiledExpression Compile(ExpressionSyntax syntax, IMathContext context = null)
 		{
-			return new CompiledExpression (syntax, context);
+			return new CompiledExpression(syntax, context);
 		}
 
-		public static CompiledExpression Compile (string expression, IMathContext context = null)
+		public static CompiledExpression Compile(string expression, IMathContext context = null)
 		{
-			return new CompiledExpression (new ExpressionSyntax (expression), context);
+			return new CompiledExpression(new ExpressionSyntax(expression), context);
 		}
 
-		public MathValue Evaluate ()
+		public MathValue Evaluate()
 		{
-			return Intermediate.Evaluate (CalculationBuffer);
+			return Intermediate.Evaluate(calculationBuffer);
 		}
 
-		public override string ToString ()
+		public override string ToString()
 		{
-			var sb = new StringBuilder ();
+			var sb = new StringBuilder();
 
 			var lastToken = Syntax.Tokens[0];
 			for (int i = 1; i < Syntax.Tokens.Count; i++)
 			{
 				var token = Syntax.Tokens[i];
-				sb.Append (lastToken);
+				sb.Append(lastToken);
 				if (lastToken.Operation != SyntaxTokenKind.OpenParentheses
 					&& token.Operation != SyntaxTokenKind.CloseParentheses
 					&& token.Operation != SyntaxTokenKind.Percentage
 					&& token.Operation != SyntaxTokenKind.Comma
 					&& lastToken.Operation != SyntaxTokenKind.Not)
 				{
-					sb.Append (' ');
+					sb.Append(' ');
 				}
 				lastToken = token;
 			}
-			sb.Append (Syntax.Tokens[Syntax.Tokens.Count - 1]);
-			return sb.ToString ();
+			sb.Append(Syntax.Tokens[Syntax.Tokens.Count - 1]);
+			return sb.ToString();
 		}
 	}
 }

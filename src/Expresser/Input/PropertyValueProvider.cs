@@ -13,7 +13,7 @@ namespace Expresser.Input
 		/// <para></para>
 		/// </summary>
 		/// <returns></returns>
-		public MathValue Value => new MathValue (targetProperty.GetValue (Target));
+		public MathValue Value => new MathValue(targetProperty.GetValue(Target));
 
 		/// <summary>
 		/// <para></para>
@@ -24,7 +24,7 @@ namespace Expresser.Input
 		/// <para></para>
 		/// </summary>
 		/// <param name="targetProperty"></param>
-		public PropertyValueProvider (PropertyInfo targetProperty)
+		public PropertyValueProvider(PropertyInfo targetProperty)
 		{
 			this.targetProperty = targetProperty;
 			Target = null;
@@ -35,7 +35,7 @@ namespace Expresser.Input
 		/// </summary>
 		/// <param name="targetProperty"></param>
 		/// <param name="targetObject"></param>
-		public PropertyValueProvider (PropertyInfo targetProperty, object targetObject)
+		public PropertyValueProvider(PropertyInfo targetProperty, object targetObject)
 		{
 			this.targetProperty = targetProperty;
 			Target = targetObject;
@@ -45,7 +45,7 @@ namespace Expresser.Input
 		/// <para></para>
 		/// </summary>
 		/// <returns></returns>
-		public override string ToString ()
+		public override string ToString()
 		{
 			return targetProperty.Name;
 		}

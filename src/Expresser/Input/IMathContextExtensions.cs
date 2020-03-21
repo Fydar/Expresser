@@ -5,13 +5,13 @@ namespace Expresser.Input
 {
 	public static class IMathContextExtensions
 	{
-		public static IValueProvider[] ResolveTerms (this IMathContext context, IReadOnlyList<string> terms)
+		public static IValueProvider[] ResolveTerms(this IMathContext context, IReadOnlyList<string> terms)
 		{
 			if (context == null)
 			{
 				if (terms != null && terms.Count != 0)
 				{
-					throw new InvalidOperationException ("Could not resolve terms with no math context provided");
+					throw new InvalidOperationException("Could not resolve terms with no math context provided");
 				}
 
 				return null;
@@ -24,9 +24,9 @@ namespace Expresser.Input
 			{
 				string term = terms[i];
 				IValueProvider provider;
-				if (!context.TryGetTerm (term, out provider))
+				if (!context.TryGetTerm(term, out provider))
 				{
-					throw new InvalidOperationException (string.Format ("Unable to find value for term \"{0}\"", term));
+					throw new InvalidOperationException(string.Format("Unable to find value for term \"{0}\"", term));
 				}
 				providers[i] = provider;
 			}

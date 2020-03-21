@@ -2,12 +2,12 @@ namespace Expresser.Input
 {
 	public interface IMathContextBuilder
 	{
-		IMathContext Build ();
+		IMathContext Build();
 
-		IMathContextBuilder ImplicitlyReferences (IValueProvider value);
+		IMathContextBuilder ImplicitlyReferences(IValueProvider value);
 
-		IMathContextBuilder WithTerm (string term, IValueProvider value);
+		IMathContextBuilder WithTerm(string term, IValueProvider value);
 
-		IMathContextBuilder WithUnit (string unit, IValueProvider value);
+		IMathContextBuilder WithUnit(string unit, IValueProvider value);
 	}
 }

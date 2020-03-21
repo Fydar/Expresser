@@ -6,26 +6,26 @@ namespace Expresser.Benchmarks
 	[RPlotExporter]
 	public class BasicBenchmarks
 	{
-		[Params ("1 + (10 / 40) > 1 == true", "1+1", "true == false")]
+		[Params("1 + (10 / 40) > 1 == true", "1+1", "true == false")]
 		public string Expression { get; set; }
 
 		private CompiledExpression EvaluateTarget;
 		private ExpressionSyntax CompileSyntax;
 
 		[GlobalSetup]
-		public void Setup ()
+		public void Setup()
 		{
-			EvaluateTarget = CompiledExpression.Compile (Expression);
-			CompileSyntax = new ExpressionSyntax (Expression);
+			EvaluateTarget = CompiledExpression.Compile(Expression);
+			CompileSyntax = new ExpressionSyntax(Expression);
 		}
 
 		[Benchmark]
-		public void Parse () => new ExpressionSyntax (Expression);
+		public void Parse() => new ExpressionSyntax(Expression);
 
 		[Benchmark]
-		public void Compile () => CompiledExpression.Compile (CompileSyntax);
+		public void Compile() => CompiledExpression.Compile(CompileSyntax);
 
 		[Benchmark]
-		public void Evaluate () => EvaluateTarget.Evaluate ();
+		public void Evaluate() => EvaluateTarget.Evaluate();
 	}
 }

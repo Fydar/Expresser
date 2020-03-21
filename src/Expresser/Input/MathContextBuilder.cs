@@ -6,44 +6,44 @@ namespace Expresser.Input
 {
 	public class MathContextBuilder : IMathContextBuilder
 	{
-		private readonly List<KeyValuePair<string, IValueProvider>> Terms;
-		private readonly List<KeyValuePair<string, IValueProvider>> Units;
-		private IValueProvider ImplicitReference;
+		private readonly List<KeyValuePair<string, IValueProvider>> terms;
+		private readonly List<KeyValuePair<string, IValueProvider>> units;
+		private IValueProvider implicitReference;
 
-		public MathContextBuilder ()
+		public MathContextBuilder()
 		{
-			Terms = new List<KeyValuePair<string, IValueProvider>> ();
-			Units = new List<KeyValuePair<string, IValueProvider>> ();
+			terms = new List<KeyValuePair<string, IValueProvider>>();
+			units = new List<KeyValuePair<string, IValueProvider>>();
 		}
 
-		public IMathContextBuilder WithTerm (string term, IValueProvider value)
+		public IMathContextBuilder WithTerm(string term, IValueProvider value)
 		{
-			Terms.Add (new KeyValuePair<string, IValueProvider> (term.ToLower (), value));
+			terms.Add(new KeyValuePair<string, IValueProvider>(term.ToLower(), value));
 			return this;
 		}
 
-		public IMathContextBuilder WithUnit (string unit, IValueProvider value)
+		public IMathContextBuilder WithUnit(string unit, IValueProvider value)
 		{
-			Units.Add (new KeyValuePair<string, IValueProvider> (unit.ToLower (), value));
+			units.Add(new KeyValuePair<string, IValueProvider>(unit.ToLower(), value));
 			return this;
 		}
 
-		public IMathContextBuilder ImplicitlyReferences (IValueProvider value)
+		public IMathContextBuilder ImplicitlyReferences(IValueProvider value)
 		{
-			if (value != null && ImplicitReference != null)
+			if (value != null && implicitReference != null)
 			{
-				throw new InvalidOperationException ("Cannot assign multiple implicit references.");
+				throw new InvalidOperationException("Cannot assign multiple implicit references.");
 			}
-			ImplicitReference = value;
+			implicitReference = value;
 			return this;
 		}
 
-		public IMathContext Build ()
+		public IMathContext Build()
 		{
-			return new MathContext (
-				Terms.ToDictionary (kvp => kvp.Key, kvp => kvp.Value),
-				Units.ToDictionary (kvp => kvp.Key, kvp => kvp.Value),
-				ImplicitReference
+			return new MathContext(
+				terms.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
+				units.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
+				implicitReference
 			);
 		}
 	}

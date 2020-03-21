@@ -15,7 +15,7 @@ namespace Expresser.Input
 		/// <returns>
 		/// <para></para>
 		/// </returns>
-		public MathValue Value => new MathValue (targetField.GetValue (Target));
+		public MathValue Value => new MathValue(targetField.GetValue(Target));
 
 		/// <summary>
 		/// <para></para>
@@ -27,7 +27,7 @@ namespace Expresser.Input
 		/// <para></para>
 		/// </summary>
 		/// <param name="targetField"></param>
-		public FieldValueProvider (FieldInfo targetField)
+		public FieldValueProvider(FieldInfo targetField)
 		{
 			this.targetField = targetField;
 			Target = null;
@@ -38,7 +38,7 @@ namespace Expresser.Input
 		/// </summary>
 		/// <param name="targetField"></param>
 		/// <param name="targetObject"></param>
-		public FieldValueProvider (FieldInfo targetField, object targetObject)
+		public FieldValueProvider(FieldInfo targetField, object targetObject)
 		{
 			this.targetField = targetField;
 			Target = targetObject;
@@ -48,7 +48,7 @@ namespace Expresser.Input
 		/// <para></para>
 		/// </summary>
 		/// <returns></returns>
-		public override string ToString ()
+		public override string ToString()
 		{
 			return targetField.Name;
 		}

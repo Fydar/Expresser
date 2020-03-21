@@ -9,7 +9,7 @@
 		/// <para>A location to store the output of this operation.</para>
 		/// </summary>
 		public byte DistIndex;
-		
+
 		/// <summary>
 		/// <para>A code representing the type of operation this represents.</para>
 		/// </summary>
@@ -26,7 +26,7 @@
 		/// <param name="distIndex">A location to store the output of this operation.</param>
 		/// <param name="operationCode">A code representing the type of operation this represents.</param>
 		/// <param name="parameters">An array of parameters used when invoking this operation.</param>
-		public IntermediateOperation (byte distIndex, IntermediateOperationCode operationCode, IntermediateParameter[] parameters)
+		public IntermediateOperation(byte distIndex, IntermediateOperationCode operationCode, IntermediateParameter[] parameters)
 		{
 			DistIndex = distIndex;
 			OperationCode = operationCode;
@@ -39,9 +39,9 @@
 		/// <returns>
 		/// <para>A string representation of this <see cref="IntermediateOperation"/>.</para>
 		/// </returns>
-		public override string ToString ()
+		public override string ToString()
 		{
-			return $"Output[{DistIndex}] = {OperationCode}: {string.Join (", ", Parameters)}";
+			return $"Output[{DistIndex}] = {OperationCode}: {string.Join(", ", Parameters)}";
 		}
 	}
 }

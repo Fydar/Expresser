@@ -7,15 +7,15 @@ namespace Expresser.Input
 	/// </summary>
 	public class MathContext : IMathContext
 	{
-		private readonly IReadOnlyDictionary<string, IValueProvider> Terms;
-		private readonly IReadOnlyDictionary<string, IValueProvider> Units;
+		private readonly IReadOnlyDictionary<string, IValueProvider> terms;
+		private readonly IReadOnlyDictionary<string, IValueProvider> units;
 
 		public IValueProvider ImplicitReference { get; }
 
-		public MathContext (IReadOnlyDictionary<string, IValueProvider> terms, IReadOnlyDictionary<string, IValueProvider> units, IValueProvider implicitReference)
+		public MathContext(IReadOnlyDictionary<string, IValueProvider> terms, IReadOnlyDictionary<string, IValueProvider> units, IValueProvider implicitReference)
 		{
-			Terms = terms;
-			Units = units;
+			this.terms = terms;
+			this.units = units;
 			ImplicitReference = implicitReference;
 		}
 
@@ -25,9 +25,9 @@ namespace Expresser.Input
 		/// <param name="key"></param>
 		/// <param name="provider"></param>
 		/// <returns></returns>
-		public bool TryGetTerm (string key, out IValueProvider provider)
+		public bool TryGetTerm(string key, out IValueProvider provider)
 		{
-			return Terms.TryGetValue (key.ToLower (), out provider);
+			return terms.TryGetValue(key.ToLower(), out provider);
 		}
 
 		/// <summary>
@@ -36,9 +36,9 @@ namespace Expresser.Input
 		/// <param name="key"></param>
 		/// <param name="provider"></param>
 		/// <returns></returns>
-		public bool TryGetUnit (string key, out IValueProvider provider)
+		public bool TryGetUnit(string key, out IValueProvider provider)
 		{
-			return Units.TryGetValue (key.ToLower (), out provider);
+			return units.TryGetValue(key.ToLower(), out provider);
 		}
 	}
 }

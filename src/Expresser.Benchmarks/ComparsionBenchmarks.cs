@@ -7,7 +7,7 @@ namespace Expresser.Benchmarks
 	[RPlotExporter]
 	public class ComparisonBenchmarks
 	{
-		[Params ("1 + (10 / 40) > 1 == true", "1+1", "true == false")]
+		[Params("1 + (10 / 40) > 1 == true", "1+1", "true == false")]
 		public string Expression { get; set; }
 
 		private CompiledExpression EvaluateTarget;
@@ -15,23 +15,23 @@ namespace Expresser.Benchmarks
 		private ExpressionEvaluator ExpressionEvaluatorInstance;
 
 		[GlobalSetup]
-		public void Setup ()
+		public void Setup()
 		{
-			EvaluateTarget = CompiledExpression.Compile (Expression);
-			CompileSyntax = new ExpressionSyntax (Expression);
-			ExpressionEvaluatorInstance = new ExpressionEvaluator ();
+			EvaluateTarget = CompiledExpression.Compile(Expression);
+			CompileSyntax = new ExpressionSyntax(Expression);
+			ExpressionEvaluatorInstance = new ExpressionEvaluator();
 		}
 
 		[Benchmark]
-		public void Parse () => new ExpressionSyntax (Expression);
+		public void Parse() => new ExpressionSyntax(Expression);
 
 		[Benchmark]
-		public void Compile () => CompiledExpression.Compile (CompileSyntax);
+		public void Compile() => CompiledExpression.Compile(CompileSyntax);
 
 		[Benchmark]
-		public void Evaluate () => EvaluateTarget.Evaluate ();
+		public void Evaluate() => EvaluateTarget.Evaluate();
 
 		[Benchmark]
-		public void ExpressionEvaluator () => ExpressionEvaluatorInstance.Evaluate (Expression);
+		public void ExpressionEvaluator() => ExpressionEvaluatorInstance.Evaluate(Expression);
 	}
 }

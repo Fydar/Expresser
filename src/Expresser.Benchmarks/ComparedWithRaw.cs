@@ -6,7 +6,7 @@ namespace Expresser.Benchmarks
 	[RPlotExporter]
 	public class ComparedWithRaw
 	{
-		[Params ("1 + (10 / 40) > 1 == true")]
+		[Params("1 + (10 / 40) > 1 == true")]
 		public string Expression { get; set; }
 
 		private CompiledExpression EvaluateTarget;
@@ -15,22 +15,22 @@ namespace Expresser.Benchmarks
 		private bool Result;
 
 		[GlobalSetup]
-		public void Setup ()
+		public void Setup()
 		{
-			EvaluateTarget = CompiledExpression.Compile (Expression);
-			CompileSyntax = new ExpressionSyntax (Expression);
+			EvaluateTarget = CompiledExpression.Compile(Expression);
+			CompileSyntax = new ExpressionSyntax(Expression);
 		}
 
 		[Benchmark]
-		public void Parse () => new ExpressionSyntax (Expression);
+		public void Parse() => new ExpressionSyntax(Expression);
 
 		[Benchmark]
-		public void Compile () => CompiledExpression.Compile (CompileSyntax);
+		public void Compile() => CompiledExpression.Compile(CompileSyntax);
 
 		[Benchmark]
-		public void Evaluate () => EvaluateTarget.Evaluate ();
+		public void Evaluate() => EvaluateTarget.Evaluate();
 
 		[Benchmark]
-		public void CSharp () => Result = 1 + (10 / 40) > 1 == true;
+		public void CSharp() => Result = 1 + (10 / 40) > 1 == true;
 	}
 }

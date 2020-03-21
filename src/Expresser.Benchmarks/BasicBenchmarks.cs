@@ -9,23 +9,23 @@ namespace Expresser.Benchmarks
 		[Params("1 + (10 / 40) > 1 == true", "1+1", "true == false")]
 		public string Expression { get; set; }
 
-		private CompiledExpression EvaluateTarget;
-		private ExpressionSyntax CompileSyntax;
+		private CompiledExpression evaluateTarget;
+		private ExpressionSyntax compileSyntax;
 
 		[GlobalSetup]
 		public void Setup()
 		{
-			EvaluateTarget = CompiledExpression.Compile(Expression);
-			CompileSyntax = new ExpressionSyntax(Expression);
+			evaluateTarget = CompiledExpression.Compile(Expression);
+			compileSyntax = new ExpressionSyntax(Expression);
 		}
 
 		[Benchmark]
 		public void Parse() => new ExpressionSyntax(Expression);
 
 		[Benchmark]
-		public void Compile() => CompiledExpression.Compile(CompileSyntax);
+		public void Compile() => CompiledExpression.Compile(compileSyntax);
 
 		[Benchmark]
-		public void Evaluate() => EvaluateTarget.Evaluate();
+		public void Evaluate() => evaluateTarget.Evaluate();
 	}
 }

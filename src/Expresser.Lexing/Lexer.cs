@@ -75,12 +75,24 @@ namespace Expresser.Lexing
 				}
 				if (!anyContinuing)
 				{
+					int longest = -1;
+					for (int i = 0; i < classifiersCount; i++)
+					{
+						var classifierState = classifierStates[i];
+
+						if (classifierState.EndIndex > longest)
+						{
+							longest = classifierState.EndIndex;
+						}
+					}
+
 					bool tokenized = false;
 					for (int i = 0; i < classifiersCount; i++)
 					{
 						var classifierState = classifierStates[i];
 
-						if (classifierState.EndIndex != -1)
+						if (classifierState.EndIndex != -1 && 
+							classifierState.EndIndex == longest)
 						{
 							int classifierEndIndex = classifierState.EndIndex;
 

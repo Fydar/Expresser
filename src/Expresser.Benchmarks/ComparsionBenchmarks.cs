@@ -5,7 +5,7 @@ using CodingSeb.ExpressionEvaluator;
 namespace Expresser.Benchmarks
 {
 	[RPlotExporter]
-	[SimpleJob(RuntimeMoniker.CoreRt22)]
+	[SimpleJob(RuntimeMoniker.NetCoreApp22)]
 	public class ComparisonBenchmarks
 	{
 		[Params("1 + (10 / 40) > 1 == true", "1+1", "true == false")]

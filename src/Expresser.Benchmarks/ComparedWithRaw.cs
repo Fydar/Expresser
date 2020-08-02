@@ -4,7 +4,7 @@ using BenchmarkDotNet.Jobs;
 namespace Expresser.Benchmarks
 {
 	[RPlotExporter]
-	[SimpleJob(RuntimeMoniker.CoreRt22)]
+	[SimpleJob(RuntimeMoniker.NetCoreApp22)]
 	public class ComparedWithRaw
 	{
 		[Params("1 + (10 / 40) > 1 == true")]

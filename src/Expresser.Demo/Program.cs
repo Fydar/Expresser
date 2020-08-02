@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Expresser.Syntax;
+using Expresser.Demo.CSharp;
+using Expresser.Demo.Json;
+using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -6,79 +9,14 @@ namespace Expresser.Demo
 {
 	internal class Program
 	{
-		private static void Main(string[] args)
+		public static void Main()
 		{
-			while (true)
-			{
-				Console.ForegroundColor = ConsoleColor.Gray;
-				Console.Write("> ");
-				string inputExpression = Console.ReadLine();
+			string csharpDemo = "using System;\nusing System.Threading;\n\nnamespace Expresser.Syntax\n{\n\tpublic static class ConsoleHighlighter\n\t{\n\t\tstruct ClassifierState\n\t\t{\n\t\t\tpublic bool HasGivenUp;\n\t\t\tpublic int EndIndex;\n\t\t}\n\n\t\tpublic static void Highlight(string source, ILanguage language)\n\t\t{\n\t\t\tvar classifierStates = new ClassifierState[language.Classifiers.Length];\n\n\t\t\tfor (int i = 0; i < language.Classifiers.Length; i++)\n\t\t\t{\n\t\t\t\tvar classifier = language.Classifiers[i];\n\t\t\t\tclassifierStates[i] = new ClassifierState()\n\t\t\t\t{\n\t\t\t\t\tEndIndex = -1\n\t\t\t\t};\n\t\t\t\tclassifier.Reset();\n\t\t\t}\n\n\t\t\tint startIndex = 0;\n\t\t\tfor (int charIndex = 0; charIndex < source.Length + 1; charIndex++)\n\t\t\t{\n\t\t\t\tchar c = charIndex != source.Length\n\t\t\t\t\t? source[charIndex]\n\t\t\t\t\t: ' ';\n\n\t\t\t\tbool anyContinuing = false;\n\t\t\t\tfor (int i = 0; i < language.Classifiers.Length; i++)\n\t\t\t\t{\n\t\t\t\t\tvar classifier = language.Classifiers[i];\n\t\t\t\t\tvar classifierState = classifierStates[i];\n\n\t\t\t\t\tif (classifierState.HasGivenUp)\n\t\t\t\t\t{\n\t\t\t\t\t\tcontinue;\n\t\t\t\t\t}\n\n\t\t\t\t\tvar result = classifier.NextCharacter(c);\n\t\t\t\t\tif (result.Action == ClassificationAction.GiveUp)\n\t\t\t\t\t{\n\t\t\t\t\t\tclassifierState.HasGivenUp = true;\n\t\t\t\t\t\tclassifierStates[i] = classifierState;\n\t\t\t\t\t}\n\t\t\t\t\telse if (result.Action == ClassificationAction.TokenizeFromLast)\n\t\t\t\t\t{\n\t\t\t\t\t\tclassifierState.EndIndex = charIndex - 1;\n\t\t\t\t\t\tclassifierStates[i] = classifierState;\n\t\t\t\t\t}\n\t\t\t\t\telse if (result.Action == ClassificationAction.TokenizeImmediately)\n\t\t\t\t\t{\n\t\t\t\t\t\tclassifierState.EndIndex = charIndex;\n\t\t\t\t\t\tclassifierStates[i] = classifierState;\n\t\t\t\t\t}\n\t\t\t\t\telse if (result.Action == ClassificationAction.ContinueReading)\n\t\t\t\t\t{\n\t\t\t\t\t\tanyContinuing = true;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tif (!anyContinuing)\n\t\t\t\t{\n\t\t\t\t\tbool tokenized = false;\n\t\t\t\t\tfor (int i = 0; i < language.Classifiers.Length; i++)\n\t\t\t\t\t{\n\t\t\t\t\t\tvar classifierState = classifierStates[i];\n\n\t\t\t\t\t\tif (classifierState.EndIndex != -1)\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tint classifierEndIndex = classifierState.EndIndex;\n\n\t\t\t\t\t\t\tConsole.ForegroundColor = language.Colors[i];\n\t\t\t\t\t\t\tConsole.Write(source.Substring(startIndex, classifierEndIndex - startIndex + 1));\n\t\t\t\t\t\t\tThread.Sleep(10);\n\n\t\t\t\t\t\t\t// Console.WriteLine($\"{classifier.GetType().Name}: \\\"{source.Substring(startIndex, classifierEndIndex - startIndex + 1)}\\\"\");\n\t\t\t\t\t\t\tstartIndex = classifierEndIndex + 1;\n\t\t\t\t\t\t\tcharIndex = classifierEndIndex;\n\t\t\t\t\t\t\ttokenized = true;\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tif (!tokenized)\n\t\t\t\t\t{\n\t\t\t\t\t\tif (charIndex != source.Length)\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t// Console.WriteLine($\"Unrecognised string in sequence: \\\"{source.Substring(startIndex, charIndex - startIndex + 1)}\\\"\");\n\n\t\t\t\t\t\t\tConsole.ForegroundColor = ConsoleColor.Red;\n\t\t\t\t\t\t\tConsole.Write(source[startIndex]);\n\t\t\t\t\t\t\tThread.Sleep(10);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tstartIndex += 1;\n\t\t\t\t\t}\n\n\t\t\t\t\tfor (int i = 0; i < language.Classifiers.Length; i++)\n\t\t\t\t\t{\n\t\t\t\t\t\tvar classifier = language.Classifiers[i];\n\t\t\t\t\t\tclassifierStates[i] = new ClassifierState()\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tEndIndex = -1\n\t\t\t\t\t\t};\n\t\t\t\t\t\tclassifier.Reset();\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}\n";
 
-				MathValue result;
-				try
-				{
-					var expression = CompiledExpression.Compile(inputExpression);
+			ConsoleHighlighter.Highlight(csharpDemo, new CSharpLang());
 
-					result = expression.Evaluate();
-				}
-				catch (Exception exception)
-				{
-					WriteFormattedException(exception);
-					continue;
-				}
-
-				Console.ForegroundColor = ConsoleColor.Yellow;
-				Console.WriteLine($"Result: {result}");
-			}
-		}
-
-		private static void WriteFormattedException(Exception exception)
-		{
-			string demystifiedException = exception.ToStringDemystified();
-
-			var originalColor = Console.ForegroundColor;
-
-			Console.ForegroundColor = ConsoleColor.DarkGray;
-			Console.Write("╔");
-			Console.Write(new string('═', Console.WindowWidth - 2));
-			Console.Write("\n");
-
-			using (var reader = new StringReader(demystifiedException))
-			{
-				string line;
-				while ((line = reader.ReadLine()) != null)
-				{
-					var lineSpan = line.AsSpan();
-					int inIndex = lineSpan.IndexOf(") in ");
-
-					Console.ForegroundColor = ConsoleColor.DarkGray;
-					Console.Write("║");
-
-					if (inIndex != -1)
-					{
-						Console.ForegroundColor = ConsoleColor.Gray;
-						Console.Write(lineSpan.Slice(0, inIndex + 1).ToString());
-
-						Console.ForegroundColor = ConsoleColor.DarkGray;
-						Console.Write("\n║    ");
-						Console.Write(lineSpan.Slice(inIndex + 1).ToString());
-						Console.Write("\n");
-					}
-					else
-					{
-						Console.ForegroundColor = ConsoleColor.Gray;
-						Console.Write(lineSpan.ToString());
-						Console.Write("\n");
-					}
-				}
-			}
-
-			Console.ForegroundColor = ConsoleColor.DarkGray;
-			Console.Write("╚");
-			Console.Write(new string('═', Console.WindowWidth - 2));
-			Console.Write("\n");
-
-			Console.ForegroundColor = originalColor;
+			var jsonExample = "[\n\t{\n\t\t\"player_id\": \"bd77a595-1cd7-4ceb-9d70-21929039be23\",\n\t\t\"session_id\": \"fff58e9e-032a-4106-9715-4e06741c299b\",\n\t\t\"deployment_id\": 87\n\t},\n\t{\n\t\t\"player_id\": \"bd77a595-1cd7-4ceb-9d70-21929039be23\",\n\t\t\"session_id\": \"fff58e9e-032a-4106-9715-4e06741c299b\",\n\t\t\"session_time_s\": 67.3232727050781,\n\t\t\"platform_code\": \"IOS\"\n\t}\n]";
+			ConsoleHighlighter.Highlight(jsonExample, new JsonLang());
 		}
 	}
 }

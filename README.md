@@ -1,16 +1,35 @@
 # Expresser
 
-[![NuGet](https://img.shields.io/nuget/v/Expresser.svg)](https://www.nuget.org/packages/expresser) [![NuGet](https://img.shields.io/nuget/dt/expresser.svg)](https://www.nuget.org/packages/expresser)
+[![NuGet](https://img.shields.io/nuget/v/Expresser.svg)](https://www.nuget.org/packages/expresser) [![NuGet](https://img.shields.io/nuget/dt/expresser.svg)](https://www.nuget.org/packages/expresser)\
+[![Project Backlog](https://img.shields.io/github/issues/Fydar/Expresser/todo.svg?color=%2384c649&label=todo)](https://github.com/Fydar/Expresser/issues?q=is%3Aissue+is%3Aopen+label%3Atodo)
+[![Bugs](https://img.shields.io/github/issues/Fydar/Expresser/bug.svg?color=%23c66649&label=bugs)](https://github.com/Fydar/Expresser/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
 
-Simple mathematics library for C#, optimized for performance in data-driven games.
+At the moment, just a modular C# DSL Lexer library.
 
 [![Documentation](https://img.shields.io/badge/-Documentation-278bce.svg)](https://github.com/Fydar/Expresser/wiki/Expresser)
 
-## Usage
+## Expresser.Lexing
+
+The Expresser lexing (tokenisation) library. Expresser also has simple (but not complete) Lexers for C# and Json in `Expresser.Lexing.Demo`, as shown below.
+
+### C# Lexer
+
+![C# Syntax Highlighted](img/expresser-csharp-2.png)
+
+![C# Tokens](img/expresser-csharp-1.png)
+
+### Json Lexer
+
+![C# Tokens](img/expresser-json-1.png)
+
+## Expresser.Language.SimpleMath
+
+Expresser contains a simple mathmatics DSL that supports a basic set of operators.
 
 ```csharp
 using System;
-using Expresser;
+using Expresser.Language.SimpleMath;
+using Expresser.Language.SimpleMath.Input;
 
 public class Program
 {
@@ -20,32 +39,25 @@ public class Program
             .WithTerm("Width", new StaticValueProvider(10))
             .Build();
 
-        var expression = new CompiledExpression("0.1*Width", context);
+        var expression = new SimpleMathExpression("0.1 * Width", context);
 
         var result = expression.Evaluate();
 
-        Console.WriteLine (expression);        // 0.1 * Width
         Console.WriteLine (result.ValueClass); // ValueClassifier.Float
         Console.WriteLine (result.FloatValue); // 1
     }
 }
 ```
 
-## Todo
+### REPL Demo
 
-[![Project Backlog](https://img.shields.io/github/issues/Fydar/Expresser/todo.svg?color=%2384c649&label=Todo%20List)](https://github.com/Fydar/Expresser/issues?q=is%3Aissue+is%3Aopen+label%3Atodo)
-[![Bugs](https://img.shields.io/github/issues/Fydar/Expresser/bug.svg?color=%23c66649&label=Bugs)](https://github.com/Fydar/Expresser/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
+The REPL demo can be used to quickly test additions and alterations to the SimpleMath language.
 
-Issues marked with Todo are issues that have been identified as potential enhancements for Expresser, and are apart of the project backlog.
+![C# Tokens](img/expresser-simplemath-1.png)
 
-Below is a collection of enhancements that are currently being considered for the project backlog.
+Invalid characters are highlighted in red.
 
-- Introduce "Functions" (`max(5, 10)`, `mod(11.5)`) [#1](https://github.com/Fydar/Expresser/issues/1)
-- Introduce another intermediary form of an expression to increase evaluation performance.
-- Support for `%` operator in use in defining percentages
-- Support for `!` as a NOT operator
-- Support for bitwise operators
-- More Data-Types (currently only support Bool and Float)
+![C# Tokens](img/expresser-invalid-chars-1.png)
 
 ## Contributing
 

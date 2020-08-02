@@ -14,11 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expresser.Benchmarks", "Expresser.Benchmarks\Expresser.Benchmarks.csproj", "{ED627DF6-0607-49EB-AF0F-5FB8B5C1BC26}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expresser.Demo", "Expresser.Demo\Expresser.Demo.csproj", "{524B8FD0-BBA0-4B27-A626-A2631DBFC13F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expresser.Lexing.Demo", "Expresser.Lexing.Demo\Expresser.Lexing.Demo.csproj", "{524B8FD0-BBA0-4B27-A626-A2631DBFC13F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expresser.Syntax", "Expresser.Syntax\Expresser.Syntax.csproj", "{C0306DDA-0FAF-4664-BE33-3AA8006D1FBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expresser.Lexing", "Expresser.Lexing\Expresser.Lexing.csproj", "{C0306DDA-0FAF-4664-BE33-3AA8006D1FBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expresser.REPL", "Expresser.REPL\Expresser.REPL.csproj", "{31DB6981-A7F2-45BA-A7D4-5030869F1DE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expresser.REPL", "Expresser.REPL\Expresser.REPL.csproj", "{31DB6981-A7F2-45BA-A7D4-5030869F1DE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expresser.Language.SimpleMath", "Expresser.Language.SimpleMath\Expresser.Language.SimpleMath.csproj", "{EACE441B-3AE9-4730-A56D-71B51FD18AAD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +52,10 @@ Global
 		{31DB6981-A7F2-45BA-A7D4-5030869F1DE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31DB6981-A7F2-45BA-A7D4-5030869F1DE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31DB6981-A7F2-45BA-A7D4-5030869F1DE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EACE441B-3AE9-4730-A56D-71B51FD18AAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EACE441B-3AE9-4730-A56D-71B51FD18AAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EACE441B-3AE9-4730-A56D-71B51FD18AAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EACE441B-3AE9-4730-A56D-71B51FD18AAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

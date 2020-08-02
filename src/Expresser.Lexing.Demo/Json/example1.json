@@ -1,0 +1,18 @@
+﻿[
+  {
+    "player_id": "bd77a595-1cd7-4ceb-9d70-21929039be23",
+    "session_id": "fff58e9e-032a-4106-9715-4e06741c299b",
+    "deployment_id": 87,
+    "data": {
+
+    }
+  },
+  {
+    "player_id": "bd77a595-1cd7-4ceb-9d70-21929039be23",
+    "session_id": "fff58e9e-032a-4106-9715-4e06741c299b",
+    "session_time_s": 67.3232727050781,
+    "platform_code": "IOS",
+    "is_online": true,
+    "data": null
+  }
+]

@@ -1,5 +1,4 @@
-using Expresser.Input;
-using Expresser.Processing;
+using Expresser.Language.SimpleMath.Runtime;
 using NUnit.Framework;
 
 namespace Expresser.UnitTests
@@ -9,8 +8,8 @@ namespace Expresser.UnitTests
 		[Test]
 		public void CompileBasicMaths()
 		{
-			var syntax = new ExpressionSyntax("1 + 1 / 20");
-			var intermediateExpression = IntermediateExpression.Compile(syntax);
+			string syntax = "1 + 1 / 20";
+			var intermediateExpression = SimpleMathExpression.Compile(syntax);
 
 
 		}
@@ -18,16 +17,16 @@ namespace Expresser.UnitTests
 		[Test]
 		public void CompileComplexLogicMaths()
 		{
-			var syntax = new ExpressionSyntax("1 + (10 / 40) > 1 == true");
-			var intermediateExpression = IntermediateExpression.Compile(syntax);
+			string syntax = "1 + (10 / 40) > 1 == true";
+			var intermediateExpression = SimpleMathExpression.Compile(syntax);
 
 		}
 
 		[Test]
 		public void CompileBasicLogic()
 		{
-			var syntax = new ExpressionSyntax("10 > 5 == true");
-			var intermediateExpression = IntermediateExpression.Compile(syntax);
+			string syntax = "10 > 5 == true";
+			var intermediateExpression = SimpleMathExpression.Compile(syntax);
 
 
 		}
@@ -35,8 +34,8 @@ namespace Expresser.UnitTests
 		[Test]
 		public void CompileBranchingExpression()
 		{
-			var syntax = new ExpressionSyntax("10 * 10 + 2 * 2");
-			var intermediateExpression = IntermediateExpression.Compile(syntax);
+			string syntax = "10 * 10 + 2 * 2";
+			var intermediateExpression = SimpleMathExpression.Compile(syntax);
 
 
 		}
@@ -48,8 +47,8 @@ namespace Expresser.UnitTests
 				.WithTerm("Width", new StaticValueProvider(10))
 				.Build();
 
-			var syntax = new ExpressionSyntax("10 * Width");
-			var intermediateExpression = IntermediateExpression.Compile(syntax, context);
+			string syntax = "10 * Width";
+			var intermediateExpression = SimpleMathExpression.Compile(syntax, context);
 
 
 		}
@@ -57,8 +56,8 @@ namespace Expresser.UnitTests
 		[Test]
 		public void OrderFromParanthesis()
 		{
-			var syntax = new ExpressionSyntax("(10 + 10) ^ 2");
-			var intermediateExpression = IntermediateExpression.Compile(syntax);
+			string syntax = "(10 + 10) ^ 2";
+			var intermediateExpression = SimpleMathExpression.Compile(syntax);
 
 
 		}

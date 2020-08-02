@@ -8,8 +8,9 @@
   <ItemGroup>
     <PackageReference Include="Ben.Demystifier" Version="0.1.6" />
   </ItemGroup>
+  
   <ItemGroup>
-    <ProjectReference Include="..\Expresser.Syntax\Expresser.Syntax.csproj" />
+    <ProjectReference Include="..\Expresser.Language.SimpleMath\Expresser.Language.SimpleMath.csproj" />
     <ProjectReference Include="..\Expresser\Expresser.csproj" />
   </ItemGroup>
 

@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Expresser.Language.SimpleMath\Expresser.Language.SimpleMath.csproj" />
+    <ProjectReference Include="..\Expresser.Lexing\Expresser.Lexing.csproj" />
     <ProjectReference Include="..\Expresser\Expresser.csproj" />
   </ItemGroup>
 

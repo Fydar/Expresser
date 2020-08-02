@@ -1,29 +1,25 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Jobs;
 
 namespace Expresser.Benchmarks
 {
-	[CoreJob]
 	[RPlotExporter]
+	[SimpleJob(RuntimeMoniker.CoreRt22)]
 	public class BasicBenchmarks
 	{
-		[Params("1 + (10 / 40) > 1 == true", "1+1", "true == false")]
+		[Params("1 + (10 / 40) > 1 == true")]
 		public string Expression { get; set; }
 
-		private CompiledExpression evaluateTarget;
-		private ExpressionSyntax compileSyntax;
+		private SimpleMathExpression evaluateTarget;
 
 		[GlobalSetup]
 		public void Setup()
 		{
-			evaluateTarget = CompiledExpression.Compile(Expression);
-			compileSyntax = new ExpressionSyntax(Expression);
+			evaluateTarget = SimpleMathExpression.Compile(Expression);
 		}
 
 		[Benchmark]
-		public void Parse() => new ExpressionSyntax(Expression);
-
-		[Benchmark]
-		public void Compile() => CompiledExpression.Compile(compileSyntax);
+		public void Compile() => SimpleMathExpression.Compile(Expression);
 
 		[Benchmark]
 		public void Evaluate() => evaluateTarget.Evaluate();

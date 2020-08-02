@@ -1,92 +1,24 @@
-﻿using Expresser.Language.SimpleMath.Lexing;
-using Expresser.Language.SimpleMath.Runtime;
+﻿using Expresser.Demo.CSharp;
+using Expresser.Demo.Json;
 using Expresser.Lexing;
 using System;
-using System.Diagnostics;
 using System.IO;
 
-namespace Expresser.REPL
+namespace Expresser.Demo
 {
 	internal class Program
 	{
-		private static void Main(string[] args)
+		public static void Main()
 		{
-			var lexer = new Lexer(new SimpleMathLexerLanguage());
+			var csharpLexer = new Lexer(new CSharpLang());
+			string csharpExample = ReadExampleResource("Expresser.Lexing.Demo.CSharp.example1.txt");
+			Highlight(csharpLexer, csharpExample);
+			Describe(csharpLexer, csharpExample);
 
-			while (true)
-			{
-				Console.ForegroundColor = ConsoleColor.Gray;
-				Console.Write("> ");
-				string inputExpression = Console.ReadLine();
-
-				Highlight(lexer, inputExpression);
-				Describe(lexer, inputExpression);
-
-				MathValue result;
-				try
-				{
-					var expression = SimpleMathExpression.Compile(inputExpression);
-
-					result = expression.Evaluate();
-				}
-				catch (Exception exception)
-				{
-					WriteFormattedException(exception);
-					continue;
-				}
-
-				Console.ForegroundColor = ConsoleColor.Yellow;
-				Console.WriteLine($"Result: {result}");
-			}
-		}
-
-		private static void WriteFormattedException(Exception exception)
-		{
-			string demystifiedException = exception.ToStringDemystified();
-
-			var originalColor = Console.ForegroundColor;
-
-			Console.ForegroundColor = ConsoleColor.DarkGray;
-			Console.Write("╔");
-			Console.Write(new string('═', Console.WindowWidth - 2));
-			Console.Write("\n");
-
-			using (var reader = new StringReader(demystifiedException))
-			{
-				string line;
-				while ((line = reader.ReadLine()) != null)
-				{
-					var lineSpan = line.AsSpan();
-					int inIndex = lineSpan.IndexOf(") in ");
-
-					Console.ForegroundColor = ConsoleColor.DarkGray;
-					Console.Write("║");
-
-					if (inIndex != -1)
-					{
-						Console.ForegroundColor = ConsoleColor.Gray;
-						Console.Write(lineSpan.Slice(0, inIndex + 1).ToString());
-
-						Console.ForegroundColor = ConsoleColor.DarkGray;
-						Console.Write("\n║    ");
-						Console.Write(lineSpan.Slice(inIndex + 1).ToString());
-						Console.Write("\n");
-					}
-					else
-					{
-						Console.ForegroundColor = ConsoleColor.Gray;
-						Console.Write(lineSpan.ToString());
-						Console.Write("\n");
-					}
-				}
-			}
-
-			Console.ForegroundColor = ConsoleColor.DarkGray;
-			Console.Write("╚");
-			Console.Write(new string('═', Console.WindowWidth - 2));
-			Console.Write("\n");
-
-			Console.ForegroundColor = originalColor;
+			var jsonLexer = new Lexer(new JsonLang());
+			string jsonExample = ReadExampleResource("Expresser.Lexing.Demo.Json.example1.json");
+			Highlight(jsonLexer, jsonExample);
+			Describe(jsonLexer, jsonExample);
 		}
 
 		private static void Highlight(Lexer lexer, string source)
@@ -167,6 +99,15 @@ namespace Expresser.REPL
 			Console.ForegroundColor = ConsoleColor.DarkGray;
 			Console.WriteLine(new string('=', 52));
 			Console.Write("\n");
+		}
+
+		private static string ReadExampleResource(string name)
+		{
+			var assembly = typeof(Program).Assembly;
+
+			using var stream = assembly.GetManifestResourceStream(name);
+			using var streamReader = new StreamReader(stream);
+			return streamReader.ReadToEnd();
 		}
 	}
 }

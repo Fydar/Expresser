@@ -8,7 +8,7 @@ namespace Expresser.Language.SimpleMath.Runtime
 	{
 		private readonly List<KeyValuePair<string, IValueProvider>> terms;
 		private readonly List<KeyValuePair<string, IValueProvider>> units;
-		private IValueProvider implicitReference;
+		private IValueProvider? implicitReference;
 
 		public MathContextBuilder()
 		{

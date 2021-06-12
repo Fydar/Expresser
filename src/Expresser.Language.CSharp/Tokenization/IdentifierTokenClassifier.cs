@@ -1,4 +1,4 @@
-﻿namespace Expresser.Lexing.Demo.CSharp.Tokenization
+﻿namespace Expresser.Language.CSharp.Tokenization
 {
 	internal class IdentifierTokenClassifier : CharacterCategoryTokenClassifier
 	{

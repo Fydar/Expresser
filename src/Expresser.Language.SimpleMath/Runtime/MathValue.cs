@@ -58,20 +58,13 @@ namespace Expresser.Language.SimpleMath.Runtime
 
 		public override string ToString()
 		{
-			switch (ValueClass)
+			return ValueClass switch
 			{
-				case ValueClassifier.FloatFractional:
-					return (FloatValue * 100).ToString() + "%";
-
-				case ValueClassifier.Float:
-					return FloatValue.ToString();
-
-				case ValueClassifier.Boolean:
-					return BoolValue.ToString();
-
-				default:
-					return "null";
-			}
+				ValueClassifier.FloatFractional => (FloatValue * 100).ToString() + "%",
+				ValueClassifier.Float => FloatValue.ToString(),
+				ValueClassifier.Boolean => BoolValue.ToString(),
+				_ => "null",
+			};
 		}
 
 		public static implicit operator MathValue(int value)

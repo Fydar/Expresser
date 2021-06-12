@@ -1,4 +1,6 @@
-﻿namespace Expresser.Lexing.Demo.Json.Tokenization
+﻿using Expresser.Lexing;
+
+namespace Expresser.Language.Json.Tokenization
 {
 	internal class NumericTokenClassifier : ITokenClassifier
 	{

@@ -1,7 +1,7 @@
-﻿using Expresser.Demo.CSharp;
-using Expresser.Demo.Json;
+﻿using Expresser.Language.CSharp;
+using Expresser.Language.Json;
+using Expresser.Language.Json.Parsing;
 using Expresser.Lexing;
-using Expresser.Lexing.Demo.Json;
 using System;
 using System.IO;
 
@@ -11,7 +11,7 @@ namespace Expresser.Demo
 	{
 		public static void Main()
 		{
-			var csharpLexer = new Lexer(new CSharpLang());
+			var csharpLexer = new Lexer(new CSharpLexerLanguage());
 			string csharpExample = ReadExampleResource("Expresser.Lexing.Demo.CSharp.example1.txt");
 			Highlight(csharpLexer, csharpExample);
 			Describe(csharpLexer, csharpExample);
@@ -169,6 +169,12 @@ namespace Expresser.Demo
 			var assembly = typeof(Program).Assembly;
 
 			using var stream = assembly.GetManifestResourceStream(name);
+
+			if (stream == null)
+			{
+				throw new InvalidOperationException($"Cannot locate assembly-embedded resource \"{name}\".");
+			}
+
 			using var streamReader = new StreamReader(stream);
 			return streamReader.ReadToEnd();
 		}

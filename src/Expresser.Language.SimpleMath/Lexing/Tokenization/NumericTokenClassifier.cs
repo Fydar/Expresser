@@ -1,6 +1,8 @@
-﻿namespace Expresser.Lexing.Common
+﻿using Expresser.Lexing;
+
+namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 {
-	public class NumericTokenClassifier : ITokenClassifier
+	internal class NumericTokenClassifier : ITokenClassifier
 	{
 		private bool isFirstCharacter;
 

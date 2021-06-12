@@ -1,4 +1,6 @@
-﻿namespace Expresser.Lexing.Common
+﻿using Expresser.Lexing;
+
+namespace Expresser.Language.CSharp.Tokenization
 {
 	public class SingleCharacterTokenClassifier : ITokenClassifier
 	{

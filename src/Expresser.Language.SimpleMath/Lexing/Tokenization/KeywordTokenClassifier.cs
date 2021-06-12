@@ -1,6 +1,8 @@
-﻿namespace Expresser.Lexing.Common
+﻿using Expresser.Lexing;
+
+namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 {
-	public class KeywordTokenClassifier : ITokenClassifier
+	internal class KeywordTokenClassifier : ITokenClassifier
 	{
 		private int currentIndex = 0;
 

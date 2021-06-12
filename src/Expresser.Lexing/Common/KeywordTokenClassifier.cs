@@ -24,14 +24,9 @@
 
 			if (currentIndex == keyword.Length)
 			{
-				if (char.IsLetterOrDigit(nextCharacter))
-				{
-					return ClassifierAction.GiveUp();
-				}
-				else
-				{
-					return ClassifierAction.TokenizeFromLast();
-				}
+				return char.IsLetterOrDigit(nextCharacter)
+					? ClassifierAction.GiveUp()
+					: ClassifierAction.TokenizeFromLast();
 			}
 			else
 			{

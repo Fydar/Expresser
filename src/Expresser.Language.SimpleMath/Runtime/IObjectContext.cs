@@ -9,6 +9,6 @@ namespace Expresser.Language.SimpleMath.Runtime
 		/// <para></para>
 		/// </summary>
 		/// <returns></returns>
-		object Target { get; }
+		object? Target { get; }
 	}
 }

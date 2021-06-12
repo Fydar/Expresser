@@ -25,14 +25,9 @@
 
 			IsFirstCharacter = false;
 
-			if (isMatched)
-			{
-				return ClassifierAction.ContinueReading();
-			}
-			else
-			{
-				return ClassifierAction.GiveUp();
-			}
+			return isMatched
+				? ClassifierAction.ContinueReading()
+				: ClassifierAction.GiveUp();
 		}
 
 		public abstract bool IsMatched(char character);

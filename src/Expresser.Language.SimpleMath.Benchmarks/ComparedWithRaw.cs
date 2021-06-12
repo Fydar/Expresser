@@ -7,12 +7,11 @@ namespace Expresser.Benchmarks
 	[SimpleJob(RuntimeMoniker.NetCoreApp22)]
 	public class ComparedWithRaw
 	{
+		public bool result;
+		private SimpleMathExpression? evaluateTarget;
+
 		[Params("1 + (10 / 40) > 1 == true")]
-		public string Expression { get; set; }
-
-		private SimpleMathExpression evaluateTarget;
-
-		private bool result;
+		public string Expression { get; set; } = string.Empty;
 
 		[GlobalSetup]
 		public void Setup()
@@ -24,7 +23,7 @@ namespace Expresser.Benchmarks
 		public void Compile() => SimpleMathExpression.Compile(Expression);
 
 		[Benchmark]
-		public void Evaluate() => evaluateTarget.Evaluate();
+		public void Evaluate() => evaluateTarget!.Evaluate();
 
 		[Benchmark]
 		public void CSharp() => result = 1 + (10 / 40) > 1 == true;

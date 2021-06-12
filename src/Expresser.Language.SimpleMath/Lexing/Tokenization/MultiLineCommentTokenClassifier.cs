@@ -6,11 +6,13 @@ namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 	{
 		private int modeIndex = 0;
 
+		/// <inheritdoc/>
 		public void Reset()
 		{
 			modeIndex = 0;
 		}
 
+		/// <inheritdoc/>
 		public ClassifierAction NextCharacter(char nextCharacter)
 		{
 			if (modeIndex == 0)

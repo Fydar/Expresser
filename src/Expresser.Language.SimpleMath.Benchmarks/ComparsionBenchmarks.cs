@@ -9,13 +9,13 @@ namespace Expresser.Benchmarks
 	public class ComparisonBenchmarks
 	{
 		[Params("1 + (10 / 40) > 1 == true", "1+1", "true == false")]
-		public string Expression { get; set; }
+		public string Expression { get; set; } = string.Empty;
 
 		// Expresser
-		private SimpleMathExpression evaluateTarget;
+		private SimpleMathExpression? evaluateTarget;
 
 		// CodingSeb.ExpressionEvaluator
-		private ExpressionEvaluator expressionEvaluatorInstance;
+		private ExpressionEvaluator? expressionEvaluatorInstance;
 
 		[GlobalSetup]
 		public void Setup()
@@ -28,9 +28,9 @@ namespace Expresser.Benchmarks
 		public void Compile() => SimpleMathExpression.Compile(Expression);
 
 		[Benchmark]
-		public void Evaluate() => evaluateTarget.Evaluate();
+		public void Evaluate() => evaluateTarget!.Evaluate();
 
 		[Benchmark]
-		public void ExpressionEvaluator() => expressionEvaluatorInstance.Evaluate(Expression);
+		public void ExpressionEvaluator() => expressionEvaluatorInstance!.Evaluate(Expression);
 	}
 }

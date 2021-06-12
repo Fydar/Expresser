@@ -138,7 +138,7 @@ namespace Expresser.Language.SimpleMath.UnitTests
 			TestExpression(12.564f, SimpleMathExpression.Compile("3.141 * 2^2"));
 		}
 
-		public void TestExpression(MathValue expected, SimpleMathExpression expression)
+		private static void TestExpression(MathValue expected, SimpleMathExpression expression)
 		{
 			Console.WriteLine(expression.ToString() + " = " + expected);
 			Describe(SimpleMathLexerLanguage.Lexer, expression.ToString());

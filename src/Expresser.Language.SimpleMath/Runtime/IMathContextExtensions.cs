@@ -5,7 +5,7 @@ namespace Expresser.Language.SimpleMath.Runtime
 {
 	public static class IMathContextExtensions
 	{
-		public static IValueProvider[] ResolveTerms(this IMathContext context, IReadOnlyList<string> terms)
+		public static IValueProvider[]? ResolveTerms(this IMathContext? context, IReadOnlyList<string> terms)
 		{
 			if (context == null)
 			{

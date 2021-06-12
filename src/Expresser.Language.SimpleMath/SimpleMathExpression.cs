@@ -18,14 +18,14 @@ namespace Expresser
 		/// <summary>
 		/// <para></para>
 		/// </summary>
-		public IMathContext Context { get; private set; }
+		public IMathContext? Context { get; private set; }
 
 		/// <summary>
 		/// <para></para>
 		/// </summary>
 		public IntermediateExpression Intermediate { get; private set; }
 
-		private SimpleMathExpression(string expression, IMathContext context = null)
+		private SimpleMathExpression(string expression, IMathContext? context = null)
 		{
 			Expression = expression;
 			Context = context;
@@ -34,7 +34,7 @@ namespace Expresser
 			runtimeBuffer = new MathValue[Intermediate.DistSize];
 		}
 
-		public static SimpleMathExpression Compile(string expression, IMathContext context = null)
+		public static SimpleMathExpression Compile(string expression, IMathContext? context = null)
 		{
 			return new SimpleMathExpression(expression, context);
 		}

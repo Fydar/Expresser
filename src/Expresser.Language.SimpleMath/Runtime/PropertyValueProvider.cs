@@ -13,12 +13,12 @@ namespace Expresser.Language.SimpleMath.Runtime
 		/// <para></para>
 		/// </summary>
 		/// <returns></returns>
-		public MathValue Value => new MathValue(targetProperty.GetValue(Target));
+		public MathValue Value => new(targetProperty.GetValue(Target));
 
 		/// <summary>
 		/// <para></para>
 		/// </summary>
-		public object Target { get; set; }
+		public object? Target { get; set; }
 
 		/// <summary>
 		/// <para></para>

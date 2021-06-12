@@ -1,7 +1,4 @@
 ﻿using Expresser.Language.SimpleMath.Runtime;
-using Expresser.Lexing;
-using System;
-using System.Collections.Generic;
 
 namespace Expresser.Language.SimpleMath.Compilation
 {
@@ -10,65 +7,6 @@ namespace Expresser.Language.SimpleMath.Compilation
 	/// </summary>
 	public struct IntermediateExpression
 	{
-		private class CompilerBuffers
-		{
-			public readonly List<DistSpan> Dist;
-			public readonly List<IntermediateOperation> Operations;
-			public readonly List<IntermediateParameter> Parameters;
-			public readonly List<MathValue> Src;
-
-			public CompilerBuffers(
-				List<DistSpan> dist,
-				List<MathValue> src,
-				List<IntermediateOperation> operations,
-				List<IntermediateParameter> parameters)
-			{
-				Dist = dist;
-				Src = src;
-				Operations = operations;
-				Parameters = parameters;
-			}
-
-			public static CompilerBuffers New()
-			{
-				return new CompilerBuffers(
-					new List<DistSpan>(),
-					new List<MathValue>(),
-					new List<IntermediateOperation>(),
-					new List<IntermediateParameter>());
-			}
-		}
-
-		private struct DistSpan
-		{
-			public byte Index;
-			public byte Length;
-			public byte Start;
-			public static DistSpan None => new DistSpan();
-
-			public byte End
-			{
-				get
-				{
-					return (byte)(Start + Length);
-				}
-			}
-
-			public DistSpan(byte start, byte length, byte index)
-			{
-				Start = start;
-				Length = length;
-				Index = index;
-			}
-
-			public bool Contains(int index)
-			{
-				return index >= Start && index <= Start + Length - 1;
-			}
-
-			public bool RangeEqual(DistSpan other) => Start == other.Start && Length == other.Length;
-		}
-
 		/// <summary>
 		/// <para>The size the buffer required to invoke <c>Evaluate</c>.</para>
 		/// </summary>
@@ -90,45 +28,6 @@ namespace Expresser.Language.SimpleMath.Compilation
 		public MathValue[] Static;
 
 		public IntermediateOperationActions Actions;
-
-		private enum OperatorPattern
-		{
-			None,
-			Prefix,
-			Conjective,
-			Suffix,
-		}
-
-		private struct TokenReference : IComparable<TokenReference>
-		{
-			public int Index;
-			public LexerToken Token;
-			public TokenOperationCompiler Compiler;
-
-			public TokenReference(int index, LexerToken token, TokenOperationCompiler compiler)
-			{
-				Index = index;
-				Token = token;
-				Compiler = compiler;
-			}
-
-			public int CompareTo(TokenReference other)
-			{
-				return Compiler.Order.CompareTo(other.Compiler.Order);
-			}
-		}
-
-		private struct TokenOperationCompiler
-		{
-			public int Order;
-			public OperatorPattern Pattern;
-
-			public TokenOperationCompiler(int order, OperatorPattern pattern)
-			{
-				Order = order;
-				Pattern = pattern;
-			}
-		}
 
 		/// <summary>
 		/// <para>Evaluates this <see cref="IntermediateExpression"/> and return a singlular outputted value.</para>
@@ -253,21 +152,14 @@ namespace Expresser.Language.SimpleMath.Compilation
 
 		private MathValue ParameterValue(IntermediateParameter parameter, MathValue[] dist)
 		{
-			switch (parameter.Source)
+			return parameter.Source switch
 			{
-				case IntermediateSource.Static:
-					return Static[parameter.Index];
-
-				case IntermediateSource.Import:
-					return Import[parameter.Index].Value;
-
-				case IntermediateSource.ImportNegated:
-					return Actions.Negate(Import[parameter.Index].Value);
-
-				case IntermediateSource.Output:
-					return dist[parameter.Index];
-			}
-			return new MathValue();
+				IntermediateSource.Static => Static[parameter.Index],
+				IntermediateSource.Import => Import[parameter.Index].Value,
+				IntermediateSource.ImportNegated => Actions.Negate(Import[parameter.Index].Value),
+				IntermediateSource.Output => dist[parameter.Index],
+				_ => new MathValue(),
+			};
 		}
 	}
 }

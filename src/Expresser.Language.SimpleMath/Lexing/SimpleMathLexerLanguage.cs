@@ -9,6 +9,7 @@ namespace Expresser.Language.SimpleMath.Lexing
 	{
 		public static Lexer Lexer { get; } = new Lexer(new SimpleMathLexerLanguage());
 
+		/// <inheritdoc/>
 		public ITokenClassifier[] Classifiers { get; } = new ITokenClassifier[]
 		{
 			new KeywordTokenClassifier("true"),
@@ -38,6 +39,7 @@ namespace Expresser.Language.SimpleMath.Lexing
 			new SingleCharacterTokenClassifier('!'),
 		};
 
+		/// <inheritdoc/>
 		public ConsoleColor[] Colors { get; } = new ConsoleColor[]
 		{
 			ConsoleColor.Blue,

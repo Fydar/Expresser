@@ -15,13 +15,13 @@ namespace Expresser.Language.SimpleMath.Runtime
 		/// <returns>
 		/// <para></para>
 		/// </returns>
-		public MathValue Value => new MathValue(targetField.GetValue(Target));
+		public MathValue Value => new(targetField.GetValue(Target));
 
 		/// <summary>
 		/// <para></para>
 		/// </summary>
 		/// <returns></returns>
-		public object Target { get; set; }
+		public object? Target { get; set; }
 
 		/// <summary>
 		/// <para></para>

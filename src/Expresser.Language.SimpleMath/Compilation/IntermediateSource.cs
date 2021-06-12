@@ -1,4 +1,6 @@
-﻿namespace Expresser.Language.SimpleMath.Compilation
+﻿using Expresser.Language.SimpleMath.Runtime;
+
+namespace Expresser.Language.SimpleMath.Compilation
 {
 	/// <summary>
 	/// <para>A source for values within an <see cref="IntermediateExpression"/>.</para>

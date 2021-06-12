@@ -5,6 +5,9 @@
 	/// </summary>
 	public readonly ref struct ClassifierAction
 	{
+		/// <summary>
+		/// The type of this <see cref="ClassifierAction"/>.
+		/// </summary>
 		public ClassifierActionType Action { get; }
 
 		private ClassifierAction(ClassifierActionType action)

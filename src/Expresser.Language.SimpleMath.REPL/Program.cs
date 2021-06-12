@@ -17,7 +17,7 @@ namespace Expresser.REPL
 			{
 				Console.ForegroundColor = ConsoleColor.Gray;
 				Console.Write("> ");
-				string inputExpression = Console.ReadLine();
+				string inputExpression = Console.ReadLine() ?? "";
 
 				Highlight(lexer, inputExpression);
 				Describe(lexer, inputExpression);
@@ -53,7 +53,7 @@ namespace Expresser.REPL
 
 			using (var reader = new StringReader(demystifiedException))
 			{
-				string line;
+				string? line;
 				while ((line = reader.ReadLine()) != null)
 				{
 					var lineSpan = line.AsSpan();
@@ -69,7 +69,7 @@ namespace Expresser.REPL
 
 						Console.ForegroundColor = ConsoleColor.DarkGray;
 						Console.Write("\n║    ");
-						Console.Write(lineSpan.Slice(inIndex + 1).ToString());
+						Console.Write(lineSpan[(inIndex + 1)..].ToString());
 						Console.Write("\n");
 					}
 					else
@@ -149,17 +149,12 @@ namespace Expresser.REPL
 				Console.ForegroundColor = ConsoleColor.DarkGray;
 				Console.Write("\tSymbol: ");
 
-				if (token.Classifier == -1)
-				{
-					Console.ForegroundColor = ConsoleColor.Red;
-				}
-				else
-				{
-					Console.ForegroundColor = lexer.LexerLanguage.Colors[token.Classifier];
-				}
+				Console.ForegroundColor = token.Classifier == -1
+					? ConsoleColor.Red
+					: lexer.LexerLanguage.Colors[token.Classifier];
+
 				Console.Write(rendered);
 				Console.Write("\n");
-
 
 				index++;
 			}

@@ -7,11 +7,13 @@ namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 		private bool isFirstCharacter = true;
 		private bool isEscaped = false;
 
+		/// <inheritdoc/>
 		public void Reset()
 		{
 			isFirstCharacter = true;
 		}
 
+		/// <inheritdoc/>
 		public ClassifierAction NextCharacter(char nextCharacter)
 		{
 			if (isFirstCharacter)

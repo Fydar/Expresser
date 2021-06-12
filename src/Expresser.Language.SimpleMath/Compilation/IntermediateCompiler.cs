@@ -12,22 +12,13 @@ namespace Expresser.Language.SimpleMath.Compilation
 	/// </summary>
 	public static class IntermediateCompiler
 	{
-		public static bool IsTrueLiteral(LexerToken token) => token.Classifier == 0;
-		public static bool IsFalseLiteral(LexerToken token) => token.Classifier == 1;
-		public static bool IsNumericLiteral(LexerToken token) => token.Classifier == 2;
-		public static bool IsIdentifier(LexerToken token) => token.Classifier == 3;
-		public static bool IsWhitespace(LexerToken token) => token.Classifier == 4;
-		public static bool IsOpeningParentheses(LexerToken token) => token.Classifier == 5;
-		public static bool IsClosingParentheses(LexerToken token) => token.Classifier == 6;
-		public static bool IsOperator(LexerToken token) => token.Classifier > 6;
-
 		private class CompilerBuffers
 		{
 			public readonly List<DistSpan> Dist;
 			public readonly List<IntermediateOperation> Operations;
 			public readonly List<IntermediateParameter> Parameters;
 			public readonly List<MathValue> Src;
-			public List<LexerToken> ImportedTerms;
+			public List<LexerToken>? ImportedTerms;
 
 			public CompilerBuffers(
 				List<DistSpan> dist,
@@ -53,32 +44,30 @@ namespace Expresser.Language.SimpleMath.Compilation
 
 		private struct DistSpan
 		{
-			public byte Index;
-			public byte Length;
-			public byte Start;
-			public static DistSpan None => new DistSpan();
+			public static DistSpan None => new();
 
-			public byte End
-			{
-				get
-				{
-					return (byte)(Start + Length);
-				}
-			}
+			public byte index;
+			public byte length;
+			public byte start;
+
+			public byte End => (byte)(start + length);
 
 			public DistSpan(byte start, byte length, byte index)
 			{
-				Start = start;
-				Length = length;
-				Index = index;
+				this.start = start;
+				this.length = length;
+				this.index = index;
 			}
 
 			public bool Contains(int index)
 			{
-				return index >= Start && index <= Start + Length - 1;
+				return index >= start && index <= start + length - 1;
 			}
 
-			public bool RangeEqual(DistSpan other) => Start == other.Start && Length == other.Length;
+			public bool RangeEqual(DistSpan other)
+			{
+				return start == other.start && length == other.length;
+			}
 		}
 
 		private enum OperatorPattern
@@ -91,32 +80,32 @@ namespace Expresser.Language.SimpleMath.Compilation
 
 		private struct TokenReference : IComparable<TokenReference>
 		{
-			public int Index;
-			public LexerToken Token;
-			public TokenOperationCompiler Compiler;
+			public int index;
+			public LexerToken token;
+			public TokenOperationCompiler compiler;
 
 			public TokenReference(int index, LexerToken token, TokenOperationCompiler compiler)
 			{
-				Index = index;
-				Token = token;
-				Compiler = compiler;
+				this.index = index;
+				this.token = token;
+				this.compiler = compiler;
 			}
 
 			public int CompareTo(TokenReference other)
 			{
-				return Compiler.Order.CompareTo(other.Compiler.Order);
+				return compiler.order.CompareTo(other.compiler.order);
 			}
 		}
 
 		private struct TokenOperationCompiler
 		{
-			public int Order;
-			public OperatorPattern Pattern;
+			public int order;
+			public OperatorPattern pattern;
 
 			public TokenOperationCompiler(int order, OperatorPattern pattern)
 			{
-				Order = order;
-				Pattern = pattern;
+				this.order = order;
+				this.pattern = pattern;
 			}
 		}
 
@@ -146,7 +135,7 @@ namespace Expresser.Language.SimpleMath.Compilation
 		/// <param name="syntax">The parsed string that describes an expression to compile.</param>
 		/// <param name="context">The compilation context.</param>
 		/// <returns></returns>
-		public static IntermediateExpression Compile(string expression, IMathContext context = null)
+		public static IntermediateExpression Compile(string expression, IMathContext? context = null)
 		{
 			var buffer = CompilerBuffers.New();
 
@@ -166,7 +155,7 @@ namespace Expresser.Language.SimpleMath.Compilation
 				DistSize = buffer.Dist.Count,
 				Import = context.ResolveTerms(buffer.ImportedTerms
 					.Select(token => expression.Substring(token.StartIndex, token.Length))
-					.ToList()),
+					.ToList()) ?? Array.Empty<IValueProvider>(),
 				Actions = new IntermediateOperationActions(context)
 			};
 		}
@@ -185,11 +174,11 @@ namespace Expresser.Language.SimpleMath.Compilation
 				buffer.Parameters.Add(singleParameter);
 
 				var intermediateOperationCode = IntermediateOperationCode.Copy;
-				var intermediateOperation = new IntermediateOperation(singleSpan.Index, intermediateOperationCode, buffer.Parameters.ToArray());
+				var intermediateOperation = new IntermediateOperation(singleSpan.index, intermediateOperationCode, buffer.Parameters.ToArray());
 
 				buffer.Parameters.Clear();
 				buffer.Operations.Add(intermediateOperation);
-				return singleSpan.Index;
+				return singleSpan.index;
 			}
 
 			int spanEnd = start + length;
@@ -225,7 +214,7 @@ namespace Expresser.Language.SimpleMath.Compilation
 				if (IsOperator(token))
 				{
 					var compiler = tokenCompilers[token.Classifier - 7];
-					if (compiler.Pattern != OperatorPattern.None)
+					if (compiler.pattern != OperatorPattern.None)
 					{
 						operatorTokens.Add(new TokenReference(i, token, compiler));
 					}
@@ -237,8 +226,8 @@ namespace Expresser.Language.SimpleMath.Compilation
 			for (int k = 0; k < operatorTokens.Count; k++)
 			{
 				var tokenReference = operatorTokens[k];
-				int i = tokenReference.Index;
-				var token = tokenReference.Token;
+				int i = tokenReference.index;
+				var token = tokenReference.token;
 
 				if (IsIndexCalculated(buffer.Dist, i))
 				{
@@ -246,7 +235,7 @@ namespace Expresser.Language.SimpleMath.Compilation
 				}
 
 				DistSpan currentSpan;
-				switch (tokenReference.Compiler.Pattern)
+				switch (tokenReference.compiler.pattern)
 				{
 					case OperatorPattern.Prefix:
 					{
@@ -282,11 +271,11 @@ namespace Expresser.Language.SimpleMath.Compilation
 					}
 				}
 
-				distIndex = currentSpan.Index;
+				distIndex = currentSpan.index;
 
 				var intermediateOperationCode = (IntermediateOperationCode)token.Classifier - 6;
 
-				var intermediateOperation = new IntermediateOperation(currentSpan.Index, intermediateOperationCode, buffer.Parameters.ToArray());
+				var intermediateOperation = new IntermediateOperation(currentSpan.index, intermediateOperationCode, buffer.Parameters.ToArray());
 
 				buffer.Parameters.Clear();
 
@@ -311,7 +300,7 @@ namespace Expresser.Language.SimpleMath.Compilation
 
 			if (IsIdentifier(token))
 			{
-				int importIndex = buffers.ImportedTerms.IndexOf(token);
+				int importIndex = buffers.ImportedTerms?.IndexOf(token) ?? -1;
 				if (importIndex == -1)
 				{
 					throw new InvalidOperationException($"Could not resolve the term \"{expression.Substring(token.StartIndex, token.Length)}\"");
@@ -353,8 +342,8 @@ namespace Expresser.Language.SimpleMath.Compilation
 		{
 			var dist = distBuffer[distIndex];
 
-			dist.Start -= 1;
-			dist.Length += 2;
+			dist.start -= 1;
+			dist.length += 2;
 
 			distBuffer[distIndex] = dist;
 			return dist;
@@ -378,18 +367,18 @@ namespace Expresser.Language.SimpleMath.Compilation
 			for (int i = 0; i < distBuffer.Count; i++)
 			{
 				var dist = distBuffer[i];
-				if (dist.Start == end)
+				if (dist.start == end)
 				{
-					dist.Start -= length;
-					dist.Length += length;
+					dist.start -= length;
+					dist.length += length;
 
 					distBuffer[i] = dist;
 					return dist;
 				}
-				if (dist.Start == end - 1)
+				if (dist.start == end - 1)
 				{
-					dist.Start -= (byte)(length - 1);
-					dist.Length += (byte)(length - 1);
+					dist.start -= (byte)(length - 1);
+					dist.length += (byte)(length - 1);
 
 					distBuffer[i] = dist;
 					return dist;
@@ -397,14 +386,14 @@ namespace Expresser.Language.SimpleMath.Compilation
 
 				if (dist.End == start)
 				{
-					dist.Length += length;
+					dist.length += length;
 
 					distBuffer[i] = dist;
 					return dist;
 				}
 				if (dist.End == start + 1)
 				{
-					dist.Length += (byte)(length - 1);
+					dist.length += (byte)(length - 1);
 
 					distBuffer[i] = dist;
 					return dist;
@@ -415,5 +404,14 @@ namespace Expresser.Language.SimpleMath.Compilation
 			distBuffer.Add(newDist);
 			return newDist;
 		}
+
+		private static bool IsTrueLiteral(LexerToken token) => token.Classifier == 0;
+		private static bool IsFalseLiteral(LexerToken token) => token.Classifier == 1;
+		private static bool IsNumericLiteral(LexerToken token) => token.Classifier == 2;
+		private static bool IsIdentifier(LexerToken token) => token.Classifier == 3;
+		private static bool IsWhitespace(LexerToken token) => token.Classifier == 4;
+		private static bool IsOpeningParentheses(LexerToken token) => token.Classifier == 5;
+		private static bool IsClosingParentheses(LexerToken token) => token.Classifier == 6;
+		private static bool IsOperator(LexerToken token) => token.Classifier > 6;
 	}
 }

@@ -5,9 +5,9 @@ namespace Expresser.Language.SimpleMath.Compilation
 {
 	public struct IntermediateOperationActions
 	{
-		private IMathContext Context { get; }
+		private IMathContext? Context { get; }
 
-		public IntermediateOperationActions(IMathContext context)
+		public IntermediateOperationActions(IMathContext? context)
 		{
 			Context = context;
 		}
@@ -16,7 +16,7 @@ namespace Expresser.Language.SimpleMath.Compilation
 		{
 			if (source.ValueClass == ValueClassifier.FloatFractional)
 			{
-				if (Context.ImplicitReference != null)
+				if (Context?.ImplicitReference != null)
 				{
 					return new MathValue(Context.ImplicitReference.Value.FloatValue * source.FloatValue, false);
 				}

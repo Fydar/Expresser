@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
-	public class SingleCharacterTokenClassifier : ITokenClassifier
+	internal class SingleCharacterTokenClassifier : ITokenClassifier
 	{
 		public char MatchedCharacter { get; }
 

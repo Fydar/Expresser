@@ -2,7 +2,7 @@
 
 namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 {
-	public class IdentifierTokenClassifier : CharacterCategoryTokenClassifier
+	internal class IdentifierTokenClassifier : CharacterCategoryTokenClassifier
 	{
 		public override bool IsMatched(char character)
 		{

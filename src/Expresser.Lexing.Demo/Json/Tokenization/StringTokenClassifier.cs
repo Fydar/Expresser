@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
-	public class StringTokenClassifier : ITokenClassifier
+	internal class StringTokenClassifier : ITokenClassifier
 	{
 		private bool isFirstCharacter = true;
 		private bool isEscaped = false;

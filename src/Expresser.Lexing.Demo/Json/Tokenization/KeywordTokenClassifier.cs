@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
-	public class KeywordTokenClassifier : ITokenClassifier
+	internal class KeywordTokenClassifier : ITokenClassifier
 	{
 		private int currentIndex = 0;
 

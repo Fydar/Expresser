@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
-	public class MultiLineCommentTokenClassifier : ITokenClassifier
+	internal class MultiLineCommentTokenClassifier : ITokenClassifier
 	{
 		private enum State : byte
 		{

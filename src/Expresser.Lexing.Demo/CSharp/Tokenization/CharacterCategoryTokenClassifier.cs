@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Lexing.Demo.CSharp.Tokenization
 {
-	public abstract class CharacterCategoryTokenClassifier : ITokenClassifier
+	internal abstract class CharacterCategoryTokenClassifier : ITokenClassifier
 	{
 		protected bool IsFirstCharacter { get; private set; }
 

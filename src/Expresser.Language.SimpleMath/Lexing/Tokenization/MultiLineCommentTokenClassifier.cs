@@ -2,7 +2,7 @@
 
 namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 {
-	public class MultiLineCommentTokenClassifier : ITokenClassifier
+	internal class MultiLineCommentTokenClassifier : ITokenClassifier
 	{
 		private int modeIndex = 0;
 

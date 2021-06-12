@@ -1,6 +1,5 @@
 ﻿using Expresser.Language.CSharp.Tokenization;
 using Expresser.Lexing;
-using Expresser.Lexing.Common;
 using System;
 
 namespace Expresser.Language.CSharp

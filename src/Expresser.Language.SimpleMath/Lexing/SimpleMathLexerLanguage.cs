@@ -1,6 +1,5 @@
 ﻿using Expresser.Language.SimpleMath.Lexing.Tokenization;
 using Expresser.Lexing;
-using Expresser.Lexing.Common;
 using System;
 
 namespace Expresser.Language.SimpleMath.Lexing

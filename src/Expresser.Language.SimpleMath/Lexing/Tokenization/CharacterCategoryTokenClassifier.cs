@@ -1,6 +1,8 @@
-﻿namespace Expresser.Lexing.Common
+﻿using Expresser.Lexing;
+
+namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 {
-	public abstract class CharacterCategoryTokenClassifier : ITokenClassifier
+	internal abstract class CharacterCategoryTokenClassifier : ITokenClassifier
 	{
 		protected bool IsFirstCharacter { get; private set; }
 

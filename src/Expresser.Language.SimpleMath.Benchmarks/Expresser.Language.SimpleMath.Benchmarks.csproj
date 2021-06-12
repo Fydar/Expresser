@@ -7,14 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.12.0" />
-    <PackageReference Include="CodingSeb.ExpressionEvaluator" Version="1.4.9" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
+    <PackageReference Include="CodingSeb.ExpressionEvaluator" Version="1.4.29" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Expresser.Language.SimpleMath\Expresser.Language.SimpleMath.csproj" />
-    <ProjectReference Include="..\Expresser.Lexing\Expresser.Lexing.csproj" />
-    <ProjectReference Include="..\Expresser\Expresser.csproj" />
   </ItemGroup>
 
 </Project>

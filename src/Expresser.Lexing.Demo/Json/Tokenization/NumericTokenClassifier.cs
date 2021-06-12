@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
-	public class NumericTokenClassifier : ITokenClassifier
+	internal class NumericTokenClassifier : ITokenClassifier
 	{
 		private bool isFirstCharacter;
 

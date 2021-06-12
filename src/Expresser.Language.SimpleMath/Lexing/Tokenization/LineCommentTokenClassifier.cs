@@ -2,7 +2,7 @@
 
 namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 {
-	public class LineCommentTokenClassifier : ITokenClassifier
+	internal class LineCommentTokenClassifier : ITokenClassifier
 	{
 		private int characterIndex = 0;
 

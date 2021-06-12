@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Lexing.Demo.CSharp.Tokenization
 {
-	public class IdentifierTokenClassifier : CharacterCategoryTokenClassifier
+	internal class IdentifierTokenClassifier : CharacterCategoryTokenClassifier
 	{
 		public override bool IsMatched(char character)
 		{

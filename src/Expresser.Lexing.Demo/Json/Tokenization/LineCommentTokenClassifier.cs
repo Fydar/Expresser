@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
-	public class LineCommentTokenClassifier : ITokenClassifier
+	internal class LineCommentTokenClassifier : ITokenClassifier
 	{
 		private int characterIndex = 0;
 

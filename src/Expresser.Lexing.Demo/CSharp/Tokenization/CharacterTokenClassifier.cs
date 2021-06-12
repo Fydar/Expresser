@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Lexing.Demo.CSharp.Tokenization
 {
-	public class CharacterLiteralTokenClassifier : ITokenClassifier
+	internal class CharacterLiteralTokenClassifier : ITokenClassifier
 	{
 		private bool isFirstCharacter = true;
 		private bool isEscaped = false;

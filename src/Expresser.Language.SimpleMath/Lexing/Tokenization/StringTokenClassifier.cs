@@ -2,7 +2,7 @@
 
 namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 {
-	public class StringTokenClassifier : ITokenClassifier
+	internal class StringTokenClassifier : ITokenClassifier
 	{
 		private bool isFirstCharacter = true;
 		private bool isEscaped = false;

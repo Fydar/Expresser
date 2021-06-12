@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
-	public class NewlineTokenClassifier : ITokenClassifier
+	internal class NewlineTokenClassifier : ITokenClassifier
 	{
 		/// <inheritdoc/>
 		public void Reset()

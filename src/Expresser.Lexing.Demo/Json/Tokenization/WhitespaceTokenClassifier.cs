@@ -1,6 +1,6 @@
 ﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
-	public class WhitespaceTokenClassifier : ITokenClassifier
+	internal class WhitespaceTokenClassifier : ITokenClassifier
 	{
 		protected bool IsFirstCharacter { get; private set; }
 

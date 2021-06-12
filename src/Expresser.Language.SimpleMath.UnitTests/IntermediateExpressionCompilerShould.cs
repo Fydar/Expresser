@@ -1,7 +1,7 @@
 using Expresser.Language.SimpleMath.Runtime;
 using NUnit.Framework;
 
-namespace Expresser.UnitTests
+namespace Expresser.Language.SimpleMath.UnitTests
 {
 	public class IntermediateExpressionCompilerShould
 	{

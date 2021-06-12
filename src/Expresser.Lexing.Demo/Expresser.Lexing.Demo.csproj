@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Expresser.Language.CSharp\Expresser.Language.CSharp.csproj" />
+    <ProjectReference Include="..\Expresser.Language.Json\Expresser.Language.Json.csproj" />
     <ProjectReference Include="..\Expresser.Lexing\Expresser.Lexing.csproj" />
   </ItemGroup>
 

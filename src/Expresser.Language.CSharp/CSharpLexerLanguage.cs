@@ -1,11 +1,11 @@
-﻿using Expresser.Lexing;
+﻿using Expresser.Language.CSharp.Tokenization;
+using Expresser.Lexing;
 using Expresser.Lexing.Common;
-using Expresser.Lexing.Demo.CSharp.Tokenization;
 using System;
 
-namespace Expresser.Demo.CSharp
+namespace Expresser.Language.CSharp
 {
-	public class CSharpLang : ILexerLanguage
+	public class CSharpLexerLanguage : ILexerLanguage
 	{
 		/// <inheritdoc/>
 		public ITokenClassifier[] Classifiers { get; } = new ITokenClassifier[]

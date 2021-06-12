@@ -1,6 +1,8 @@
-﻿namespace Expresser.Lexing.Demo.Json.Tokenization
+﻿using Expresser.Lexing;
+
+namespace Expresser.Language.CSharp.Tokenization
 {
-	internal class WhitespaceTokenClassifier : ITokenClassifier
+	internal abstract class CharacterCategoryTokenClassifier : ITokenClassifier
 	{
 		protected bool IsFirstCharacter { get; private set; }
 
@@ -13,9 +15,7 @@
 		/// <inheritdoc/>
 		public ClassifierAction NextCharacter(char nextCharacter)
 		{
-			bool isMatched = char.IsWhiteSpace(nextCharacter)
-				&& nextCharacter != '\r'
-				&& nextCharacter != '\n';
+			bool isMatched = IsMatched(nextCharacter);
 
 			if (!IsFirstCharacter)
 			{
@@ -31,5 +31,7 @@
 				? ClassifierAction.ContinueReading()
 				: ClassifierAction.GiveUp();
 		}
+
+		public abstract bool IsMatched(char character);
 	}
 }

@@ -1,6 +1,8 @@
-﻿namespace Expresser.Lexing.Demo.CSharp.Tokenization
+﻿using Expresser.Lexing;
+
+namespace Expresser.Language.Json.Tokenization
 {
-	internal class CharacterLiteralTokenClassifier : ITokenClassifier
+	internal class StringTokenClassifier : ITokenClassifier
 	{
 		private bool isFirstCharacter = true;
 		private bool isEscaped = false;
@@ -18,7 +20,7 @@
 			{
 				isFirstCharacter = false;
 
-				return nextCharacter == '\''
+				return nextCharacter == '"'
 					? ClassifierAction.ContinueReading()
 					: ClassifierAction.GiveUp();
 			}
@@ -29,7 +31,7 @@
 					isEscaped = true;
 					return ClassifierAction.ContinueReading();
 				}
-				else if (nextCharacter == '\'')
+				else if (nextCharacter == '"')
 				{
 					if (isEscaped)
 					{

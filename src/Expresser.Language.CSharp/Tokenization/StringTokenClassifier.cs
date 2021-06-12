@@ -1,4 +1,6 @@
-﻿namespace Expresser.Lexing.Demo.CSharp.Tokenization
+﻿using Expresser.Lexing;
+
+namespace Expresser.Language.CSharp.Tokenization
 {
 	internal class StringTokenClassifier : ITokenClassifier
 	{

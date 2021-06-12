@@ -24,7 +24,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expresser.Language.SimpleMa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expresser.Parsing", "Expresser.Parsing\Expresser.Parsing.csproj", "{2DF335FD-0A33-4BC5-8657-63E22B948B43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expresser.Language.SimpleMath.UnitTests", "Expresser.Language.SimpleMath.UnitTests\Expresser.Language.SimpleMath.UnitTests.csproj", "{929956FE-5711-419A-846E-ED9999D0DE2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expresser.Language.SimpleMath.UnitTests", "Expresser.Language.SimpleMath.UnitTests\Expresser.Language.SimpleMath.UnitTests.csproj", "{929956FE-5711-419A-846E-ED9999D0DE2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expresser.Language.Json", "Expresser.Language.Json\Expresser.Language.Json.csproj", "{8655A9B7-9DF2-4334-8411-ACDBC49A0AB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expresser.Language.CSharp", "Expresser.Language.CSharp\Expresser.Language.CSharp.csproj", "{992AC229-DAEC-4DD5-8C0C-0ECE6FEC4692}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +72,14 @@ Global
 		{929956FE-5711-419A-846E-ED9999D0DE2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{929956FE-5711-419A-846E-ED9999D0DE2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{929956FE-5711-419A-846E-ED9999D0DE2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8655A9B7-9DF2-4334-8411-ACDBC49A0AB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8655A9B7-9DF2-4334-8411-ACDBC49A0AB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8655A9B7-9DF2-4334-8411-ACDBC49A0AB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8655A9B7-9DF2-4334-8411-ACDBC49A0AB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{992AC229-DAEC-4DD5-8C0C-0ECE6FEC4692}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{992AC229-DAEC-4DD5-8C0C-0ECE6FEC4692}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{992AC229-DAEC-4DD5-8C0C-0ECE6FEC4692}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{992AC229-DAEC-4DD5-8C0C-0ECE6FEC4692}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

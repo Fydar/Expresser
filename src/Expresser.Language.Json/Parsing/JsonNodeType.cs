@@ -1,4 +1,4 @@
-﻿namespace Expresser.Lexing.Demo.Json
+﻿namespace Expresser.Language.Json.Parsing
 {
 	public enum JsonNodeType
 	{

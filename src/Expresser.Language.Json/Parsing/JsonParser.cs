@@ -1,11 +1,11 @@
-﻿using Expresser.Demo.Json;
+﻿using Expresser.Lexing;
 using System.Collections.Generic;
 
-namespace Expresser.Lexing.Demo.Json
+namespace Expresser.Language.Json.Parsing
 {
 	public class JsonParser
 	{
-		private static readonly JsonLexerLanguage jsonLanguage = new JsonLexerLanguage();
+		private static readonly JsonLexerLanguage jsonLanguage = new();
 
 		public IEnumerable<JsonNode> Parse(string source)
 		{

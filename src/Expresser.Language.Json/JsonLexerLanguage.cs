@@ -1,8 +1,8 @@
-﻿using Expresser.Lexing;
-using Expresser.Lexing.Demo.Json.Tokenization;
+﻿using Expresser.Language.Json.Tokenization;
+using Expresser.Lexing;
 using System;
 
-namespace Expresser.Demo.Json
+namespace Expresser.Language.Json
 {
 	public class JsonLexerLanguage : ILexerLanguage
 	{

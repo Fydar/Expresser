@@ -1,4 +1,4 @@
-﻿namespace Expresser.Demo.Json
+﻿namespace Expresser.Language.Json
 {
 	public enum JsonLexerTokenType
 	{

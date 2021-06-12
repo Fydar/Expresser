@@ -10,9 +10,9 @@ namespace Expresser.Language.SimpleMath.Runtime
 		private readonly IReadOnlyDictionary<string, IValueProvider> terms;
 		private readonly IReadOnlyDictionary<string, IValueProvider> units;
 
-		public IValueProvider ImplicitReference { get; }
+		public IValueProvider? ImplicitReference { get; }
 
-		public MathContext(IReadOnlyDictionary<string, IValueProvider> terms, IReadOnlyDictionary<string, IValueProvider> units, IValueProvider implicitReference)
+		public MathContext(IReadOnlyDictionary<string, IValueProvider> terms, IReadOnlyDictionary<string, IValueProvider> units, IValueProvider? implicitReference)
 		{
 			this.terms = terms;
 			this.units = units;

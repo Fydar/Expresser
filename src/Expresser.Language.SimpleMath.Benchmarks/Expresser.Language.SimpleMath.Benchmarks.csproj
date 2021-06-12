@@ -2,15 +2,18 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
+    <Optimize>true</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ben.Demystifier" Version="0.1.6" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.12.0" />
+    <PackageReference Include="CodingSeb.ExpressionEvaluator" Version="1.4.9" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\Expresser.Language.SimpleMath\Expresser.Language.SimpleMath.csproj" />
+    <ProjectReference Include="..\Expresser.Lexing\Expresser.Lexing.csproj" />
     <ProjectReference Include="..\Expresser\Expresser.csproj" />
   </ItemGroup>
 

@@ -4,7 +4,7 @@ using Expresser.Lexing;
 using NUnit.Framework;
 using System;
 
-namespace Expresser.UnitTests
+namespace Expresser.Language.SimpleMath.UnitTests
 {
 	public class SimpleMathExpressionShould
 	{

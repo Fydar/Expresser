@@ -45,6 +45,7 @@ namespace Expresser.Language.Json.Tokenization
 				}
 				else
 				{
+					isEscaped = false;
 					return ClassifierAction.ContinueReading();
 				}
 			}

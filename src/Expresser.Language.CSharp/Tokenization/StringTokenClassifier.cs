@@ -45,6 +45,7 @@ namespace Expresser.Language.CSharp.Tokenization
 				}
 				else
 				{
+					isEscaped = false;
 					return ClassifierAction.ContinueReading();
 				}
 			}

@@ -1,88 +1,71 @@
-﻿using Expresser.Lexing;
-
-namespace Expresser.Demo.Json.Tokenization
+﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
 	public class MultiLineCommentTokenClassifier : ITokenClassifier
 	{
-		private int modeIndex = 0;
-
-		public void Reset()
+		private enum State : byte
 		{
-			modeIndex = 0;
+			ExpectingStartingSlash,
+			ExpectingStartingAsterisk,
+			ExpectingEndingAsterisk,
+			ExpectingEndingSlash,
 		}
 
-		public NextCharacterResult NextCharacter(char nextCharacter)
+		private State state;
+
+		/// <inheritdoc/>
+		public void Reset()
 		{
-			if (modeIndex == 0)
+			state = State.ExpectingStartingSlash;
+		}
+
+		/// <inheritdoc/>
+		public ClassifierAction NextCharacter(char nextCharacter)
+		{
+			switch (state)
 			{
-				modeIndex = 1;
-				if (nextCharacter == '/')
+				case State.ExpectingStartingSlash:
 				{
-					return new NextCharacterResult()
+					if (nextCharacter == '/')
 					{
-						Action = ClassifierAction.ContinueReading,
-					};
+						state = State.ExpectingStartingAsterisk;
+						return ClassifierAction.ContinueReading();
+					}
+					else
+					{
+						return ClassifierAction.GiveUp();
+					}
 				}
-				else
+				case State.ExpectingStartingAsterisk:
 				{
-					return new NextCharacterResult()
+					if (nextCharacter == '*')
 					{
-						Action = ClassifierAction.GiveUp
-					};
+						state = State.ExpectingEndingAsterisk;
+						return ClassifierAction.ContinueReading();
+					}
+					else
+					{
+						return ClassifierAction.GiveUp();
+					}
 				}
-			}
-			else if (modeIndex == 1)
-			{
-				modeIndex = 2;
-				if (nextCharacter == '*')
+				case State.ExpectingEndingAsterisk:
 				{
-					return new NextCharacterResult()
+					if (nextCharacter == '*')
 					{
-						Action = ClassifierAction.ContinueReading,
-					};
+						state = State.ExpectingEndingSlash;
+					}
+					return ClassifierAction.ContinueReading();
 				}
-				else
+				default:
 				{
-					return new NextCharacterResult()
+					if (nextCharacter == '/')
 					{
-						Action = ClassifierAction.GiveUp
-					};
-				}
-			}
-			else if (modeIndex == 2)
-			{
-				if (nextCharacter == '*')
-				{
-					modeIndex = 3;
-					return new NextCharacterResult()
+						return ClassifierAction.TokenizeImmediately();
+					}
+					else
 					{
-						Action = ClassifierAction.ContinueReading,
-					};
-				}
-				else
-				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading,
-					};
-				}
-			}
-			else
-			{
-				if (nextCharacter == '/')
-				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.TokenizeImmediately,
-					};
-				}
-				else
-				{
-					modeIndex = 2;
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading,
-					};
+						state = State.ExpectingStartingAsterisk;
+						return ClassifierAction.ContinueReading();
+					}
 				}
 			}
 		}

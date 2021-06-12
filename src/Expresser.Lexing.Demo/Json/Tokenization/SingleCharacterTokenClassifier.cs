@@ -1,4 +1,4 @@
-﻿namespace Expresser.Lexing.Common
+﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
 	public class SingleCharacterTokenClassifier : ITokenClassifier
 	{
@@ -8,8 +8,8 @@
 		{
 			MatchedCharacter = matchedCharacter;
 		}
-		/// <inheritdoc/>
 
+		/// <inheritdoc/>
 		public void Reset()
 		{
 		}

@@ -149,9 +149,9 @@ namespace Expresser.UnitTests
 		{
 			Console.ForegroundColor = ConsoleColor.Gray;
 			int index = 0;
-			foreach (var token in lexer.Evaluate(source))
+			foreach (var token in lexer.Tokenize(source))
 			{
-				string typeName = lexer.LexerLanguage.Classifiers[token.ClassifierIndex].GetType().Name
+				string typeName = lexer.LexerLanguage.Classifiers[token.Classifier].GetType().Name
 					.Replace("TokenClassifier", "")
 					.PadRight(16);
 
@@ -159,7 +159,7 @@ namespace Expresser.UnitTests
 					.Substring(token.StartIndex, token.Length)
 					.Replace(Environment.NewLine, "\\n");
 
-				Console.WriteLine($"ID:{index,4}  Type:{token.ClassifierIndex,4}  {typeName}\tSymbol: \"{rendered}\"");
+				Console.WriteLine($"ID:{index,4}  Type:{token.Classifier,4}  {typeName}\tSymbol: \"{rendered}\"");
 				index++;
 			}
 			Console.Write("\n");

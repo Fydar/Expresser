@@ -1,4 +1,4 @@
-﻿namespace Expresser.Lexing.Common
+﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
 	public class KeywordTokenClassifier : ITokenClassifier
 	{
@@ -20,22 +20,15 @@
 		/// <inheritdoc/>
 		public ClassifierAction NextCharacter(char nextCharacter)
 		{
-			string keyword = Keyword;
-
-			if (currentIndex == keyword.Length)
+			if (currentIndex == Keyword.Length)
 			{
-				if (char.IsLetterOrDigit(nextCharacter))
-				{
-					return ClassifierAction.GiveUp();
-				}
-				else
-				{
-					return ClassifierAction.TokenizeFromLast();
-				}
+				return char.IsLetterOrDigit(nextCharacter)
+					? ClassifierAction.GiveUp()
+					: ClassifierAction.TokenizeFromLast();
 			}
 			else
 			{
-				if (nextCharacter == keyword[currentIndex])
+				if (nextCharacter == Keyword[currentIndex])
 				{
 					currentIndex++;
 					return ClassifierAction.ContinueReading();

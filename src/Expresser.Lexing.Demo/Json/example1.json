@@ -1,11 +1,20 @@
-﻿[
+﻿// File header and stuff
+[
+  /* Multi
+  linecomment*/
   {
     "player_id": "bd77a595-1cd7-4ceb-9d70-21929039be23",
     "session_id": "fff58e9e-032a-4106-9715-4e06741c299b",
     "deployment_id": 87,
+    "is_online": false,
     "data": {
 
-    }
+    },
+    "login_time": [
+      1231959,
+      1431949,
+      "now"
+    ]
   },
   {
     "player_id": "bd77a595-1cd7-4ceb-9d70-21929039be23",

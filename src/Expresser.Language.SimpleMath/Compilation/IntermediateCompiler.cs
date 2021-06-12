@@ -12,14 +12,14 @@ namespace Expresser.Language.SimpleMath.Compilation
 	/// </summary>
 	public static class IntermediateCompiler
 	{
-		public static bool IsTrueLiteral(LexerToken token) => token.ClassifierIndex == 0;
-		public static bool IsFalseLiteral(LexerToken token) => token.ClassifierIndex == 1;
-		public static bool IsNumericLiteral(LexerToken token) => token.ClassifierIndex == 2;
-		public static bool IsIdentifier(LexerToken token) => token.ClassifierIndex == 3;
-		public static bool IsWhitespace(LexerToken token) => token.ClassifierIndex == 4;
-		public static bool IsOpeningParentheses(LexerToken token) => token.ClassifierIndex == 5;
-		public static bool IsClosingParentheses(LexerToken token) => token.ClassifierIndex == 6;
-		public static bool IsOperator(LexerToken token) => token.ClassifierIndex > 6;
+		public static bool IsTrueLiteral(LexerToken token) => token.Classifier == 0;
+		public static bool IsFalseLiteral(LexerToken token) => token.Classifier == 1;
+		public static bool IsNumericLiteral(LexerToken token) => token.Classifier == 2;
+		public static bool IsIdentifier(LexerToken token) => token.Classifier == 3;
+		public static bool IsWhitespace(LexerToken token) => token.Classifier == 4;
+		public static bool IsOpeningParentheses(LexerToken token) => token.Classifier == 5;
+		public static bool IsClosingParentheses(LexerToken token) => token.Classifier == 6;
+		public static bool IsOperator(LexerToken token) => token.Classifier > 6;
 
 		private class CompilerBuffers
 		{
@@ -151,7 +151,7 @@ namespace Expresser.Language.SimpleMath.Compilation
 			var buffer = CompilerBuffers.New();
 
 			var lexer = SimpleMathLexerLanguage.Lexer;
-			var syntax = lexer.Evaluate(expression)
+			var syntax = lexer.Tokenize(expression)
 				.Where(token => !IsWhitespace(token))
 				.ToArray();
 
@@ -224,7 +224,7 @@ namespace Expresser.Language.SimpleMath.Compilation
 
 				if (IsOperator(token))
 				{
-					var compiler = tokenCompilers[token.ClassifierIndex - 7];
+					var compiler = tokenCompilers[token.Classifier - 7];
 					if (compiler.Pattern != OperatorPattern.None)
 					{
 						operatorTokens.Add(new TokenReference(i, token, compiler));
@@ -284,7 +284,7 @@ namespace Expresser.Language.SimpleMath.Compilation
 
 				distIndex = currentSpan.Index;
 
-				var intermediateOperationCode = (IntermediateOperationCode)token.ClassifierIndex - 6;
+				var intermediateOperationCode = (IntermediateOperationCode)token.Classifier - 6;
 
 				var intermediateOperation = new IntermediateOperation(currentSpan.Index, intermediateOperationCode, buffer.Parameters.ToArray());
 

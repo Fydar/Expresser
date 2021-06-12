@@ -1,12 +1,13 @@
-﻿using Expresser.Demo.CSharp.Tokenization;
-using Expresser.Lexing;
+﻿using Expresser.Lexing;
 using Expresser.Lexing.Common;
+using Expresser.Lexing.Demo.CSharp.Tokenization;
 using System;
 
 namespace Expresser.Demo.CSharp
 {
 	public class CSharpLang : ILexerLanguage
 	{
+		/// <inheritdoc/>
 		public ITokenClassifier[] Classifiers { get; } = new ITokenClassifier[]
 		{
 			new LineCommentTokenClassifier(),
@@ -88,6 +89,7 @@ namespace Expresser.Demo.CSharp
 			new WhitespaceTokenClassifier(),
 		};
 
+		/// <inheritdoc/>
 		public ConsoleColor[] Colors { get; } = new ConsoleColor[]
 		{
 			ConsoleColor.Green,

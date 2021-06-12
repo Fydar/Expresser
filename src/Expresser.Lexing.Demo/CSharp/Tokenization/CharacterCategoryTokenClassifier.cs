@@ -1,4 +1,4 @@
-﻿namespace Expresser.Lexing.Common
+﻿namespace Expresser.Lexing.Demo.CSharp.Tokenization
 {
 	public abstract class CharacterCategoryTokenClassifier : ITokenClassifier
 	{

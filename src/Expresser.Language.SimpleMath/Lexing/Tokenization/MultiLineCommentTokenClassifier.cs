@@ -11,24 +11,18 @@ namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 			modeIndex = 0;
 		}
 
-		public NextCharacterResult NextCharacter(char nextCharacter)
+		public ClassifierAction NextCharacter(char nextCharacter)
 		{
 			if (modeIndex == 0)
 			{
 				modeIndex = 1;
 				if (nextCharacter == '/')
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading,
-					};
+					return ClassifierAction.ContinueReading();
 				}
 				else
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.GiveUp
-					};
+					return ClassifierAction.GiveUp();
 				}
 			}
 			else if (modeIndex == 1)
@@ -36,17 +30,11 @@ namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 				modeIndex = 2;
 				if (nextCharacter == '*')
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading,
-					};
+					return ClassifierAction.ContinueReading();
 				}
 				else
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.GiveUp
-					};
+					return ClassifierAction.GiveUp();
 				}
 			}
 			else if (modeIndex == 2)
@@ -54,35 +42,23 @@ namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 				if (nextCharacter == '*')
 				{
 					modeIndex = 3;
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading,
-					};
+					return ClassifierAction.ContinueReading();
 				}
 				else
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading,
-					};
+					return ClassifierAction.ContinueReading();
 				}
 			}
 			else
 			{
 				if (nextCharacter == '/')
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.TokenizeImmediately,
-					};
+					return ClassifierAction.TokenizeImmediately();
 				}
 				else
 				{
 					modeIndex = 2;
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading,
-					};
+					return ClassifierAction.ContinueReading();
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-﻿namespace Expresser.Lexing.Demo.CSharp.Tokenization
+﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
 	public class LineCommentTokenClassifier : ITokenClassifier
 	{

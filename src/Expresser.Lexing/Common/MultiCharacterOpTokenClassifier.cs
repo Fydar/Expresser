@@ -11,38 +11,31 @@
 			MatchedString = matchedString;
 		}
 
+		/// <inheritdoc/>
 		public void Reset()
 		{
 			currentIndex = 0;
 		}
 
-		public NextCharacterResult NextCharacter(char nextCharacter)
+		/// <inheritdoc/>
+		public ClassifierAction NextCharacter(char nextCharacter)
 		{
 			string keyword = MatchedString;
 
 			if (currentIndex == keyword.Length)
 			{
-				return new NextCharacterResult()
-				{
-					Action = ClassifierAction.TokenizeFromLast
-				};
+				return ClassifierAction.TokenizeFromLast();
 			}
 			else
 			{
 				if (nextCharacter == keyword[currentIndex])
 				{
 					currentIndex++;
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading
-					};
+					return ClassifierAction.ContinueReading();
 				}
 				else
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.GiveUp
-					};
+					return ClassifierAction.GiveUp();
 				}
 			}
 		}

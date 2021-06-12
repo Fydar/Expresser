@@ -1,53 +1,36 @@
-﻿using System;
-
-namespace Expresser.Lexing
+﻿namespace Expresser.Lexing
 {
-	public struct LexerToken : IEquatable<LexerToken>
+	/// <summary>
+	/// A token representing a classified span of text.
+	/// </summary>
+	public readonly struct LexerToken
 	{
-		public int LineNumber { get; }
+		/// <summary>
+		/// The starting index of the classified span.
+		/// </summary>
 		public int StartIndex { get; }
-		public int Length { get; }
-		public int ClassifierIndex { get; }
 
-		public LexerToken(int lineNumber, int startIndex, int length, int classifierIndex)
+		/// <summary>
+		/// The length of the classified span.
+		/// </summary>
+		public int Length { get; }
+
+		/// <summary>
+		/// The index of the classifier used to classify the span.
+		/// </summary>
+		public int Classifier { get; }
+
+		/// <summary>
+		/// Creates a new instance of the <see cref="LexerToken"/> struct.
+		/// </summary>
+		/// <param name="startIndex">The starting index of the classified span.</param>
+		/// <param name="length">The length of the classified span.</param>
+		/// <param name="classifier">The index of the classifier used to classify the span.</param>
+		public LexerToken(int startIndex, int length, int classifier)
 		{
-			LineNumber = lineNumber;
 			StartIndex = startIndex;
 			Length = length;
-			ClassifierIndex = classifierIndex;
-		}
-
-		public override bool Equals(object obj)
-		{
-			return obj is LexerToken token && Equals(token);
-		}
-
-		public bool Equals(LexerToken other)
-		{
-			return LineNumber == other.LineNumber &&
-				   StartIndex == other.StartIndex &&
-				   Length == other.Length &&
-				   ClassifierIndex == other.ClassifierIndex;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = 849123704;
-			hashCode = hashCode * -1521134295 + LineNumber.GetHashCode();
-			hashCode = hashCode * -1521134295 + StartIndex.GetHashCode();
-			hashCode = hashCode * -1521134295 + Length.GetHashCode();
-			hashCode = hashCode * -1521134295 + ClassifierIndex.GetHashCode();
-			return hashCode;
-		}
-
-		public static bool operator ==(LexerToken left, LexerToken right)
-		{
-			return left.Equals(right);
-		}
-
-		public static bool operator !=(LexerToken left, LexerToken right)
-		{
-			return !(left == right);
+			Classifier = classifier;
 		}
 	}
 }

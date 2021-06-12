@@ -2,22 +2,37 @@
 
 namespace Expresser.Lexing
 {
+	/// <summary>
+	/// A lexer used to classify spans of text using an <see cref="ILexerLanguage"/>.
+	/// </summary>
 	public class Lexer
 	{
 		private struct ClassifierState
 		{
-			public bool HasGivenUp;
-			public int EndIndex;
+			public bool hasGivenUp;
+			public int endIndex;
 		}
 
+		/// <summary>
+		/// The <see cref="ILexerLanguage"/> that this <see cref="Lexer"/> uses to classify tokens.
+		/// </summary>
 		public ILexerLanguage LexerLanguage { get; }
 
+		/// <summary>
+		/// Constructs a new instance of the <see cref="Lexer"/> class.
+		/// </summary>
+		/// <param name="lexerLanguage">The language used to classify tokens.</param>
 		public Lexer(ILexerLanguage lexerLanguage)
 		{
 			LexerLanguage = lexerLanguage;
 		}
 
-		public IEnumerable<LexerToken> Evaluate(string source)
+		/// <summary>
+		/// Iterates over the classifiable spans present in the source <see cref="string"/>.
+		/// </summary>
+		/// <param name="source">A <see cref="string"/> to classify.</param>
+		/// <returns>A collection representing every classified token in the source <see cref="string"/>.</returns>
+		public IEnumerable<LexerToken> Tokenize(string source)
 		{
 			var classifiers = LexerLanguage.Classifiers;
 
@@ -29,7 +44,7 @@ namespace Expresser.Lexing
 				var classifier = classifiers[i];
 				classifierStates[i] = new ClassifierState()
 				{
-					EndIndex = -1
+					endIndex = -1
 				};
 				classifier.Reset();
 			}
@@ -45,44 +60,51 @@ namespace Expresser.Lexing
 				for (int i = 0; i < classifiersCount; i++)
 				{
 					var classifierState = classifierStates[i];
-
-					if (classifierState.HasGivenUp)
+					if (classifierState.hasGivenUp)
 					{
 						continue;
 					}
 
 					var classifier = classifiers[i];
 					var result = classifier.NextCharacter(c);
-					if (result.Action == ClassifierAction.GiveUp)
+					switch (result.Action)
 					{
-						classifierState.HasGivenUp = true;
-						classifierStates[i] = classifierState;
-					}
-					else if (result.Action == ClassifierAction.TokenizeFromLast)
-					{
-						classifierState.EndIndex = charIndex - 1;
-						classifierStates[i] = classifierState;
-					}
-					else if (result.Action == ClassifierAction.TokenizeImmediately)
-					{
-						classifierState.EndIndex = charIndex;
-						classifierStates[i] = classifierState;
-					}
-					else // if (result.Action == ClassificationAction.ContinueReading)
-					{
-						anyContinuing = true;
+						case ClassifierActionType.GiveUp:
+						{
+							classifierState.hasGivenUp = true;
+							classifierStates[i] = classifierState;
+							break;
+						}
+						case ClassifierActionType.TokenizeFromLast:
+						{
+							classifierState.endIndex = charIndex - 1;
+							classifierStates[i] = classifierState;
+							break;
+						}
+						case ClassifierActionType.TokenizeImmediately:
+						{
+							classifierState.endIndex = charIndex;
+							classifierStates[i] = classifierState;
+							break;
+						}
+						default:
+						case ClassifierActionType.ContinueReading:
+						{
+							anyContinuing = true;
+							break;
+						}
 					}
 				}
+
 				if (!anyContinuing)
 				{
 					int longest = -1;
 					for (int i = 0; i < classifiersCount; i++)
 					{
 						var classifierState = classifierStates[i];
-
-						if (classifierState.EndIndex > longest)
+						if (classifierState.endIndex > longest)
 						{
-							longest = classifierState.EndIndex;
+							longest = classifierState.endIndex;
 						}
 					}
 
@@ -91,16 +113,15 @@ namespace Expresser.Lexing
 					{
 						var classifierState = classifierStates[i];
 
-						if (classifierState.EndIndex != -1 && 
-							classifierState.EndIndex == longest)
+						if (classifierState.endIndex != -1 &&
+							classifierState.endIndex == longest)
 						{
-							int classifierEndIndex = classifierState.EndIndex;
+							int classifierEndIndex = classifierState.endIndex;
 
 							yield return new LexerToken(
-								lineNumber: 0,
 								startIndex: startIndex,
 								length: classifierEndIndex - startIndex + 1,
-								classifierIndex: i
+								classifier: i
 							);
 
 							startIndex = classifierEndIndex + 1;
@@ -109,15 +130,15 @@ namespace Expresser.Lexing
 							break;
 						}
 					}
+
 					if (!tokenized)
 					{
 						if (charIndex != source.Length)
 						{
 							yield return new LexerToken(
-								lineNumber: 0,
 								startIndex: startIndex,
-								length: charIndex - startIndex + 1,
-								classifierIndex: -1
+								length: 1,
+								classifier: -1
 							);
 						}
 
@@ -129,7 +150,7 @@ namespace Expresser.Lexing
 						var classifier = classifiers[i];
 						classifierStates[i] = new ClassifierState()
 						{
-							EndIndex = -1
+							endIndex = -1
 						};
 						classifier.Reset();
 					}

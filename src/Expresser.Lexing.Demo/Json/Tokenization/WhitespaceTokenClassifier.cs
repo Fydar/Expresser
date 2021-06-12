@@ -1,12 +1,35 @@
-﻿using Expresser.Lexing.Common;
-
-namespace Expresser.Demo.Json.Tokenization
+﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
-	public class WhitespaceTokenClassifier : CharacterCategoryTokenClassifier
+	public class WhitespaceTokenClassifier : ITokenClassifier
 	{
-		public override bool IsMatched(char character)
+		protected bool IsFirstCharacter { get; private set; }
+
+		/// <inheritdoc/>
+		public void Reset()
 		{
-			return char.IsWhiteSpace(character);
+			IsFirstCharacter = true;
+		}
+
+		/// <inheritdoc/>
+		public ClassifierAction NextCharacter(char nextCharacter)
+		{
+			bool isMatched = char.IsWhiteSpace(nextCharacter)
+				&& nextCharacter != '\r'
+				&& nextCharacter != '\n';
+
+			if (!IsFirstCharacter)
+			{
+				if (!isMatched)
+				{
+					return ClassifierAction.TokenizeFromLast();
+				}
+			}
+
+			IsFirstCharacter = false;
+
+			return isMatched
+				? ClassifierAction.ContinueReading()
+				: ClassifierAction.GiveUp();
 		}
 	}
 }

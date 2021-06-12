@@ -1,6 +1,4 @@
-﻿using Expresser.Lexing.Common;
-
-namespace Expresser.Demo.CSharp.Tokenization
+﻿namespace Expresser.Lexing.Demo.CSharp.Tokenization
 {
 	public class WhitespaceTokenClassifier : CharacterCategoryTokenClassifier
 	{

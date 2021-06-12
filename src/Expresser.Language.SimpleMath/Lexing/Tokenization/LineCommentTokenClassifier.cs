@@ -11,24 +11,18 @@ namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 			characterIndex = 0;
 		}
 
-		public NextCharacterResult NextCharacter(char nextCharacter)
+		public ClassifierAction NextCharacter(char nextCharacter)
 		{
 			if (characterIndex == 0)
 			{
 				characterIndex++;
 				if (nextCharacter == '/')
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading,
-					};
+					return ClassifierAction.ContinueReading();
 				}
 				else
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.GiveUp
-					};
+					return ClassifierAction.GiveUp();
 				}
 			}
 			if (characterIndex == 1)
@@ -36,17 +30,11 @@ namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 				characterIndex++;
 				if (nextCharacter == '/')
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading,
-					};
+					return ClassifierAction.ContinueReading();
 				}
 				else
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.GiveUp
-					};
+					return ClassifierAction.GiveUp();
 				}
 			}
 			else
@@ -54,17 +42,11 @@ namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 				characterIndex++;
 				if (nextCharacter == '\n')
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.TokenizeImmediately,
-					};
+					return ClassifierAction.TokenizeImmediately();
 				}
 				else
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading
-					};
+					return ClassifierAction.ContinueReading();
 				}
 			}
 		}

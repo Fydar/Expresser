@@ -12,7 +12,7 @@ namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 			isFirstCharacter = true;
 		}
 
-		public NextCharacterResult NextCharacter(char nextCharacter)
+		public ClassifierAction NextCharacter(char nextCharacter)
 		{
 			if (isFirstCharacter)
 			{
@@ -20,17 +20,11 @@ namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 
 				if (nextCharacter == '\'')
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading,
-					};
+					return ClassifierAction.ContinueReading();
 				}
 				else
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.GiveUp
-					};
+					return ClassifierAction.GiveUp();
 				}
 			}
 			else
@@ -38,35 +32,23 @@ namespace Expresser.Language.SimpleMath.Lexing.Tokenization
 				if (nextCharacter == '\\')
 				{
 					isEscaped = true;
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading
-					};
+					return ClassifierAction.ContinueReading();
 				}
 				else if (nextCharacter == '\'')
 				{
 					if (isEscaped)
 					{
 						isEscaped = false;
-						return new NextCharacterResult()
-						{
-							Action = ClassifierAction.ContinueReading
-						};
+						return ClassifierAction.ContinueReading();
 					}
 					else
 					{
-						return new NextCharacterResult()
-						{
-							Action = ClassifierAction.TokenizeImmediately
-						};
+						return ClassifierAction.TokenizeImmediately();
 					}
 				}
 				else
 				{
-					return new NextCharacterResult()
-					{
-						Action = ClassifierAction.ContinueReading
-					};
+					return ClassifierAction.ContinueReading();
 				}
 			}
 		}

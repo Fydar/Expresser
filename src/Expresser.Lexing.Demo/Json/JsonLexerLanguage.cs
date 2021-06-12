@@ -1,19 +1,21 @@
-﻿using Expresser.Demo.Json.Tokenization;
-using Expresser.Lexing;
-using Expresser.Lexing.Common;
+﻿using Expresser.Lexing;
+using Expresser.Lexing.Demo.Json.Tokenization;
 using System;
 
 namespace Expresser.Demo.Json
 {
-	public class JsonLang : ILexerLanguage
+	public class JsonLexerLanguage : ILexerLanguage
 	{
+		/// <inheritdoc/>
 		public ITokenClassifier[] Classifiers { get; } = new ITokenClassifier[]
 		{
 			new StringTokenClassifier(),
 			new NumericTokenClassifier(),
 
 			new WhitespaceTokenClassifier(),
+			new NewlineTokenClassifier(),
 			new MultiLineCommentTokenClassifier(),
+			new LineCommentTokenClassifier(),
 
 			new SingleCharacterTokenClassifier('{'),
 			new SingleCharacterTokenClassifier('}'),
@@ -27,12 +29,15 @@ namespace Expresser.Demo.Json
 			new KeywordTokenClassifier("false"),
 		};
 
+		/// <inheritdoc/>
 		public ConsoleColor[] Colors { get; } = new ConsoleColor[]
 		{
 			ConsoleColor.Yellow,
 			ConsoleColor.Blue,
 
 			ConsoleColor.Red,
+			ConsoleColor.Red,
+			ConsoleColor.Green,
 			ConsoleColor.Green,
 
 			ConsoleColor.DarkGray,

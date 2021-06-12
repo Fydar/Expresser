@@ -1,4 +1,4 @@
-﻿namespace Expresser.Lexing.Common
+﻿namespace Expresser.Lexing.Demo.Json.Tokenization
 {
 	public class NumericTokenClassifier : ITokenClassifier
 	{
